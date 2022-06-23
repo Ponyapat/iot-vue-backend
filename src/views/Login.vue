@@ -1,7 +1,11 @@
 <script setup>
-import { reactive } from "vue";
+import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
-import { mdiAccount, mdiAsterisk } from "@mdi/js";
+import {
+  mdiAccount,
+  mdiAsterisk,
+  mdiCheckboxMultipleMarkedCircleOutline,
+} from "@mdi/js";
 import FullScreenSection from "@/components/FullScreenSection.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import CheckRadioPicker from "@/components/CheckRadioPicker.vue";
@@ -10,17 +14,52 @@ import Control from "@/components/Control.vue";
 import Divider from "@/components/Divider.vue";
 import JbButton from "@/components/JbButton.vue";
 import JbButtons from "@/components/JbButtons.vue";
+import Notification from "@/components/Notification.vue";
+import axios from "axios";
+import { useMainStore } from "@/stores/main";
+
+const mainStore = useMainStore();
+
+let ck_login = ref(0);
 
 const form = reactive({
-  login: "Demo",
-  pass: "123456",
+  username: "Demo",
+  password: "123456",
   remember: ["remember"],
 });
 
 const router = useRouter();
 
 const submit = () => {
-  router.push("/dashboard");
+  console.log(form.username);
+  console.log(form.password);
+  //router.push("/dashboard");
+  axios
+    .post("http://localhost:3000/api/auth/login", {
+      email: form.username,
+      password: form.password,
+    })
+    .then((data) => {
+      console.log(data.data.user.name);
+      if (data.data.status == 200) {
+        mainStore.setUser({
+          name: data.data.user.name,
+          email: data.data.user.email,
+        });
+        localStorage.setItem("tkfw", data.data.accessToken);
+        localStorage.setItem("userid", data.data.user.id);
+      }
+      router.push("/dashboard");
+    })
+    .catch((error) => {
+      console.log("Fail");
+      console.log(error.response.data.statusCode);
+      if (error.response.data.statusCode == 400) {
+        ck_login.value = 1;
+        console.log(ck_login.value);
+        //ck_login = form.ck_login
+      }
+    });
 };
 </script>
 
@@ -34,10 +73,7 @@ const submit = () => {
     >
       <div class="flex justify-center pb-2">
         <div>
-        <img 
-        src="/logo.png"
-        class="h-20" 
-        />
+          <img src="/logo.png" class="h-20" />
         </div>
       </div>
 
@@ -45,10 +81,18 @@ const submit = () => {
         <div class="text-lg"><b>FarmWorld Login</b></div>
       </div>
 
-      
+      <div
+        v-if="ck_login"
+        class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-5 mt-2"
+      >
+        <span class="block sm:inline"
+          >ไม่สามารถเข้าระบบได้ กรุณาเช็ค Useranme หรือ Password</span
+        >
+      </div>
+
       <field label="Username" help="Please enter your login">
         <control
-          v-model="form.login"
+          v-model="form.username"
           :icon="mdiAccount"
           name="login"
           autocomplete="username"
@@ -57,7 +101,7 @@ const submit = () => {
 
       <field label="Password" help="Please enter your password">
         <control
-          v-model="form.pass"
+          v-model="form.password"
           :icon="mdiAsterisk"
           type="password"
           name="password"

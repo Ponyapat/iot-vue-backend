@@ -6,13 +6,16 @@ import router from './router'
 import { useMainStore } from '@/stores/main'
 import { darkModeKey, styleKey } from '@/config.js'
 
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
 import './css/main.css'
 
 /* Init Pinia */
 const pinia = createPinia()
 
 /* Create Vue app */
-createApp(App).use(router).use(pinia).mount('#app')
+createApp(App).use(router).use(pinia).use(VueSweetalert2).mount('#app')
 
 /* Init Pinia main store */
 const mainStore = useMainStore(pinia)

@@ -21,7 +21,7 @@ const routes = [
   },
   {
     meta: {
-      title: 'Select style',
+      title: 'Login',
       fullScreen: true
     },
     path: '/',

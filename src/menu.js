@@ -54,26 +54,26 @@ export default [
           label: 'Responsive',
           icon: mdiResponsive
         },
-        {
-          to: '/',
-          label: 'Styles',
-          icon: mdiPalette
-        },
-        {
-          to: '/profile',
-          label: 'Profile',
-          icon: mdiAccountCircle
-        },
-        {
-          to: '/login',
-          label: 'Login',
-          icon: mdiLock
-        },
-        {
-          to: '/error',
-          label: 'Error',
-          icon: mdiAlertCircle
-        },
+        // {
+        //   to: '/',
+        //   label: 'Styles',
+        //   icon: mdiPalette
+        // },
+        // {
+        //   to: '/profile',
+        //   label: 'Profile',
+        //   icon: mdiAccountCircle
+        // },
+        // {
+        //   to: '/login',
+        //   label: 'Login',
+        //   icon: mdiLock
+        // },
+        // {
+        //   to: '/error',
+        //   label: 'Error',
+        //   icon: mdiAlertCircle
+        // },
         {
           to: '/test',
           icon: mdiDesktopMac,
