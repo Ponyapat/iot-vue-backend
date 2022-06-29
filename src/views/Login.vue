@@ -23,7 +23,7 @@ const mainStore = useMainStore();
 let ck_login = ref(0);
 
 const form = reactive({
-  username: "Demo",
+  username: "sonicnong@hotmail.com",
   password: "123456",
   remember: ["remember"],
 });
@@ -31,20 +31,18 @@ const form = reactive({
 const router = useRouter();
 
 const submit = () => {
-  console.log(form.username);
-  console.log(form.password);
-  //router.push("/dashboard");
   axios
-    .post("http://localhost:3000/api/auth/login", {
+    .post(import.meta.env.VITE_API_ENDPOINT+"/api/auth/login", {
       email: form.username,
       password: form.password,
     })
     .then((data) => {
-      console.log(data.data.user.name);
+      console.log(data.data);
       if (data.data.status == 200) {
         mainStore.setUser({
           name: data.data.user.name,
           email: data.data.user.email,
+          avatar: 'https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair&options[accessoriesChance]=93'
         });
         localStorage.setItem("tkfw", data.data.accessToken);
         localStorage.setItem("userid", data.data.user.id);
@@ -52,12 +50,10 @@ const submit = () => {
       router.push("/dashboard");
     })
     .catch((error) => {
-      console.log("Fail");
+      //console.log("Fail");
       console.log(error.response.data.statusCode);
       if (error.response.data.statusCode == 400) {
         ck_login.value = 1;
-        console.log(ck_login.value);
-        //ck_login = form.ck_login
       }
     });
 };

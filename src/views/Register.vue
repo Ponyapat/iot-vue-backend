@@ -23,7 +23,7 @@ const form = reactive({
 
 const submit = () => {
   axios
-    .post("http://localhost:3000/api/auth/register", {
+    .post(import.meta.env.VITE_API_ENDPOINT+"/api/auth/register", {
       name: form.username,
       username: form.username,
       email: form.email,

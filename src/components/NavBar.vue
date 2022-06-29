@@ -24,7 +24,9 @@ import Divider from '@/components/Divider.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import Icon from '@/components/Icon.vue'
 import NavBarSearch from '@/components/NavBarSearch.vue'
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const mainStore = useMainStore()
 
 const lightBorderStyle = computed(() => mainStore.lightBorderStyle)
@@ -56,7 +58,9 @@ const menuOpenLg = () => {
 }
 
 const logout = () => {
-  //
+  localStorage.removeItem('tkfw');
+  localStorage.removeItem('userid');
+  router.push("/login");
 }
 </script>
 
@@ -147,7 +151,7 @@ const logout = () => {
               />
             </nav-bar-item>
             <divider nav-bar />
-            <nav-bar-item to="/">
+            <nav-bar-item @click="logout">
               <nav-bar-item-label
                 :icon="mdiLogout"
                 label="Log Out"
@@ -180,7 +184,6 @@ const logout = () => {
         <nav-bar-item
           is-desktop-icon-only
           @click="logout"
-          to="/"
         >
           <nav-bar-item-label
             :icon="mdiLogout"

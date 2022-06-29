@@ -43,7 +43,8 @@ const props = defineProps({
   required: Boolean,
   borderless: Boolean,
   transparent: Boolean,
-  ctrlKFocus: Boolean
+  ctrlKFocus: Boolean,
+  disabled: Boolean,
 })
 
 const emit = defineEmits(['update:modelValue', 'setRef'])
@@ -154,6 +155,7 @@ if (props.ctrlKFocus) {
       :inputmode="inputmode"
       :autocomplete="autocomplete"
       :required="required"
+      :disabled="disabled"
       :placeholder="placeholder"
       :type="computedType"
       :class="inputElClass"
