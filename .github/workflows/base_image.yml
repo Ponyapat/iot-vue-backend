@@ -1,11 +1,11 @@
-name: Base Imagexx
+name: Base Image
 
 on:
   push:
-    # branches:
-    #   - develop
+    branches:
+       - develop
     branches-ignore:
-      - '**'
+    #  - '**'
 
 jobs:
   build:
