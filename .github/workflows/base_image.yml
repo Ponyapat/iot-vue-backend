@@ -1,4 +1,4 @@
-name: Base Image
+name: Base Imagexx
 
 on:
   push:
