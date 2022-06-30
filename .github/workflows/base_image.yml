@@ -40,3 +40,4 @@ jobs:
           IMAGE_TAG: base
         run: |
           docker push asia.gcr.io/$CI_REPOSITORY_NAME_SLUG:base
+
