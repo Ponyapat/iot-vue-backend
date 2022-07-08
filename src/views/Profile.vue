@@ -70,6 +70,7 @@ const submitProfile = () => {
 };
 
 const submitPass = () => {
+  const token = localStorage.getItem("tkfw");
   if(passwordForm.password != passwordForm.password_confirmation){
      Swal.fire({
         icon: "warning",
@@ -78,11 +79,39 @@ const submitPass = () => {
         showConfirmButton: 1,
       });
       return false
+
   }else{
     console.log(passwordForm.password)
     console.log(passwordForm.password_confirmation)
+      axios.post(import.meta.env.VITE_API_ENDPOINT+"/api/auth/change-password", {
+        email: profileForm.email,
+        password: passwordForm.password,
+      },{
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }).then((data) => {
+      console.log(data.data);
+      if (data.data.status == 200) {
+          console.log(data.data.status);
+          Swal.fire({
+            icon: "success",
+            title: "แก้ไขรหัสผ่าน สำเร็จ",
+            timer: 2500,
+            showConfirmButton: 1,
+          });
+      }else{
+        Swal.fire({
+            icon: "warning",
+            title: "ไม่สามารถเปลี่ยนรหัสผ่านได้",
+            timer: 3000,
+            showConfirmButton: 1,
+        });
+        return false
+      }}).catch((error) => {
+        console.log(error);
+      });
   }
-  //
 };
 </script>
 
@@ -152,7 +181,7 @@ const submitPass = () => {
         form
         @submit.prevent="submitPass"
       >
-        <field label="Current password" help="Required. Your current password">
+        <!-- <field label="Current password" help="Required. Your current password">
           <control
             v-model="passwordForm.password_current"
             :icon="mdiAsterisk"
@@ -163,7 +192,7 @@ const submitPass = () => {
           />
         </field>
 
-        <divider />
+        <divider /> -->
 
         <field label="New password" help="Required. New password">
           <control

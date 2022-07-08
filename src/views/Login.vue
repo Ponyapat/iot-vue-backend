@@ -37,7 +37,7 @@ const submit = () => {
       password: form.password,
     })
     .then((data) => {
-      console.log(data.data);
+      //console.log(data.data);
       if (data.data.status == 200) {
         mainStore.setUser({
           name: data.data.user.name,
@@ -46,12 +46,14 @@ const submit = () => {
         });
         localStorage.setItem("tkfw", data.data.accessToken);
         localStorage.setItem("userid", data.data.user.id);
+        router.push("/dashboard");
+      }else{
+        ck_login.value = 1;
       }
-      router.push("/dashboard");
     })
     .catch((error) => {
       //console.log("Fail");
-      console.log(error.response.data.statusCode);
+      //console.log(error.response.data.statusCode);
       if (error.response.data.statusCode == 400) {
         ck_login.value = 1;
       }
