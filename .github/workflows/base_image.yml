@@ -25,7 +25,7 @@ jobs:
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@v0
         with:
-          project_id: $CI_REPOSITORY_NAME_SLUG
+          project_id: farmpress-production
           service_account_key: ${{ secrets.GCLOUD_AUTH }}
           export_default_credentials: true
 
