@@ -20,12 +20,12 @@ jobs:
       - name: Build Docker image
         env:
           IMAGE_TAG: base
-        run: docker build . --file Dockerfile.base --tag asia.gcr.io/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG
+        run: docker build . --file Dockerfile.base --tag asia.gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG
 
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@v0
         with:
-          project_id: farmpress-production
+          project_id: ${{ secrets.GCLOUD_PROJECT }}
           service_account_key: ${{ secrets.GCLOUD_AUTH }}
           export_default_credentials: true
 
@@ -39,4 +39,4 @@ jobs:
         env:
           IMAGE_TAG: base
         run: |
-          docker push asia.gcr.io/$CI_REPOSITORY_NAME_SLUG:base
+          docker push asia.gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:base
