@@ -7,6 +7,8 @@
     "serve:vite": "vite preview",
     "build": "vue-cli-service build",
     "build:vite": "vite build",
+    "build:stage": "cross-env NODE_ENV=staging vite build --mode staging",
+    "build:prod": "cross-env NODE_ENV=production vite build --mode production",
     "lint": "vue-cli-service lint",
     "lint:fix": "vue-cli-service lint --fix"
   },
