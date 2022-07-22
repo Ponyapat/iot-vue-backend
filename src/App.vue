@@ -12,7 +12,7 @@ import axios from "axios";
 const mainStore = useMainStore()
 const router = useRouter();
 
-mainStore.setStyle("basic") 
+mainStore.setStyle("basic")
 // mainStore.setDarkMode(false)
 
 // if (localStorage.getItem("nong") === null) {

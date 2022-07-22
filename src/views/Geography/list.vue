@@ -3,10 +3,11 @@
     <title-bar :title-stack="titleStack" />
     <card-component
       :icon="mdiMonitorCellphone"
-      title="Users"
+      title="ภูมิศาสตร์ ที่ดิน"
       has-table
+      addlink="/geography/add"
     >
-      <clients-table />
+      <GeographyTable />
     </card-component>
   </div>
 </template>
@@ -18,9 +19,9 @@ import { useMainStore } from "@/stores/main";
 import TitleBar from "@/components/TitleBar.vue";
 import HeroBar from "@/components/HeroBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
-import ClientsTable from '@/components/ClientsTable.vue'
+import GeographyTable from '@/components/GeographyTable.vue'
 
-const titleStack = ref(["Admin", "Users"]);
+const titleStack = ref(["Admin", "ภูมิศาสตร์(ที่ดิน)"]);
 
 
 

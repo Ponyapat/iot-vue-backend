@@ -1,118 +1,145 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Style from '@/views/Style.vue'
-import Home from '@/views/Home.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import Style from "@/views/Style.vue";
+import Home from "@/views/Home.vue";
 
 const routes = [
   {
     meta: {
-      title: 'Users',
+      title: "Users",
     },
-    path: '/users',
-    name: 'Users',
-    component: () => import('@/views/Users.vue')
+    path: "/users",
+    name: "Users",
+    component: () => import("@/views/Users.vue"),
   },
   {
     meta: {
-      title: 'TEST',
+      title: "Geography",
     },
-    path: '/test',
-    name: 'test',
-    component: () => import('@/views/Test.vue')
+    path: "/geography",
+    name: "Geography",
+    component: () => import("@/views/Geography/list.vue"),
+    // children: [
+    //   {
+    //     path: "add",
+    //     component: () => import(/* webpackChunkName: "ui" */ "@/views/Ui.vue"),
+    //   }
+    // ],
   },
   {
     meta: {
-      title: 'Login',
-      fullScreen: true
+      title: "ADDGeography",
     },
-    path: '/',
-    name: 'style',
-    component: () => import(/* webpackChunkName: "login" */ '@/views/Login.vue')
+    path: "/geography/add",
+    name: "ADDGeography",
+    component: () => import("@/views/Geography/Add.vue"),
+  },
+  {
+    meta: {
+      title: "TEST",
+    },
+    path: "/test",
+    name: "test",
+    component: () => import("@/views/Test.vue"),
+  },
+  {
+    meta: {
+      title: "Login",
+      fullScreen: true,
+    },
+    path: "/",
+    name: "style",
+    component: () => import("@/views/Login.vue"),
   },
   {
     // Document title tag
     // We combine it with defaultDocumentTitle set in `src/main.js` on router.afterEach hook
     meta: {
-      title: 'Dashboard'
+      title: "Dashboard",
     },
-    path: '/dashboard',
-    name: 'dashboard',
-    component: Home
+    path: "/dashboard",
+    name: "dashboard",
+    component: Home,
   },
   {
     meta: {
-      title: 'Tables'
+      title: "Tables",
     },
-    path: '/tables',
-    name: 'tables',
-    component: () => import(/* webpackChunkName: "tables" */ '@/views/Tables.vue')
+    path: "/tables",
+    name: "tables",
+    component: () =>
+      import(/* webpackChunkName: "tables" */ "@/views/Tables.vue"),
   },
   {
     meta: {
-      title: 'Forms'
+      title: "Forms",
     },
-    path: '/forms',
-    name: 'forms',
-    component: () => import(/* webpackChunkName: "forms" */ '@/views/Forms.vue')
+    path: "/forms",
+    name: "forms",
+    component: () => import(/* webpackChunkName: "forms" */ "@/views/Forms.vue"),
   },
   {
     meta: {
-      title: 'Profile'
+      title: "Profile",
     },
-    path: '/profile',
-    name: 'profile',
-    component: () => import(/* webpackChunkName: "profile" */ '@/views/Profile.vue')
+    path: "/profile",
+    name: "profile",
+    component: () => import(/* webpackChunkName: "profile" */ "@/views/Profile.vue"),
   },
   {
     meta: {
-      title: 'Ui'
+      title: "Ui",
     },
-    path: '/ui',
-    name: 'ui',
-    component: () => import(/* webpackChunkName: "ui" */ '@/views/Ui.vue')
+    path: "/ui",
+    name: "ui",
+    component: () => import(/* webpackChunkName: "ui" */ "@/views/Ui.vue"),
   },
   {
     meta: {
-      title: 'Responsive layout'
+      title: "Responsive layout",
     },
-    path: '/responsive',
-    name: 'responsive',
-    component: () => import(/* webpackChunkName: "responsive" */ '@/views/Responsive.vue')
+    path: "/responsive",
+    name: "responsive",
+    component: () =>
+      import(/* webpackChunkName: "responsive" */ "@/views/Responsive.vue"),
   },
   {
     meta: {
-      title: 'Login',
-      fullScreen: true
+      title: "Login",
+      fullScreen: true,
     },
-    path: '/login',
-    name: 'login',
-    component: () => import(/* webpackChunkName: "login" */ '@/views/Login.vue')
+    path: "/login",
+    name: "login",
+    component: () =>
+      import(/* webpackChunkName: "login" */ "@/views/Login.vue"),
   },
   {
     meta: {
-      title: 'Register',
-      fullScreen: true
+      title: "Register",
+      fullScreen: true,
     },
-    path: '/register',
-    name: 'register',
-    component: () => import(/* webpackChunkName: "login" */ '@/views/Register.vue')
+    path: "/register",
+    name: "register",
+    component: () =>
+      import(/* webpackChunkName: "login" */ "@/views/Register.vue"),
   },
   {
     meta: {
-      title: 'Error',
-      fullScreen: true
+      title: "Error",
+      fullScreen: true,
     },
-    path: '/error',
-    name: 'error',
-    component: () => import(/* webpackChunkName: "error" */ '@/views/Error.vue')
-  }
-]
+    path: "/error",
+    name: "error",
+    component: () =>
+      import(/* webpackChunkName: "error" */ "@/views/Error.vue"),
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior (to, from, savedPosition) {
-    return savedPosition || { top: 0 }
-  }
-})
+  scrollBehavior(to, from, savedPosition) {
+    return savedPosition || { top: 0 };
+  },
+});
 
-export default router
+export default router;

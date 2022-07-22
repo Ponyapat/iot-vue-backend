@@ -25,6 +25,11 @@ export default [
   'Admin',
   [
     {
+      to: '/geography',
+      label: 'ภูมิศาสตร์',
+      icon: mdiTable
+    },
+    {
       to: '/users',
       label: 'Users',
       icon: mdiTable
