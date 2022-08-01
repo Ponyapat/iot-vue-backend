@@ -35,6 +35,38 @@ const routes = [
   },
   {
     meta: {
+      title: "EDITGeography",
+    },
+    path: "/geography/edit/:id",
+    name: "EDITGeography",
+    component: () => import("@/views/Geography/Edit.vue"),
+  },
+  {
+    meta: {
+      title: "Weather",
+    },
+    path: "/weather",
+    name: "Weather",
+    component: () => import("@/views/Weather/list.vue"),
+  },
+  {
+    meta: {
+      title: "ADDWeather",
+    },
+    path: "/weather/add",
+    name: "ADDWeather",
+    component: () => import("@/views/Weather/Add.vue"),
+  },
+  {
+    meta: {
+      title: "EDITWeather",
+    },
+    path: "/weather/edit/:id",
+    name: "EDITWeather",
+    component: () => import("@/views/Weather/Edit.vue"),
+  },
+  {
+    meta: {
       title: "TEST",
     },
     path: "/test",

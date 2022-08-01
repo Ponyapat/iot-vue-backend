@@ -31,7 +31,7 @@ const tableTrOddStyle = computed(() => mainStore.tableTrOddStyle);
 const darkMode = computed(() => mainStore.darkMode);
 
 const states = reactive({
-  geo: {},
+  weather: {},
 });
 
 const token = localStorage.getItem("tkfw");
@@ -48,14 +48,14 @@ const currentPage = ref(0);
 
 onBeforeMount(() => {
   axios
-    .get(import.meta.env.VITE_API_ENDPOINT + "/api/geo", {
+    .get(import.meta.env.VITE_API_ENDPOINT + "/api/weather", {
       headers: {
         Authorization: "Bearer " + token,
       },
     })
     .then((data) => {
-      console.log(data.data.meta.itemCount);
-      states.geo = data.data.data;
+      //console.log(data.data.meta.itemCount);
+      states.weather = data.data.data;
       items.value = data.data.meta.itemCount
     })
     .catch((error) => {
@@ -66,7 +66,7 @@ onBeforeMount(() => {
 const del = (id) => {
   Swal.fire({
     title: "ยืนยันการลบ",
-    text: "คุณต้องการลบ ภูมิศาสตร์(ที่ดิน)นี้ใช้หรือไม่",
+    text: "คุณต้องการลบ ภูมิอากาศนี้ใช้หรือไม่",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
@@ -75,7 +75,7 @@ const del = (id) => {
   }).then((result) => {
     if (result.isConfirmed) {
       axios
-        .delete(import.meta.env.VITE_API_ENDPOINT + "/api/geo/"+id, {
+        .delete(import.meta.env.VITE_API_ENDPOINT + "/api/weather/"+id, {
           headers: {
             Authorization: "Bearer " + token,
           },
@@ -95,7 +95,7 @@ const del = (id) => {
 };
 
 const edit = (id) => {
- router.push("/geography/edit/"+id); 
+ router.push("/weather/edit/"+id); 
 }
 
 const numPages = computed(() => {
@@ -125,40 +125,40 @@ const pagesList = computed(() => {
         <th>#</th>
         <th>หัวข้อ</th>
         <th>รายละเอียด</th>
-        <th>เลขโฉนด</th>
-        <th>ขนาดที่ดิน(ไร่-งาน-ตรว)</th>
-        <th>Latitude</th>
-        <th>Longitude</th>
-        <th>Created</th>
+        <th>วันที่วัดค่า</th>
+        <th>ปริมาณฝนรวม 24 ชม.</th>
+        <th>สภาพอากาศโดยทั่วไป</th>
+        <th>ความเร็วลม</th>
+        <th>วันที่สร้าง</th>
         <th />
       </tr>
     </thead>
     <tbody>
       <tr
-        v-for="(client, index) in states.geo"
+        v-for="(client, index) in states.weather"
         :key="client.id"
         :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']"
       >
         <td>
           {{ index+1 }}
         </td>
-        <td data-label="Name">
+        <td data-label="title">
           {{ client.title }}
         </td>
         <td data-label="detail">
           {{ client.detail }}
         </td>
-        <td data-label="detail">
-          {{ client.landCode }}
+        <td data-label="date">
+          {{ client.date }}
         </td>
-        <td data-label="landSize">
-          {{ client.landSize }}
+        <td data-label="rain_volume">
+          {{ client.rainVolume }}
         </td>
-        <td data-label="Latitude">
-          {{ client.lat }}
+        <td data-label="weather_condition">
+          {{ client.weatherCondition }}
         </td>
-        <td data-label="Latitude">
-          {{ client.lon }}
+        <td data-label="windSpeed">
+          {{ client.windSpeed }}
         </td>
         <td data-label="createdAt">
           {{ client.createdAt }}

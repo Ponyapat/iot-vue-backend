@@ -30,6 +30,11 @@ export default [
       icon: mdiTable
     },
     {
+      to: '/weather',
+      label: 'ภูมิอากาศ',
+      icon: mdiTable
+    },
+    {
       to: '/users',
       label: 'Users',
       icon: mdiTable

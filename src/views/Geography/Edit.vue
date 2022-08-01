@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive , onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { mdiBallot, mdiBallotOutline, mdiAccount, mdiMail } from "@mdi/js";
 import MainSection from "@/components/MainSection.vue";
@@ -19,7 +19,7 @@ import TitleSubBar from "@/components/TitleSubBar.vue";
 import axios from "axios"; 
 import Swal from "sweetalert2";
 
-const titleStack = ref(["Admin", "เพิ่มข้อมูลภูมิศาสตร์ (ที่ดิน)"]);
+const titleStack = ref(["Admin", "แก้ไขข้อมูลภูมิศาสตร์ (ที่ดิน)"]);
 
 // const selectOptions = [
 //   { id: 1, label: "Business development" },
@@ -35,38 +35,75 @@ const titleStack = ref(["Admin", "เพิ่มข้อมูลภูมิ�
 // });
 
 const router = useRouter();
+const url = window.location.href;
+const id = url.split("/")[5];
 
 const form = reactive({
-  title: "title",
-  detail: "detail",
-  lat: "100.3424324",
-  long: "13.32423423",
-  land_detail: "land_detail",
-
-  ri: "1",
-  ngan: "2",
-  wa: "3",
-
-  land_size: "land_size",
-  land_code: "land_code",
-  land_img: "land_img",
-  land_price_rate: "land_price_rate",
-  land_price: "land_price",
-  land_type: "land_type",
-  land_properties: "land_properties",
-  land_water: "land_water",
-  land_mineral: "land_mineral",
-  land_limitation: "land_limitation",
-  //department: selectOptions[0],
+  title: "",
+  detail: "",
+  lat: "",
+  long: "",
+  land_detail: "",
+  ri: "",
+  ngan: "",
+  wa: "",
+  land_size: "",
+  land_code: "",
+  land_img: "",
+  land_price_rate: "",
+  land_price: "",
+  land_type: "",
+  land_properties: "",
+  land_water: "",
+  land_mineral: "",
+  land_limitation: "",
 });
+
+onMounted(async () => {
+  const token = localStorage.getItem("tkfw");
+  await axios
+      .get(import.meta.env.VITE_API_ENDPOINT + "/api/geo/"+id,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then(response => {
+        console.log(response.data)
+        let landSize = response.data.geo.landSize;
+        const landSize_split = landSize.split("-");
+        //console.log(landSize_split)
+        form.title=response.data.geo.title
+        form.detail=response.data.geo.detail
+        form.lat=response.data.geo.lat
+        form.long=response.data.geo.lon
+        form.land_detail=response.data.geo.landDetail
+
+        form.ri=landSize_split[0]
+        form.ngan=landSize_split[1]
+        form.wa=landSize_split[2]
+
+        form.land_code=response.data.geo.landCode
+        form.land_img=response.data.geo.landImg
+
+        form.land_price_rate=response.data.geo.landPriceRate
+        form.land_price=response.data.geo.landPrice
+        
+        form.land_type=response.data.geo.landType
+        form.land_properties=response.data.geo.landProperties
+        form.land_water=response.data.geo.landWater
+
+        form.land_mineral=response.data.geo.landMineral
+        form.land_limitation=response.data.geo.landLimitation
+      })
+})
 
 const submit = () => {
   const token = localStorage.getItem("tkfw");
-  console.log(token);
-  console.log(form);
+  console.log(token); 
   axios
-    .post(
-      import.meta.env.VITE_API_ENDPOINT + "/api/geo",
+    .put(
+      import.meta.env.VITE_API_ENDPOINT + "/api/geo/"+id,
       {
         title: form.title,
         detail: form.detail,
@@ -91,12 +128,12 @@ const submit = () => {
       }
     )
     .then((data) => {
-      console.log(data.data);
-      if (data.data.status == 201) {
+      //console.log(data.data);
+      if (data.data.status == 204) {
         console.log(data.data.status);
         Swal.fire({
           icon: "success",
-          title: "เพิ่มข้อมูลภูมิศาสตร์ (ที่ดิน) สำเร็จ",
+          title: "แก้ไขข้อมูลภูมิศาสตร์ (ที่ดิน) สำเร็จ",
           timer: 2500,
           showConfirmButton: 1,
         });
@@ -104,7 +141,7 @@ const submit = () => {
       } else {
         Swal.fire({
           icon: "warning",
-          title: "ไม่สามารถเพิ่มข้อมูลภูมิศาสตร์ได้",
+          title: "ไม่สามารถแก้ไขข้อมูลภูมิศาสตร์ได้",
           timer: 3000,
           showConfirmButton: 1,
         });
@@ -128,7 +165,7 @@ const submit = () => {
       title="Forms example"
     /> -->
     <card-component
-      title="กรอกข้อมูลภูมิศาสตร์ (ที่ดิน)"
+      title="แก้ไขข้อมูลภูมิศาสตร์ (ที่ดิน)"
       :icon="mdiBallot"
       form
       @submit.prevent="submit"
@@ -246,8 +283,8 @@ const submit = () => {
       <divider />
 
       <jb-buttons>
-        <jb-button type="submit" color="info" label="เพิ่ม" />
-        <jb-button type="reset" color="info" outline label="รีเซต" />
+        <jb-button type="submit" color="info" label="อัพเดท" />
+        <!-- <jb-button type="reset" color="info" outline label="Reset" /> -->
       </jb-buttons>
     </card-component>
   </main-section>
