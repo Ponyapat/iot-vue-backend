@@ -11,6 +11,7 @@ import JbButton from "@/components/JbButton.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
 import axios from "axios";
 import Swal from "sweetalert2";
+import moment from 'moment'
 
 defineProps({
   checkable: Boolean,
@@ -161,7 +162,7 @@ const pagesList = computed(() => {
           {{ client.lon }}
         </td>
         <td data-label="createdAt">
-          {{ client.createdAt }}
+          {{ moment(client.createdAt).format('DD-MM-YYYY') }}
         </td>
         <td class="actions-cell">
           <jb-buttons type="justify-start lg:justify-end" no-wrap>

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onBeforeMount, reactive } from "vue";
+import { computed, ref, onBeforeMount, reactive  } from "vue";
 import { useMainStore } from "@/stores/main";
 import { useRouter } from "vue-router";
 import { mdiEye, mdiTrashCan , mdiGreasePencil } from "@mdi/js";
@@ -11,6 +11,7 @@ import JbButton from "@/components/JbButton.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
 import axios from "axios";
 import Swal from "sweetalert2";
+import moment from 'moment'
 
 defineProps({
   checkable: Boolean,
@@ -19,6 +20,10 @@ defineProps({
 const router = useRouter();
 
 const mainStore = useMainStore();
+
+const date_format = (date) => { 
+      return date
+}
 
 const lightBorderStyle = computed(() => mainStore.lightBorderStyle);
 
@@ -81,11 +86,20 @@ const del = (id) => {
           },
         })
         .then((data) => {
-          setInterval(function () {
-            location.reload();
-          }, 1500);
+          // setInterval(function () {
+          //   location.reload();
+          // }, 1500);
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
           console.log("del" + id);
+
+          axios.get(import.meta.env.VITE_API_ENDPOINT + "/api/weather", {
+          headers: {
+            Authorization: "Bearer " + token,
+          }}).then((data) => {
+            states.weather = data.data.data;
+            items.value = data.data.meta.itemCount
+          })
+
         })
         .catch((error) => {
           console.log(error);
@@ -126,8 +140,8 @@ const pagesList = computed(() => {
         <th>หัวข้อ</th>
         <th>รายละเอียด</th>
         <th>วันที่วัดค่า</th>
-        <th>ปริมาณฝนรวม 24 ชม.</th>
-        <th>สภาพอากาศโดยทั่วไป</th>
+        <th>ปริมาณฝนรวม24ชม.</th>
+        <th>สภาพอากาศ</th>
         <th>ความเร็วลม</th>
         <th>วันที่สร้าง</th>
         <th />
@@ -149,7 +163,7 @@ const pagesList = computed(() => {
           {{ client.detail }}
         </td>
         <td data-label="date">
-          {{ client.date }}
+          {{ moment(client.date).format('DD-MM-YYYY') }}
         </td>
         <td data-label="rain_volume">
           {{ client.rainVolume }}
@@ -161,7 +175,7 @@ const pagesList = computed(() => {
           {{ client.windSpeed }}
         </td>
         <td data-label="createdAt">
-          {{ client.createdAt }}
+          {{ moment(client.createdAt).format('DD-MM-YYYY') }}
         </td>
         <td class="actions-cell">
           <jb-buttons type="justify-start lg:justify-end" no-wrap>

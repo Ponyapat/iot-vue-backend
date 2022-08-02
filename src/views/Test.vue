@@ -1,8 +1,8 @@
 <template lang="">
   <div>
     <div>TEST</div>
-    <div>----{{test}}----</div>
-    <div>----{{test2}}----</div>
+    <div>----test={{test}}----</div>
+    <div>----test2={{test2}}----</div>
     <div>----{{states.account}}----</div>
     <div>----{{myVar}}----</div>
     <button class="bg-red-400" @click="onClick1">click1</button><br>
@@ -40,8 +40,8 @@
     test++
     console.log(test)
     //this.$refs.testh1.focus()
-    console.log(testh1.value.textContent)
-    console.log(testh2.value.textContent)
+    //console.log(testh1.value.textContent)
+    //console.log(testh2.value.textContent)
   }
 
   const onClick2 = ()=> {
@@ -49,6 +49,7 @@
     test2.value += test2.value = "5555"
     
     console.log(test2.value)
+    console.log(test)
   }
 
   const clear = ()=> {
