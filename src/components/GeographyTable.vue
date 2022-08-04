@@ -2,7 +2,7 @@
 import { computed, ref, onBeforeMount, reactive } from "vue";
 import { useMainStore } from "@/stores/main";
 import { useRouter } from "vue-router";
-import { mdiEye, mdiTrashCan , mdiGreasePencil } from "@mdi/js";
+import { mdiEye, mdiTrashCan, mdiGreasePencil } from "@mdi/js";
 import ModalBox from "@/components/ModalBox.vue";
 import CheckboxCell from "@/components/CheckboxCell.vue";
 import Level from "@/components/Level.vue";
@@ -11,7 +11,7 @@ import JbButton from "@/components/JbButton.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
 import axios from "axios";
 import Swal from "sweetalert2";
-import moment from 'moment'
+import moment from "moment";
 
 defineProps({
   checkable: Boolean,
@@ -57,7 +57,7 @@ onBeforeMount(() => {
     .then((data) => {
       console.log(data.data.meta.itemCount);
       states.geo = data.data.data;
-      items.value = data.data.meta.itemCount
+      items.value = data.data.meta.itemCount;
     })
     .catch((error) => {
       console.log(error);
@@ -76,7 +76,7 @@ const del = (id) => {
   }).then((result) => {
     if (result.isConfirmed) {
       axios
-        .delete(import.meta.env.VITE_API_ENDPOINT + "/api/geo/"+id, {
+        .delete(import.meta.env.VITE_API_ENDPOINT + "/api/geo/" + id, {
           headers: {
             Authorization: "Bearer " + token,
           },
@@ -90,32 +90,44 @@ const del = (id) => {
         })
         .catch((error) => {
           console.log(error);
-        })
+        });
     }
   });
 };
 
 const edit = (id) => {
- router.push("/geography/edit/"+id); 
-}
+  router.push("/geography/edit/" + id);
+};
 
 const numPages = computed(() => {
-  return Math.ceil(items.value / perPage.value)
-  }
-)
+  return Math.ceil(items.value / perPage.value);
+});
 
-const currentPageHuman = computed(() => currentPage.value + 1)
+const currentPageHuman = computed(() => currentPage.value + 1);
 
 const pagesList = computed(() => {
-  const pagesList = []
+  const pagesList = [];
 
   for (let i = 0; i < numPages.value; i++) {
-    pagesList.push(i)
+    pagesList.push(i);
   }
 
-  return pagesList
-})
+  return pagesList;
+});
 
+const pageNext = (page) => {
+  currentPage.value = page;
+  //console.log("pageNext " + (page+1));
+  axios
+    .get(import.meta.env.VITE_API_ENDPOINT + "/api/geo?order=ASC&page="+(page+1)+"&take="+perPage.value, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+    .then((data) => {
+      states.geo = data.data.data;
+    });
+};
 </script>
 
 <template>
@@ -141,7 +153,7 @@ const pagesList = computed(() => {
         :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']"
       >
         <td>
-          {{ index+1 }}
+          {{ client.id }}
         </td>
         <td data-label="Name">
           {{ client.title }}
@@ -162,7 +174,7 @@ const pagesList = computed(() => {
           {{ client.lon }}
         </td>
         <td data-label="createdAt">
-          {{ moment(client.createdAt).format('DD-MM-YYYY') }}
+          {{ moment(client.createdAt).format("DD-MM-YYYY") }}
         </td>
         <td class="actions-cell">
           <jb-buttons type="justify-start lg:justify-end" no-wrap>
@@ -196,7 +208,7 @@ const pagesList = computed(() => {
           :label="page + 1"
           :outline="darkMode"
           small
-          @click="currentPage = page"
+          @click="pageNext(page)"
         />
       </jb-buttons>
       <small>Page {{ currentPageHuman }} of {{ numPages }}</small>
