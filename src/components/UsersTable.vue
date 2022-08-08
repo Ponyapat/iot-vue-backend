@@ -53,7 +53,7 @@ const currentPage = ref(0);
 
 onBeforeMount(() => {
   axios
-    .get(import.meta.env.VITE_API_ENDPOINT + "/api/weather", {
+    .get(import.meta.env.VITE_API_ENDPOINT + "/api/users", {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -71,16 +71,16 @@ onBeforeMount(() => {
 const del = (id) => {
   Swal.fire({
     title: "ยืนยันการลบ",
-    text: "คุณต้องการลบ ภูมิอากาศนี้ใช้หรือไม่",
+    text: "คุณต้องการลบ ผู้ใช้นี้ใช่หรือไม่",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Ok",
+    confirmButtonText: "ตกลง",
   }).then((result) => {
     if (result.isConfirmed) {
       axios
-        .delete(import.meta.env.VITE_API_ENDPOINT + "/api/weather/"+id, {
+        .delete(import.meta.env.VITE_API_ENDPOINT + "/api/user/"+id, {
           headers: {
             Authorization: "Bearer " + token,
           },
@@ -92,7 +92,7 @@ const del = (id) => {
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
           console.log("del" + id);
 
-          axios.get(import.meta.env.VITE_API_ENDPOINT + "/api/weather", {
+          axios.get(import.meta.env.VITE_API_ENDPOINT + "/api/users", {
           headers: {
             Authorization: "Bearer " + token,
           }}).then((data) => {
@@ -109,7 +109,7 @@ const del = (id) => {
 };
 
 const edit = (id) => {
- router.push("/weather/edit/"+id); 
+ router.push("/user/edit/"+id);
 }
 
 const numPages = computed(() => {
@@ -137,45 +137,33 @@ const pagesList = computed(() => {
       <tr>
         <th v-if="checkable" />
         <th>#</th>
-        <th>หัวข้อ</th>
-        <th>รายละเอียด</th>
-        <th>วันที่วัดค่า</th>
-        <th>ปริมาณฝนรวม24ชม.</th>
-        <th>สภาพอากาศ</th>
-        <th>ความเร็วลม</th>
-        <th>วันที่สร้าง</th>
+        <th>E-mail</th>
+        <th>Username</th>
+        <th>Name</th>
+        <th>วันที่สร้าง Account</th>
         <th />
       </tr>
     </thead>
     <tbody>
       <tr
-        v-for="(client, index) in states.weather"
-        :key="client.id"
+        v-for="(item, index) in states.users"
+        :key="item.id"
         :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']"
       >
         <td>
           {{ index+1 }}
         </td>
         <td data-label="title">
-          {{ client.title }}
+          {{ item.title }}
         </td>
         <td data-label="detail">
-          {{ client.detail }}
+          {{ item.detail }}
         </td>
         <td data-label="date">
-          {{ moment(client.date).format('HH:mm:ss DD/MM/YYYY') }}
+          {{ moment(item.date).format('DD-MM-YYYY') }}
         </td>
         <td data-label="rain_volume">
-          {{ client.rainVolume }}
-        </td>
-        <td data-label="weather_condition">
-          {{ client.weatherCondition }}
-        </td>
-        <td data-label="windSpeed">
-          {{ client.windSpeed }}
-        </td>
-        <td data-label="createdAt">
-          {{ moment(client.createdAt).format('DD-MM-YYYY') }}
+          {{ item.rainVolume }}
         </td>
         <td class="actions-cell">
           <jb-buttons type="justify-start lg:justify-end" no-wrap>
@@ -183,13 +171,13 @@ const pagesList = computed(() => {
               color="info"
               :icon="mdiGreasePencil"
               small
-              @click="edit(client.id)"
+              @click="edit(item.id)"
             />
             <jb-button
               color="danger"
               :icon="mdiTrashCan"
               small
-              @click="del(client.id)"
+              @click="del(item.id)"
             />
           </jb-buttons>
         </td>

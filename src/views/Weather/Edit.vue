@@ -51,7 +51,6 @@ onMounted(async () => {
       })
       .then(response => {
         console.log(response.data)
-
         form.title=response.data.data.title
         form.detail=response.data.data.detail
         form.lat=response.data.data.lat

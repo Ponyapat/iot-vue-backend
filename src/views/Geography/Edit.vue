@@ -70,31 +70,32 @@ onMounted(async () => {
       })
       .then(response => {
         console.log(response.data)
-        let landSize = response.data.geo.landSize;
+        // console.table("DEBUG:GEO", response.data.geo.landSize, response.data.data.landSize)
+        let landSize = response.data.data.landSize;
         const landSize_split = landSize.split("-");
         //console.log(landSize_split)
-        form.title=response.data.geo.title
-        form.detail=response.data.geo.detail
-        form.lat=response.data.geo.lat
-        form.long=response.data.geo.lon
-        form.land_detail=response.data.geo.landDetail
+        form.title=response.data.data.title
+        form.detail=response.data.data.detail
+        form.lat=response.data.data.lat
+        form.long=response.data.data.lon
+        form.land_detail=response.data.data.landDetail
 
         form.ri=landSize_split[0]
         form.ngan=landSize_split[1]
         form.wa=landSize_split[2]
 
-        form.land_code=response.data.geo.landCode
-        form.land_img=response.data.geo.landImg
+        form.land_code=response.data.data.landCode
+        form.land_img=response.data.data.landImg
 
-        form.land_price_rate=response.data.geo.landPriceRate
-        form.land_price=response.data.geo.landPrice
+        form.land_price_rate=response.data.data.landPriceRate
+        form.land_price=response.data.data.landPrice
         
-        form.land_type=response.data.geo.landType
-        form.land_properties=response.data.geo.landProperties
-        form.land_water=response.data.geo.landWater
+        form.land_type=response.data.data.landType
+        form.land_properties=response.data.data.landProperties
+        form.land_water=response.data.data.landWater
 
-        form.land_mineral=response.data.geo.landMineral
-        form.land_limitation=response.data.geo.landLimitation
+        form.land_mineral=response.data.data.landMineral
+        form.land_limitation=response.data.data.landLimitation
       })
 })
 

@@ -13,6 +13,14 @@ const routes = [
   },
   {
     meta: {
+      title: "ADDUser",
+    },
+    path: "/user/add",
+    name: "ADDUser",
+    component: () => import("@/views/User/Add.vue"),
+  },
+  {
+    meta: {
       title: "Geography",
     },
     path: "/geography",
