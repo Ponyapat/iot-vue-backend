@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive , onMounted } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { mdiBallot, mdiBallotOutline, mdiAccount, mdiMail } from "@mdi/js";
 import MainSection from "@/components/MainSection.vue";

@@ -12,6 +12,7 @@ import BottomOtherPagesSection from '@/components/BottomOtherPagesSection.vue'
 import Divider from '@/components/Divider.vue'
 import JbButton from '@/components/JbButton.vue'
 import JbButtons from '@/components/JbButtons.vue'
+import CheckRadioPicker from '@/components/CheckRadioPicker.vue'
 
 // const router = useRouter()
 
@@ -20,7 +21,9 @@ const titleStack = ref(['Admin', 'เพิ่มข้อมูลผู้ใ�
 const form = reactive({
   name: '',
   email: '',
-  username: ''
+  username: '',
+  password: '',
+  role: []
 })
 
 const submit = () => {
@@ -58,6 +61,23 @@ const submit = () => {
           v-model="form.username"
           type="text"
           placeholder="Username"
+        />
+      </field>
+      <field label="Password" placeholder="กรอก Username ผู้ใช้">
+        <control
+          v-model="form.username"
+          type="text"
+          placeholder="Password"
+        />
+      </field>
+      <field
+        label="สถานะ"
+        wrap-body
+      >
+        <check-radio-picker
+          v-model="form.role"
+          name="sample-checkbox"
+          :options="{ customer: 'Customer', admin: 'Admin', super_admin: 'Super Admin' }"
         />
       </field>
 

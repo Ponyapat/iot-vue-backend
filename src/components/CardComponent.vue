@@ -1,5 +1,5 @@
 <script setup>
-import { mdiCog } from "@mdi/js";
+import { mdiCog, mdiPlus } from "@mdi/js";
 import { useMainStore } from "@/stores/main";
 import { computed } from "vue";
 import Icon from "@/components/Icon.vue";
@@ -100,6 +100,7 @@ const submit = (e) => {
           class="bg-green-700 hover:bg-green-900 text-white font-bold m-2 py-2 px-4 rounded"
         >
           เพิ่ม ​{{title}}
+          <!-- {{ title }} -->
         </button>
       </router-link>
 
