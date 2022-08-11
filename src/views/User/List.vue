@@ -3,11 +3,11 @@
     <title-bar :title-stack="titleStack" />
     <card-component
       :icon="mdiMonitorCellphone"
-      title="ผู้ใช้งาน"
+      title="ผู้ดูแล (Admin)"
       has-table
       addlink="/user/add"
     >
-      <!-- <UserTable /> -->
+      <UsersTable />
     </card-component>
   </div>
 </template>
@@ -18,7 +18,7 @@ import { useMainStore } from "@/stores/main";
 import TitleBar from "@/components/TitleBar.vue";
 import HeroBar from "@/components/HeroBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
-// import UserTable from '@/components/UserTable.vue';
+import UsersTable from '@/components/UsersTable.vue';
 
-const titleStack = ref(["Admin", "ผู้ใช้"]);
+const titleStack = ref(["Admin", "ผู้ดูแลระบบ"]);
 </script>
