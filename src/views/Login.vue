@@ -97,7 +97,7 @@ const submit = () => {
         />
       </field>
 
-      <field label="Password" help="Please enter your password">
+      <field label="Password" help="Please enter your password..">
         <control
           v-model="form.password"
           :icon="mdiAsterisk"
