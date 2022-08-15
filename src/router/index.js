@@ -22,6 +22,14 @@ const routes = [
   },
   {
     meta: {
+      title: "Customers"
+    },
+    path: "/customers",
+    name: 'Customer',
+    component: () => import('@/views/Customer/List.vue')
+  },
+  {
+    meta: {
       title: "Geography",
     },
     path: "/geography",

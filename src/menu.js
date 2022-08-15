@@ -38,8 +38,13 @@ export default [
       icon: mdiWeatherPartlyRainy
     },
     {
+      to: '/customers',
+      label: 'Customer',
+      icon: mdiAccount
+    },
+    {
       to: '/users',
-      label: 'Users',
+      label: 'Admin',
       icon: mdiAccount
     },
     {
