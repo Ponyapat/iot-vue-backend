@@ -22,6 +22,14 @@ const routes = [
   },
   {
     meta: {
+      title: 'EDITUser'
+    },
+    path: "/user/edit/:id",
+    name: "EDITUser",
+    component: () => import('@/views/User/Edit.vue'),
+  },
+  {
+    meta: {
       title: "Customers"
     },
     path: "/customers",
