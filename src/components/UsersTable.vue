@@ -1,9 +1,10 @@
 <script setup>
-import { computed, ref, onBeforeMount, reactive  } from "vue";
+import { computed, ref, onBeforeMount, reactive, onMounted } from "vue";
 import { useMainStore } from "@/stores/main";
 import { useRouter } from "vue-router";
 import JbButtons from "@/components/JbButtons.vue";
 import JbButton from "@/components/JbButton.vue";
+import CheckRadioPicker from "@/components/CheckRadioPicker.vue";
 import { mdiTrashCan, mdiGreasePencil } from "@mdi/js";
 const mainStore = useMainStore();
 
@@ -19,13 +20,19 @@ const edit = (id) => {
 const del = (id) => {
   console.log('Delete', id)
 }
-const users = [
+const onChangeActive = (id, isActive) => {
+  console.log('DEBUG:', id, isActive)
+  // ส่งค่าไปยัง data base
+}
+
+const users = ref([
   {
     id: 1,
     username: "inkink1",
     name: "ink1",
     email: "ink1@gmailcom",
     status: "admin",
+    is_active: 0
   },
   {
     id: 2,
@@ -33,8 +40,17 @@ const users = [
     name: "ink2",
     email: "ink2@gmailcom",
     status: "super_admin",
+    is_active: 1
   },
-];
+  {
+    id: 3,
+    username: "inkink3",
+    name: "ink3",
+    email: "ink3@gmailcom",
+    status: "admin",
+    is_active: 1
+  }
+]);
 </script>
 <template>
   <div>
@@ -46,6 +62,7 @@ const users = [
           <th>Name</th>
           <th>Email</th>
           <th>Status</th>
+          <th>Active</th>
           <th></th>
         </tr>
       </thead>
@@ -56,6 +73,16 @@ const users = [
           <td>{{ user.name }}</td>
           <td>{{ user.email }}</td>
           <td>{{ user.status }}</td>
+          <td>
+            <!-- {{ user.is_active }} -->
+            <check-radio-picker
+              v-model="user.is_active"
+              name="sample-switch"
+              type="switch"
+              @change="onChangeActive(user.id, user.is_active)"
+            />
+            <!-- <input type="checkbox" v-model="user.is_active" :true-value="1" :false-value="0"> -->
+          </td>
           <td class="actions-cell">
             <jb-buttons type="justify-start lg:justify-end" no-wrap>
               <jb-button color="info" :icon="mdiGreasePencil" small @click="edit(user.id)" />
@@ -65,5 +92,24 @@ const users = [
         </tr>
       </tbody>
     </table>
+    <div
+      :class="lightBorderStyle"
+      class="p-3 lg:px-6 border-t dark:border-gray-800"
+    >
+      <!-- <level>
+        <jb-buttons>
+          <jb-button
+            v-for="page in pagesList"
+            :key="page"
+            :active="page === currentPage"
+            :label="page + 1"
+            :outline="darkMode"
+            small
+            @click="pageNext(page)"
+          />
+        </jb-buttons>
+        <small>Page {{ currentPageHuman }} of {{ numPages }}</small>
+      </level> -->
+    </div>
   </div>
 </template>
