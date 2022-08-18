@@ -4,9 +4,11 @@ import { useMainStore } from "@/stores/main";
 import { useRouter } from "vue-router";
 import JbButtons from "@/components/JbButtons.vue";
 import JbButton from "@/components/JbButton.vue";
+import Level from "@/components/Level.vue";
 import CheckRadioPicker from "@/components/CheckRadioPicker.vue";
 import { mdiTrashCan, mdiGreasePencil } from "@mdi/js";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const mainStore = useMainStore();
 
@@ -20,11 +22,72 @@ const tableTrOddStyle = computed(() => mainStore.tableTrOddStyle);
 
 const darkMode = computed(() => mainStore.darkMode);
 
+const items = ref(0);
+
+const perPage = ref(10);
+
+const currentPage = ref(0);
+
+
+const numPages = computed(() => {
+  return Math.ceil(items.value / perPage.value);
+});
+
+const currentPageHuman = computed(() => currentPage.value + 1);
+
+const pagesList = computed(() => {
+  const pagesList = [];
+
+  for (let i = 0; i < numPages.value; i++) {
+    pagesList.push(i);
+  }
+
+  return pagesList;
+});
+
+const token = localStorage.getItem("tkfw");
+
+const states = reactive({
+  users: {},
+});
+const fetchData = () => {
+  axios
+    .get(import.meta.env.VITE_API_ENDPOINT + "/api/users", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+    .then((data) => {
+      // console.log('DEBUG', data.data.data, data.data);
+      states.users = data.data.data;
+      items.value = data.data.meta.itemCount;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+onBeforeMount(() => {
+  fetchData()
+  // axios
+  //   .get(import.meta.env.VITE_API_ENDPOINT + "/api/users", {
+  //     headers: {
+  //       Authorization: "Bearer " + token,
+  //     },
+  //   })
+  //   .then((data) => {
+  //     console.log('DEBUG', data.data.data);
+  //     states.users = data.data.data;
+  //   //   items.value = data.data.meta.itemCount;
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+});
 
 const edit = (id) => {
-  console.log('Edit', id)
-  const url = router.push("/user/edit/" + id);
-  console.log('DEBUG: ', url)
+  // console.log('Edit', id)
+  router.push("/user/edit/" + id);
 }
 const del = (id) => {
   console.log('Delete', id)
@@ -39,39 +102,84 @@ const del = (id) => {
   }).then(() => {
     console.log('ยืนยันการลบ')
     // ส่งการลบไปยัง data base
+    axios
+      .delete(import.meta.env.VITE_API_ENDPOINT + "/api/users/" + id, {
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      })
+      .then((data) => {
+        setInterval(function () {
+          location.reload();
+        }, 1500);
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        // console.log("del" + id);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   })
 }
 const onChangeActive = (id, isActive) => {
-  console.log('DEBUG:', id, isActive)
-  // ส่งค่าไปยัง data base
+  if (isActive == 1) {
+    isActive = 0
+  } else if (isActive == 0) {
+    isActive = 1
+  }
+  Swal.fire({
+    title: "ยืนยันการเปลี่ยนสถานะ",
+    text: "คุณต้องการเปลี่ยนสถานะ Admin ท่านนี้ใช่หรือไม่",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Ok",
+  }).then((result) => {
+    console.log('DEBUG:', id, isActive, result)
+    if (result.isConfirmed) {
+      console.log('confirmed')
+      axios
+        .put(import.meta.env.VITE_API_ENDPOINT+"/api/users/"+id+"/update-status",
+          {
+            isActive: isActive
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + token
+            }
+          }
+        ).then((data) => {
+          console.log(data)
+          fetchData()
+          // location.reload();
+        })
+    }
+  })
 }
 
-const users = ref([
-  {
-    id: 1,
-    username: "inkink1",
-    name: "ink1",
-    email: "ink1@gmailcom",
-    status: "admin",
-    is_active: 0
-  },
-  {
-    id: 2,
-    username: "inkink2",
-    name: "ink2",
-    email: "ink2@gmailcom",
-    status: "super_admin",
-    is_active: 1
-  },
-  {
-    id: 3,
-    username: "inkink3",
-    name: "ink3",
-    email: "ink3@gmailcom",
-    status: "admin",
-    is_active: 1
+const pageNext = (page) => {
+  currentPage.value = page;
+  //console.log("pageNext " + (page+1));
+  axios
+    .get(import.meta.env.VITE_API_ENDPOINT + "/api/users?order=ASC&page="+(page+1)+"&take="+perPage.value, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+    .then((data) => {
+      states.users = data.data.data;
+    });
+}
+const statusText = (value) => {
+  if (!value) {
+    return ''
+  } else if (value === 'admin') {
+    return 'Admin'
+  } else if (value === 'super_admin') {
+    return 'Super Admin'
   }
-]);
+}
+
 </script>
 <template>
   <div>
@@ -79,7 +187,7 @@ const users = ref([
       <thead>
         <tr>
           <th>#</th>
-          <th>Admin ID</th>
+          <!-- <th>Admin ID</th> -->
           <th>Username</th>
           <th>Name</th>
           <th>Email</th>
@@ -89,31 +197,31 @@ const users = ref([
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(user, index) in users" :key="index" :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']">
+        <tr v-for="(user, index) in states.users" :key="index" :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']">
           <td data-label="#">
             {{ index + 1 }}
           </td>
-          <td data-label="ID">
+          <!-- <td data-label="ID" class="p-3">
             {{ user.id }}
-          </td>
-          <td data-label="Username">
+          </td> -->
+          <td class="p-3" data-label="Username">
             {{ user.username }}
           </td>
-          <td data-label="Name">
+          <td class="p-3" data-label="Name">
             {{ user.name }}
           </td>
-          <td data-label="E-mail">
+          <td class="p-3" data-label="E-mail">
             {{ user.email }}
           </td>
-          <td data-label="Status">
-            {{ user.status }}
+          <td class="p-3" data-label="Status">
+            {{ statusText(user.status) }}
           </td>
-          <td data-label="Active">
+          <td class="p-3" data-label="Active">
             <check-radio-picker
-              v-model="user.is_active"
+              v-model="user.isActive"
               name="sample-switch"
               type="switch"
-              @change="onChangeActive(user.id, user.is_active)"
+              @click.prevent="onChangeActive(user.id, user.isActive)"
             />
           </td>
           <td class="actions-cell">
@@ -129,7 +237,7 @@ const users = ref([
       :class="lightBorderStyle"
       class="p-3 lg:px-6 border-t dark:border-gray-800"
     >
-      <!-- <level>
+      <level>
         <jb-buttons>
           <jb-button
             v-for="page in pagesList"
@@ -142,7 +250,7 @@ const users = ref([
           />
         </jb-buttons>
         <small>Page {{ currentPageHuman }} of {{ numPages }}</small>
-      </level> -->
+      </level>
     </div>
   </div>
 </template>

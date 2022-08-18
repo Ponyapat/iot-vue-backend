@@ -1,8 +1,8 @@
 <script setup>
-// import { useRouter } from 'vue-router'
-// import { useMainStore } from '@/stores/main'
+import { useRouter } from 'vue-router'
+import { useMainStore } from '@/stores/main'
 import TitleBar from '@/components/TitleBar.vue'
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import MainSection from '@/components/MainSection.vue'
 import CardComponent from '@/components/CardComponent.vue'
 import Field from '@/components/Field.vue'
@@ -12,9 +12,11 @@ import BottomOtherPagesSection from '@/components/BottomOtherPagesSection.vue'
 import Divider from '@/components/Divider.vue'
 import JbButton from '@/components/JbButton.vue'
 import JbButtons from '@/components/JbButtons.vue'
+import axios from 'axios'
+import Swal from 'sweetalert2'
 // import CheckRadioPicker from '@/components/CheckRadioPicker.vue'
 
-// const router = useRouter()
+const router = useRouter()
 
 const titleStack = ref(['Admin', 'เพิ่มข้อมูลผู้ใช้'])
 
@@ -22,6 +24,9 @@ const selectOptions = [
   { role: 'admin', label: 'Admin' },
   { role: 'super_admin', label: 'Super Admin' }
 ]
+onMounted(() => {
+  clearData()
+})
 
 const form = reactive({
   name: '',
@@ -31,9 +36,46 @@ const form = reactive({
   role: selectOptions[0]
 })
 
+const clearData = () => {
+  console.log('clearData')
+  form.name = ''
+  form.email = ''
+  form.username = ''
+  form.password = ''
+  form.role = selectOptions[0]
+  console.log('22', form)
+}
+
 const submit = () => {
   console.log('add data user')
   console.log(form)
+  axios
+    .post(import.meta.env.VITE_API_ENDPOINT+"/api/auth/register", {
+      name: form.name,
+      username: form.username,
+      email: form.email,
+      password: form.password,
+    })
+    .then((r) => {
+      console.log("success");
+      Swal.fire({
+        icon: "success",
+        title: "เพิ่ม Admin สำเร็จ",
+        showConfirmButton: 1,
+        timer: 3000,
+      });
+      router.push("/users");
+    })
+    .catch((error) => {
+      console.log(error.response.data.message);
+      if (error.response.data.message == "Error: User not registration!"){
+        Swal.fire({
+          icon: "warning",
+          title: "มีผู้ใช้งานในระบบนี้แล้ว",
+          showConfirmButton: 1
+        });
+      }
+    });
 }
 
 </script>
@@ -54,13 +96,6 @@ const submit = () => {
           placeholder="Name"
         />
       </field>
-      <field label="E-mail" placeholder="กรอก E-mail ผู้ใช้">
-        <control
-          v-model="form.email"
-          type="text"
-          placeholder="E-mail"
-        />
-      </field>
       <field label="Username" placeholder="กรอก Username ผู้ใช้">
         <control
           v-model="form.username"
@@ -68,10 +103,18 @@ const submit = () => {
           placeholder="Username"
         />
       </field>
-      <field label="Password" placeholder="กรอก Username ผู้ใช้">
+      <field label="E-mail" placeholder="กรอก E-mail ผู้ใช้">
         <control
-          v-model="form.username"
+          v-model="form.email"
           type="text"
+          placeholder="E-mail"
+        />
+      </field>
+      <field label="Password" placeholder="กรอก Password">
+        <control
+          v-model="form.password"
+          type="password"
+          autocomplete="none"
           placeholder="Password"
         />
       </field>
