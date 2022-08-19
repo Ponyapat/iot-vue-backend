@@ -134,7 +134,9 @@ if (props.ctrlKFocus) {
         :key="option.id ?? option"
         :value="option"
       >
-        {{ option.label ?? option }}
+        <span v-if="option.label">{{ option.label }}</span>
+        <span v-else-if="option.name">{{ option.name }}</span>
+        <span v-else>{{ option }}</span>
       </option>
     </select>
     <textarea

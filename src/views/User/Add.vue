@@ -17,6 +17,7 @@ import Swal from 'sweetalert2'
 // import CheckRadioPicker from '@/components/CheckRadioPicker.vue'
 
 const router = useRouter()
+const token = localStorage.getItem("tkfw");
 
 const titleStack = ref(['Admin', 'เพิ่มข้อมูลผู้ใช้'])
 
@@ -24,8 +25,13 @@ const selectOptions = [
   { role: 'admin', label: 'Admin' },
   { role: 'super_admin', label: 'Super Admin' }
 ]
+const states = reactive({
+  roles: "",
+});
+
 onMounted(() => {
   clearData()
+  fetchRole()
 })
 
 const form = reactive({
@@ -33,7 +39,7 @@ const form = reactive({
   email: '',
   username: '',
   password: '',
-  role: selectOptions[0]
+  role: states.roles[1]
 })
 
 const clearData = () => {
@@ -42,40 +48,55 @@ const clearData = () => {
   form.email = ''
   form.username = ''
   form.password = ''
-  form.role = selectOptions[0]
-  console.log('22', form)
+  form.role = states.roles[1]
+}
+
+const fetchRole = () => {
+  console.log('fetch role')
+  axios
+    .get(import.meta.env.VITE_API_ENDPOINT+"/api/role", {
+      headers: {
+        Authorization: "Bearer " + token,
+      }
+    })
+    .then((data) => {
+      // console.log('DEBUG ROLE: ', data)
+      states.roles = data.data.data
+      // set role default เป็น admin
+      form.role = states.roles[1]
+    })
 }
 
 const submit = () => {
   console.log('add data user')
   console.log(form)
-  axios
-    .post(import.meta.env.VITE_API_ENDPOINT+"/api/auth/register", {
-      name: form.name,
-      username: form.username,
-      email: form.email,
-      password: form.password,
-    })
-    .then((r) => {
-      console.log("success");
-      Swal.fire({
-        icon: "success",
-        title: "เพิ่ม Admin สำเร็จ",
-        showConfirmButton: 1,
-        timer: 3000,
-      });
-      router.push("/users");
-    })
-    .catch((error) => {
-      console.log(error.response.data.message);
-      if (error.response.data.message == "Error: User not registration!"){
-        Swal.fire({
-          icon: "warning",
-          title: "มีผู้ใช้งานในระบบนี้แล้ว",
-          showConfirmButton: 1
-        });
-      }
-    });
+  // axios
+  //   .post(import.meta.env.VITE_API_ENDPOINT+"/api/auth/register", {
+  //     name: form.name,
+  //     username: form.username,
+  //     email: form.email,
+  //     password: form.password,
+  //   })
+  //   .then((r) => {
+  //     console.log("success");
+  //     Swal.fire({
+  //       icon: "success",
+  //       title: "เพิ่ม Admin สำเร็จ",
+  //       showConfirmButton: 1,
+  //       timer: 3000,
+  //     });
+  //     router.push("/users");
+  //   })
+  //   .catch((error) => {
+  //     console.log(error.response.data.message);
+  //     if (error.response.data.message == "Error: User not registration!"){
+  //       Swal.fire({
+  //         icon: "warning",
+  //         title: "มีผู้ใช้งานในระบบนี้แล้ว",
+  //         showConfirmButton: 1
+  //       });
+  //     }
+  //   });
 }
 
 </script>
@@ -89,28 +110,28 @@ const submit = () => {
       form
       @submit.prevent="submit"
     >
-      <field label="Name" placeholder="กรอก Name ผู้ใช้">
+      <field label="Name" placeholder="กรอก Name ผู้ใช้" :require="true">
         <control
           v-model="form.name"
           type="text"
           placeholder="Name"
         />
       </field>
-      <field label="Username" placeholder="กรอก Username ผู้ใช้">
+      <field label="Username" placeholder="กรอก Username ผู้ใช้" :require="true">
         <control
           v-model="form.username"
           type="text"
           placeholder="Username"
         />
       </field>
-      <field label="E-mail" placeholder="กรอก E-mail ผู้ใช้">
+      <field label="E-mail" placeholder="กรอก E-mail ผู้ใช้" :require="true">
         <control
           v-model="form.email"
-          type="text"
+          type="email"
           placeholder="E-mail"
         />
       </field>
-      <field label="Password" placeholder="กรอก Password">
+      <field label="Password" placeholder="กรอก Password" :require="true">
         <control
           v-model="form.password"
           type="password"
@@ -121,7 +142,7 @@ const submit = () => {
       <field label="กำหนดสิทธ์">
         <control
           v-model="form.role"
-          :options="selectOptions"
+          :options="states.roles"
         />
       </field>
 

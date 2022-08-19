@@ -104,24 +104,24 @@ const submit = () => {
       form
       @submit.prevent="submit"
     >
-      <field label="Name" placeholder="กรอก Name ผู้ใช้">
+      <field label="Name" placeholder="กรอก Name ผู้ใช้" :require="true">
         <control
           v-model="form.name"
           type="text"
           placeholder="Name"
         />
       </field>
-      <field label="Username" placeholder="กรอก Username ผู้ใช้">
+      <field label="Username" placeholder="กรอก Username ผู้ใช้" :require="true">
         <control
           v-model="form.username"
           type="text"
           placeholder="Username"
         />
       </field>
-      <field label="E-mail" placeholder="กรอก E-mail ผู้ใช้">
+      <field label="E-mail" placeholder="กรอก E-mail ผู้ใช้" :require="true">
         <control
           v-model="form.email"
-          type="text"
+          type="email"
           placeholder="E-mail"
         />
       </field>
