@@ -24,11 +24,16 @@ const selectOptions = [
   { role: 'admin', label: 'Admin' },
   { role: 'super_admin', label: 'Super Admin' }
 ]
+
+const states = reactive({
+  roles: "",
+});
+
 const url = window.location.href;
 const id = url.split("/")[5];
-
+const token = localStorage.getItem("tkfw");
 onMounted(async () => {
-  const token = localStorage.getItem("tkfw");
+  fetchRole()
   await axios
     .get(import.meta.env.VITE_API_ENDPOINT + "/api/users/"+id+"/profile",
       {
@@ -40,21 +45,37 @@ onMounted(async () => {
       form.name = response.data.user.name
       form.username = response.data.user.username
       form.email = response.data.user.email
+      if (!response.data.user.role) {
+        form.role = states.roles[1]
+      } else {
+        form.role = response.data.user.role
+      }
     })
 })
-
+const fetchRole = () => {
+  console.log('fetch role')
+  axios
+    .get(import.meta.env.VITE_API_ENDPOINT+"/api/role", {
+      headers: {
+        Authorization: "Bearer " + token,
+      }
+    })
+    .then((data) => {
+      console.log('DEBUG ROLE: ', data)
+      states.roles = data.data.data
+    })
+}
 const form = reactive({
   id: '',
   name: '',
   email: '',
   username: '',
   password: '',
-  role: selectOptions[0]
+  role: ''
 })
 
 const submit = () => {
   console.log('update data user')
-  const token = localStorage.getItem("tkfw");
   axios
     .put(
       import.meta.env.VITE_API_ENDPOINT + "/api/users/"+id+"/profile",
@@ -62,6 +83,7 @@ const submit = () => {
         name: form.name,
         email: form.email,
         username: form.username,
+        roleId: form.role.id
       },
       {
         headers: {
@@ -135,7 +157,7 @@ const submit = () => {
       <field label="กำหนดสิทธ์">
         <control
           v-model="form.role"
-          :options="selectOptions"
+          :options="states.roles"
         />
       </field>
 

@@ -21,10 +21,10 @@ const token = localStorage.getItem("tkfw");
 
 const titleStack = ref(['Admin', 'เพิ่มข้อมูลผู้ใช้'])
 
-const selectOptions = [
-  { role: 'admin', label: 'Admin' },
-  { role: 'super_admin', label: 'Super Admin' }
-]
+// const selectOptions = [
+//   { role: 'admin', label: 'Admin' },
+//   { role: 'super_admin', label: 'Super Admin' }
+// ]
 const states = reactive({
   roles: "",
 });
@@ -39,7 +39,7 @@ const form = reactive({
   email: '',
   username: '',
   password: '',
-  role: states.roles[1]
+  role_id: states.roles[1]
 })
 
 const clearData = () => {
@@ -48,7 +48,7 @@ const clearData = () => {
   form.email = ''
   form.username = ''
   form.password = ''
-  form.role = states.roles[1]
+  form.role_id = states.roles[1]
 }
 
 const fetchRole = () => {
@@ -141,7 +141,7 @@ const submit = () => {
       </field>
       <field label="กำหนดสิทธ์">
         <control
-          v-model="form.role"
+          v-model="form.role_id"
           :options="states.roles"
         />
       </field>

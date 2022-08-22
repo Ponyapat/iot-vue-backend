@@ -58,7 +58,7 @@ const fetchData = () => {
       },
     })
     .then((data) => {
-      // console.log('DEBUG', data.data.data, data.data);
+      console.log('DEBUG', data.data.data, data.data);
       states.users = data.data.data;
       items.value = data.data.meta.itemCount;
     })
@@ -173,9 +173,9 @@ const pageNext = (page) => {
 const statusText = (value) => {
   if (!value) {
     return ''
-  } else if (value === 'admin') {
+  } else if (value === '1') {
     return 'Admin'
-  } else if (value === 'super_admin') {
+  } else if (value === '2') {
     return 'Super Admin'
   }
 }
@@ -214,7 +214,7 @@ const statusText = (value) => {
             {{ user.email }}
           </td>
           <td class="p-3" data-label="Status">
-            {{ statusText(user.status) }}
+            {{ user.role ? user.role.name : '' }}
           </td>
           <td class="p-3" data-label="Active">
             <check-radio-picker
