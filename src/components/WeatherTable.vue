@@ -163,7 +163,7 @@ const pagesList = computed(() => {
           {{ client.detail }}
         </td>
         <td data-label="date">
-          {{ moment(client.date).format('DD-MM-YYYY') }}
+          {{ moment(client.date).format('HH:mm:ss DD/MM/YYYY') }}
         </td>
         <td data-label="rain_volume">
           {{ client.rainVolume }}

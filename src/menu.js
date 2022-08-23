@@ -10,7 +10,10 @@ import {
   mdiViewList,
   mdiTelevisionGuide,
   mdiResponsive,
-  mdiPalette
+  mdiPalette,
+  mdiAccount,
+  mdiEarth,
+  mdiWeatherPartlyRainy
 } from '@mdi/js'
 
 export default [
@@ -27,17 +30,22 @@ export default [
     {
       to: '/geography',
       label: 'ภูมิศาสตร์',
-      icon: mdiTable
+      icon: mdiEarth
     },
     {
       to: '/weather',
       label: 'ภูมิอากาศ',
-      icon: mdiTable
+      icon: mdiWeatherPartlyRainy
+    },
+    {
+      to: '/customers',
+      label: 'Customer',
+      icon: mdiAccount
     },
     {
       to: '/users',
-      label: 'Users',
-      icon: mdiTable
+      label: 'Admin',
+      icon: mdiAccount
     },
     {
       label: 'Submenus',

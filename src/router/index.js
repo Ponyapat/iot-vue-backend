@@ -9,7 +9,32 @@ const routes = [
     },
     path: "/users",
     name: "Users",
-    component: () => import("@/views/Users.vue"),
+    // component: () => import("@/views/Users.vue"),
+    component: () => import('@/views/User/List.vue')
+  },
+  {
+    meta: {
+      title: "ADDUser",
+    },
+    path: "/user/add",
+    name: "ADDUser",
+    component: () => import("@/views/User/Add.vue"),
+  },
+  {
+    meta: {
+      title: 'EDITUser'
+    },
+    path: "/user/edit/:id",
+    name: "EDITUser",
+    component: () => import('@/views/User/Edit.vue'),
+  },
+  {
+    meta: {
+      title: "Customers"
+    },
+    path: "/customers",
+    name: 'Customer',
+    component: () => import('@/views/Customer/List.vue')
   },
   {
     meta: {

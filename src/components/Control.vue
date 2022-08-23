@@ -36,6 +36,10 @@ const props = defineProps({
     type: String,
     default: 'text'
   },
+  pattern: {
+    type: String,
+    default: null
+  },
   modelValue: {
     type: [String, Number, Boolean, Array, Object],
     default: ''
@@ -134,7 +138,9 @@ if (props.ctrlKFocus) {
         :key="option.id ?? option"
         :value="option"
       >
-        {{ option.label ?? option }}
+        <span v-if="option.label">{{ option.label }}</span>
+        <span v-else-if="option.name">{{ option.name }}</span>
+        <span v-else>{{ option }}</span>
       </option>
     </select>
     <textarea
@@ -159,6 +165,7 @@ if (props.ctrlKFocus) {
       :placeholder="placeholder"
       :type="computedType"
       :class="inputElClass"
+      :pattern="pattern"
     >
     <control-icon
       v-if="icon"
