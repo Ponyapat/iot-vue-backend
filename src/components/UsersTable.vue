@@ -99,25 +99,28 @@ const del = (id) => {
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
     confirmButtonText: "Ok",
-  }).then(() => {
-    console.log('ยืนยันการลบ')
-    // ส่งการลบไปยัง data base
-    axios
-      .delete(import.meta.env.VITE_API_ENDPOINT + "/api/users/" + id, {
-        headers: {
-          Authorization: "Bearer " + token
-        }
-      })
-      .then((data) => {
-        setInterval(function () {
-          location.reload();
-        }, 1500);
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
-        // console.log("del" + id);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  }).then((result) => {
+    console.log('result', result)
+    if (result.isConfirmed) {
+      console.log('ยืนยันการลบ')
+      // ส่งการลบไปยัง data base
+      axios
+        .delete(import.meta.env.VITE_API_ENDPOINT + "/api/users/" + id, {
+          headers: {
+            Authorization: "Bearer " + token
+          }
+        })
+        .then((data) => {
+          setInterval(function () {
+            location.reload();
+          }, 1500);
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          // console.log("del" + id);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   })
 }
 const onChangeActive = (id, isActive) => {
@@ -191,8 +194,8 @@ const statusText = (value) => {
           <th>Username</th>
           <th>Name</th>
           <th>Email</th>
+          <th>Role</th>
           <th>Status</th>
-          <th>Active</th>
           <th></th>
         </tr>
       </thead>
@@ -213,10 +216,10 @@ const statusText = (value) => {
           <td class="p-3" data-label="E-mail">
             {{ user.email }}
           </td>
-          <td class="p-3" data-label="Status">
+          <td class="p-3 text-gray-500" data-label="Role">
             {{ user.role ? user.role.name : '' }}
           </td>
-          <td class="p-3" data-label="Active">
+          <td class="p-3" data-label="Status">
             <check-radio-picker
               v-model="user.isActive"
               name="sample-switch"

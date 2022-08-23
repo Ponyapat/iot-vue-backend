@@ -18,12 +18,7 @@ import Swal from 'sweetalert2';
 
 // const router = useRouter()
 
-const titleStack = ref(['Admin', 'เพิ่มข้อมูลผู้ใช้'])
-
-const selectOptions = [
-  { role: 'admin', label: 'Admin' },
-  { role: 'super_admin', label: 'Super Admin' }
-]
+const titleStack = ref(['Admin', 'แก้ไขข้อมูลผู้ใช้'])
 
 const states = reactive({
   roles: "",
@@ -41,7 +36,7 @@ onMounted(async () => {
           Authorization: "Bearer " + token,
         },
       }).then(response => {
-      console.log('DEBUG: ', response)
+      // console.log('DEBUG: ', response)
       form.name = response.data.user.name
       form.username = response.data.user.username
       form.email = response.data.user.email
@@ -53,7 +48,6 @@ onMounted(async () => {
     })
 })
 const fetchRole = () => {
-  console.log('fetch role')
   axios
     .get(import.meta.env.VITE_API_ENDPOINT+"/api/role", {
       headers: {
@@ -75,7 +69,7 @@ const form = reactive({
 })
 
 const submit = () => {
-  console.log('update data user')
+  console.log('update data user', form)
   axios
     .put(
       import.meta.env.VITE_API_ENDPOINT + "/api/users/"+id+"/profile",

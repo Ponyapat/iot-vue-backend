@@ -48,7 +48,7 @@ const clearData = () => {
   form.email = ''
   form.username = ''
   form.password = ''
-  form.role_id = states.roles[1]
+  form.role = states.roles[1]
 }
 
 const fetchRole = () => {
@@ -70,35 +70,35 @@ const fetchRole = () => {
 const submit = () => {
   console.log('add data user')
   console.log(form)
-  // axios
-  //   .post(import.meta.env.VITE_API_ENDPOINT+"/api/auth/register", {
-  //     name: form.name,
-  //     username: form.username,
-  //     email: form.email,
-  //     password: form.password,
-  //   })
-  //   .then((r) => {
-  //     console.log("success");
-  //     Swal.fire({
-  //       icon: "success",
-  //       title: "เพิ่ม Admin สำเร็จ",
-  //       showConfirmButton: 1,
-  //       timer: 3000,
-  //     });
-  //     router.push("/users");
-  //   })
-  //   .catch((error) => {
-  //     console.log(error.response.data.message);
-  //     if (error.response.data.message == "Error: User not registration!"){
-  //       Swal.fire({
-  //         icon: "warning",
-  //         title: "มีผู้ใช้งานในระบบนี้แล้ว",
-  //         showConfirmButton: 1
-  //       });
-  //     }
-  //   });
+  axios
+    .post(import.meta.env.VITE_API_ENDPOINT+"/api/auth/register", {
+      name: form.name,
+      username: form.username,
+      email: form.email,
+      password: form.password,
+      roleId: form.role.id
+    })
+    .then((r) => {
+      console.log("success");
+      Swal.fire({
+        icon: "success",
+        title: "เพิ่ม Admin สำเร็จ",
+        showConfirmButton: 1,
+        timer: 3000,
+      });
+      router.push("/users");
+    })
+    .catch((error) => {
+      console.log(error.response.data.message);
+      if (error.response.data.message == "Error: User not registration!"){
+        Swal.fire({
+          icon: "warning",
+          title: "มีผู้ใช้งานในระบบนี้แล้ว",
+          showConfirmButton: 1
+        });
+      }
+    });
 }
-
 </script>
 
 <template>
@@ -141,7 +141,7 @@ const submit = () => {
       </field>
       <field label="กำหนดสิทธ์">
         <control
-          v-model="form.role_id"
+          v-model="form.role"
           :options="states.roles"
         />
       </field>
