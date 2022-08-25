@@ -13,7 +13,8 @@ import {
   mdiPalette,
   mdiAccount,
   mdiEarth,
-  mdiWeatherPartlyRainy
+  mdiWeatherPartlyRainy,
+  mdiShieldAccountVariant
 } from '@mdi/js'
 
 export default [
@@ -46,6 +47,11 @@ export default [
       to: '/users',
       label: 'Admin',
       icon: mdiAccount
+    },
+    {
+      to: '/roles',
+      label: 'Role',
+      icon: mdiShieldAccountVariant
     },
     {
       label: 'Submenus',

@@ -92,6 +92,30 @@ const routes = [
   },
   {
     meta: {
+      title: "Role",
+    },
+    path: "/roles",
+    name: "Role",
+    component: () => import("@/views/Role/List.vue"),
+  },
+  {
+    meta: {
+      title: "ADDRole"
+    },
+    path: "/role/add",
+    name: "ADDRole",
+    component: () => import("@/views/Role/Form.vue")
+  },
+  {
+    meta: {
+      title: "EDITRole"
+    },
+    path: "/role/edit/:id",
+    name: "EDITRole",
+    component: () => import("@/views/Role/Form.vue")
+  },
+  {
+    meta: {
       title: "TEST",
     },
     path: "/test",
