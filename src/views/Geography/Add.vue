@@ -57,10 +57,63 @@ const form = reactive({
   land_water: "land_water",
   land_mineral: "land_mineral",
   land_limitation: "land_limitation",
+
+  fileupload:null,
   //department: selectOptions[0],
 });
 
-const submit = () => {
+const upload_image = () => {
+  console.log("upload_image")
+  //console.log(form.fileupload)
+  const token = localStorage.getItem("tkfw");
+  let formData = new FormData();
+  let imagefile = document.querySelector('#imgInp');
+  formData.append("file", imagefile.files[0]);
+  //console.log(formData)
+  axios.post(
+      import.meta.env.VITE_API_ENDPOINT + "/api/image?imageableType=land",formData, 
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+          'Content-Type': 'multipart/form-data',
+          'accept': 'application/json'
+        },
+      }
+    )
+    .then((data) => {
+      console.log(data);
+      if (data.status == 201) {
+        //console.log(data.status);
+        form.land_img = data.data.url
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'อัพโหลดรูปสำเร็จ',
+          showConfirmButton: false,
+          timer: 1500
+        })
+ 
+      } else {
+        Swal.fire({
+          position: 'top-end',
+          icon: "warning",
+          title: "ไม่สามารถอัพโหลดรูปได้",
+          timer: 1500,
+        });
+        return false;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+  const [file] = imgInp.files
+  if (file) {
+       blah.src = URL.createObjectURL(file)
+  }
+};
+
+const submit = () => { 
   const token = localStorage.getItem("tkfw");
   console.log(token);
   console.log(form);
@@ -184,11 +237,17 @@ const submit = () => {
 
       <field label="รูปภาพขอบเขตที่ดิน">
         <control
-          v-model="form.land_img"
-          type="text"
+          type="file"
           placeholder="รูปภาพขอบเขตที่ดิน"
+          name="imgInp"
+          id="imgInp"
+          @change="upload_image"
+          v-model="form.fileupload"
         />
       </field>
+
+      <div><img id="blah" src="/images/noimage.png" width="300" /></div>
+      
 
       <field label="ราคาประเมิน (บาท/ตารางวา)">
         <control

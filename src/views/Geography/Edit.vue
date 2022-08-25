@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive , onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { mdiBallot, mdiBallotOutline, mdiAccount, mdiMail } from "@mdi/js";
 import MainSection from "@/components/MainSection.vue";
@@ -34,6 +34,9 @@ const titleStack = ref(["Admin", "แก้ไขข้อมูลภูมิ�
 //   file: null,
 // });
 
+const token = localStorage.getItem("tkfw");
+axios.defaults.headers.common['Authorization'] = token;
+
 const router = useRouter();
 const url = window.location.href;
 const id = url.split("/")[5];
@@ -57,10 +60,10 @@ const form = reactive({
   land_water: "",
   land_mineral: "",
   land_limitation: "",
+  img:"/images/noimage.png"
 });
 
 onMounted(async () => {
-  const token = localStorage.getItem("tkfw");
   await axios
       .get(import.meta.env.VITE_API_ENDPOINT + "/api/geo/"+id,
       {
@@ -69,8 +72,7 @@ onMounted(async () => {
         },
       })
       .then(response => {
-        console.log(response.data)
-        // console.table("DEBUG:GEO", response.data.geo.landSize, response.data.data.landSize)
+        //console.log(response.data)
         let landSize = response.data.data.landSize;
         const landSize_split = landSize.split("-");
         //console.log(landSize_split)
@@ -97,11 +99,24 @@ onMounted(async () => {
         form.land_mineral=response.data.data.landMineral
         form.land_limitation=response.data.data.landLimitation
       })
+
+      console.log(import.meta.env.VITE_API_ENDPOINT + "/api/image/1661332484901153.png?imageableType=land")
+      await axios
+      .get(import.meta.env.VITE_API_ENDPOINT + "/api/image/1661332484901153.png?imageableType=land",
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then(response => {
+        console.log(response.data)
+        form.img = import.meta.env.VITE_API_ENDPOINT + "/api/image/1661332484901153.png?imageableType=land"
+      })
+
 })
 
 const submit = () => {
   const token = localStorage.getItem("tkfw");
-  console.log(token); 
   axios
     .put(
       import.meta.env.VITE_API_ENDPOINT + "/api/geo/"+id,
@@ -165,6 +180,10 @@ const submit = () => {
       :icon="mdiBallotOutline"
       title="Forms example"
     /> -->
+    <div>
+    <img :src="form.img">
+    </div>
+
     <card-component
       title="แก้ไขข้อมูลภูมิศาสตร์ (ที่ดิน)"
       :icon="mdiBallot"
