@@ -103,6 +103,10 @@ const submit = () => {
   }
 }
 
+const clearData = () => {
+  form.name = ""
+}
+
 onBeforeMount(() => {
   fetchRoleDataId()
 })
@@ -126,7 +130,7 @@ onBeforeMount(() => {
         <divider />
         <jb-buttons>
           <jb-button type="submit" color="info" :label="buttonLabel" v-on:click="submit()"/>
-          <jb-button v-if="!id" type="reset" color="info" outline label="Reset" />
+          <jb-button v-if="!id" type="reset" color="info" outline label="Reset" v-on:click="clearData()"/>
         </jb-buttons>
       </card-component>
     </main-section>

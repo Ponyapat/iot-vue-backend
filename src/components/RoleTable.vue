@@ -7,6 +7,7 @@ import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import JbButtons from "@/components/JbButtons.vue";
 import JbButton from "@/components/JbButton.vue";
+import Level from "@/components/Level.vue";
 import { mdiTrashCan, mdiGreasePencil } from "@mdi/js";
 
 const mainStore = useMainStore();
@@ -14,10 +15,46 @@ const router = useRouter();
 // const lightBorderStyle = computed(() => mainStore.lightBorderStyle)
 const tableTrStyle = computed(() => mainStore.tableTrStyle);
 const tableTrOddStyle = computed(() => mainStore.tableTrOddStyle);
+const lightBorderStyle = computed(() => mainStore.lightBorderStyle);
+const darkMode = computed(() => mainStore.darkMode);
+const items = ref(0);
+const perPage = ref(10);
+const currentPage = ref(0);
+
 const token = localStorage.getItem("tkfw");
 const states = reactive({
   roles: {}
 })
+
+const numPages = computed(() => {
+  return Math.ceil(items.value / perPage.value);
+});
+
+const currentPageHuman = computed(() => currentPage.value + 1);
+
+const pagesList = computed(() => {
+  const pagesList = [];
+
+  for (let i = 0; i < numPages.value; i++) {
+    pagesList.push(i);
+  }
+
+  return pagesList;
+});
+
+const pageNext = (page) => {
+  currentPage.value = page;
+  //console.log("pageNext " + (page+1));
+  axios
+    .get(import.meta.env.VITE_API_ENDPOINT + "/api/role?order=ASC&page="+(page+1)+"&take="+perPage.value, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+    .then((data) => {
+      states.users = data.data.data;
+    });
+}
 
 const fetchRoleData = () => {
   axios
@@ -29,6 +66,7 @@ const fetchRoleData = () => {
     .then((response) => {
       console.log('DEBUG:DATAROLE ', response)
       states.roles = response.data.data
+      items.value = response.data.meta.itemCount;
     })
 }
 const edit = (id) => {
@@ -99,5 +137,24 @@ onBeforeMount(() => {
         </tr>
       </tbody>
     </table>
+    <div
+      :class="lightBorderStyle"
+      class="p-3 lg:px-6 border-t dark:border-gray-800"
+    >
+      <level>
+        <jb-buttons>
+          <jb-button
+            v-for="page in pagesList"
+            :key="page"
+            :active="page === currentPage"
+            :label="page + 1"
+            :outline="darkMode"
+            small
+            @click="pageNext(page)"
+          />
+        </jb-buttons>
+        <small>Page {{ currentPageHuman }} of {{ numPages }}</small>
+      </level>
+    </div>
   </div>
 </template>
