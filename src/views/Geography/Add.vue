@@ -49,7 +49,7 @@ const form = reactive({
 
   land_size: "land_size",
   land_code: "land_code",
-  land_img: "land_img",
+  land_img: "",
   land_price_rate: "land_price_rate",
   land_price: "land_price",
   land_type: "land_type",
@@ -84,7 +84,7 @@ const upload_image = () => {
       console.log(data);
       if (data.status == 201) {
         //console.log(data.status);
-        form.land_img = data.data.url
+        form.land_img = "/api/image/"+data.data+"?imageableType=land"
         Swal.fire({
           position: 'top-end',
           icon: 'success',
@@ -115,8 +115,8 @@ const upload_image = () => {
 
 const submit = () => { 
   const token = localStorage.getItem("tkfw");
-  console.log(token);
-  console.log(form);
+  //console.log(token);
+  //console.log(form);
   axios
     .post(
       import.meta.env.VITE_API_ENDPOINT + "/api/geo",

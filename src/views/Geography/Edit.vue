@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive , onMounted } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { mdiBallot, mdiBallotOutline, mdiAccount, mdiMail } from "@mdi/js";
 import MainSection from "@/components/MainSection.vue";
@@ -16,7 +16,7 @@ import JbButtons from "@/components/JbButtons.vue";
 import BottomOtherPagesSection from "@/components/BottomOtherPagesSection.vue";
 import TitledSection from "@/components/TitledSection.vue";
 import TitleSubBar from "@/components/TitleSubBar.vue";
-import axios from "axios"; 
+import axios from "axios";
 import Swal from "sweetalert2";
 
 const titleStack = ref(["Admin", "แก้ไขข้อมูลภูมิศาสตร์ (ที่ดิน)"]);
@@ -35,7 +35,7 @@ const titleStack = ref(["Admin", "แก้ไขข้อมูลภูมิ�
 // });
 
 const token = localStorage.getItem("tkfw");
-axios.defaults.headers.common['Authorization'] = token;
+axios.defaults.headers.common["Authorization"] = token;
 
 const router = useRouter();
 const url = window.location.href;
@@ -52,7 +52,8 @@ const form = reactive({
   wa: "",
   land_size: "",
   land_code: "",
-  land_img: "",
+  land_img: "/images/noimage.png",
+  land_img_edit: "",
   land_price_rate: "",
   land_price: "",
   land_type: "",
@@ -60,74 +61,126 @@ const form = reactive({
   land_water: "",
   land_mineral: "",
   land_limitation: "",
-  img:"/images/noimage.png"
+  fileupload:null,
 });
 
 onMounted(async () => {
   await axios
-      .get(import.meta.env.VITE_API_ENDPOINT + "/api/geo/"+id,
+    .get(import.meta.env.VITE_API_ENDPOINT + "/api/geo/" + id, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+    .then((response) => {
+      //console.log(response.data)
+      let landSize = response.data.data.landSize;
+      const landSize_split = landSize.split("-");
+      //console.log(landSize_split)
+      form.title = response.data.data.title;
+      form.detail = response.data.data.detail;
+      form.lat = response.data.data.lat;
+      form.long = response.data.data.lon;
+      form.land_detail = response.data.data.landDetail;
+
+      form.ri = landSize_split[0];
+      form.ngan = landSize_split[1];
+      form.wa = landSize_split[2];
+
+      form.land_code = response.data.data.landCode;
+      if(response.data.data.landImg!=""){
+        form.land_img = import.meta.env.VITE_API_ENDPOINT + response.data.data.landImg;
+      }
+      
+      form.land_img_edit = response.data.data.landImg;
+
+      form.land_price_rate = response.data.data.landPriceRate;
+      form.land_price = response.data.data.landPrice;
+
+      form.land_type = response.data.data.landType;
+      form.land_properties = response.data.data.landProperties;
+      form.land_water = response.data.data.landWater;
+
+      form.land_mineral = response.data.data.landMineral;
+      form.land_limitation = response.data.data.landLimitation;
+    });
+});
+
+const upload_image = () => {
+  console.log("edit_image")
+  const token = localStorage.getItem("tkfw");
+  let formData = new FormData();
+  let imagefile = document.querySelector('#imgInp');
+  formData.append("file", imagefile.files[0]);
+  //console.log(formData)
+  axios.post(
+      import.meta.env.VITE_API_ENDPOINT + "/api/image?imageableType=land",formData, 
       {
         headers: {
           Authorization: "Bearer " + token,
+          'Content-Type': 'multipart/form-data',
+          'accept': 'application/json'
         },
-      })
-      .then(response => {
-        //console.log(response.data)
-        let landSize = response.data.data.landSize;
-        const landSize_split = landSize.split("-");
-        //console.log(landSize_split)
-        form.title=response.data.data.title
-        form.detail=response.data.data.detail
-        form.lat=response.data.data.lat
-        form.long=response.data.data.lon
-        form.land_detail=response.data.data.landDetail
-
-        form.ri=landSize_split[0]
-        form.ngan=landSize_split[1]
-        form.wa=landSize_split[2]
-
-        form.land_code=response.data.data.landCode
-        form.land_img=response.data.data.landImg
-
-        form.land_price_rate=response.data.data.landPriceRate
-        form.land_price=response.data.data.landPrice
+      }
+    )
+    .then((data) => {
+      console.log(data);
+      if (data.status == 201) {
+        //console.log(data.status);
+        form.land_img_edit = "/api/image/"+data.data+"?imageableType=land"
+        console.log(form.land_img)
         
-        form.land_type=response.data.data.landType
-        form.land_properties=response.data.data.landProperties
-        form.land_water=response.data.data.landWater
+        axios.delete(form.land_img,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+            'Content-Type': 'multipart/form-data',
+            'accept': 'application/json'
+          },
+        }).then((data) => {
+          console.log("deleted");
+        })
 
-        form.land_mineral=response.data.data.landMineral
-        form.land_limitation=response.data.data.landLimitation
-      })
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'อัพโหลดรูปสำเร็จ',
+          showConfirmButton: false,
+          timer: 1500
+        })
+ 
+      } else {
+        Swal.fire({
+          position: 'top-end',
+          icon: "warning",
+          title: "ไม่สามารถอัพโหลดรูปได้",
+          timer: 1500,
+        });
+        return false;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
-      console.log(import.meta.env.VITE_API_ENDPOINT + "/api/image/1661332484901153.png?imageableType=land")
-      await axios
-      .get(import.meta.env.VITE_API_ENDPOINT + "/api/image/1661332484901153.png?imageableType=land",
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      })
-      .then(response => {
-        console.log(response.data)
-        form.img = import.meta.env.VITE_API_ENDPOINT + "/api/image/1661332484901153.png?imageableType=land"
-      })
-
-})
+  const [file] = imgInp.files
+  if (file) {
+       blah.src = URL.createObjectURL(file)
+  }
+};
 
 const submit = () => {
   const token = localStorage.getItem("tkfw");
   axios
     .put(
-      import.meta.env.VITE_API_ENDPOINT + "/api/geo/"+id,
+      import.meta.env.VITE_API_ENDPOINT + "/api/geo/" + id,
       {
         title: form.title,
         detail: form.detail,
         lat: form.lat,
         lon: form.long,
-        landImg: form.land_img,
+        landImg: form.land_img_edit,
         landDetail: form.land_detail,
-        landSize: form.ri+"-"+form.ngan+"-"+form.wa,
+        landSize: form.ri + "-" + form.ngan + "-" + form.wa,
         landCode: form.land_code,
         landPriceRate: form.land_price_rate,
         landPrice: form.land_price,
@@ -146,7 +199,7 @@ const submit = () => {
     .then((data) => {
       //console.log(data.data);
       if (data.data.status == 204) {
-        console.log(data.data.status);
+        //console.log(data.data.status);
         Swal.fire({
           icon: "success",
           title: "แก้ไขข้อมูลภูมิศาสตร์ (ที่ดิน) สำเร็จ",
@@ -173,17 +226,7 @@ const submit = () => {
 
 <template>
   <title-bar :title-stack="titleStack" />
-  <!-- <hero-bar>Forms</hero-bar> -->
-
   <main-section>
-    <!-- <title-sub-bar
-      :icon="mdiBallotOutline"
-      title="Forms example"
-    /> -->
-    <div>
-    <img :src="form.img">
-    </div>
-
     <card-component
       title="แก้ไขข้อมูลภูมิศาสตร์ (ที่ดิน)"
       :icon="mdiBallot"
@@ -241,11 +284,18 @@ const submit = () => {
 
       <field label="รูปภาพขอบเขตที่ดิน">
         <control
-          v-model="form.land_img"
-          type="text"
+          type="file"
           placeholder="รูปภาพขอบเขตที่ดิน"
+          name="imgInp"
+          id="imgInp"
+          @change="upload_image"
+          v-model="form.fileupload"
         />
       </field>
+
+      <div>
+        <div><img id="blah" :src="form.land_img" width="300" /></div>
+      </div>
 
       <field label="ราคาประเมิน (บาท/ตารางวา)">
         <control
