@@ -2,6 +2,7 @@
 import { ref, reactive, onBeforeMount } from "vue";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useRouter } from "vue-router";
 import TitleBar from "@/components/TitleBar.vue";
 import MainSection from "@/components/MainSection.vue";
 import CardComponent from "@/components/CardComponent.vue";
@@ -12,6 +13,7 @@ import JbButton from "@/components/JbButton.vue";
 import JbButtons from "@/components/JbButtons.vue";
 import { mdiBallot } from "@mdi/js";
 
+const router = useRouter();
 const url = window.location.href;
 const id = url.split("/")[5];
 const token = localStorage.getItem("tkfw");
@@ -81,7 +83,7 @@ const submit = () => {
         }
       })
       .then((data) => {
-        if (data.data.status == 204 || data.data.status == 200) {
+        if (data.data.status == 204 || data.data.status == 200 || data.data.status == 201) {
           console.log(data.data.status);
           Swal.fire({
             icon: "success",

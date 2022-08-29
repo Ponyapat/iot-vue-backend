@@ -9,7 +9,10 @@ import {
   mdiMonitorCellphone,
   mdiReload,
   mdiGithub,
-  mdiChartPie
+  mdiChartPie,
+  mdiWeatherPartlyRainy,
+  mdiEarth,
+  mdiAccount
 } from '@mdi/js'
 import * as chartConfig from '@/components/Charts/chart.config.js'
 import LineChart from '@/components/Charts/LineChart.vue'
@@ -24,17 +27,61 @@ import JbButton from '@/components/JbButton.vue'
 import CardTransactionBar from '@/components/CardTransactionBar.vue'
 import CardClientBar from '@/components/CardClientBar.vue'
 import TitleSubBar from '@/components/TitleSubBar.vue'
+import axios from 'axios'
+import { reactive } from 'vue'
 
 const titleStack = ref(['Admin', 'Dashboard'])
+const token = localStorage.getItem("tkfw");
 
 const chartData = ref(null)
+const states = reactive({
+  geoCountItem: 0,
+  weatherCountItem: 0,
+  customerCountItem: 0
+})
 
 const fillChartData = () => {
   chartData.value = chartConfig.sampleChartData()
 }
 
+const geoData = () => {
+  axios
+    .get(import.meta.env.VITE_API_ENDPOINT + "/api/geo", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+    .then((data) => {
+      // console.log(data.data.meta.itemCount);
+      states.geoCountItem = data.data.meta.itemCount;
+      console.log(states.geoCountItem)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+const weatherData = () => {
+  axios
+    .get(import.meta.env.VITE_API_ENDPOINT + "/api/weather", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+    .then((data) => {
+      // console.log(data.data.meta.itemCount);
+      states.weatherCountItem = data.data.meta.itemCount;
+      console.log(states.weatherCountItem)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 onMounted(() => {
   fillChartData()
+  geoData()
+  weatherData()
 })
 
 const mainStore = useMainStore()
@@ -75,31 +122,30 @@ const darkMode = computed(() => mainStore.darkMode)
         trend="12%"
         trend-type="up"
         color="text-emerald-500"
-        :icon="mdiAccountMultiple"
-        :number="512"
-        label="Clients"
+        :icon="mdiEarth"
+        :number="states.geoCountItem"
+        label="ภูมิศาสตร์"
       />
       <card-widget
         trend="12%"
         trend-type="down"
-        color="text-blue-500"
-        :icon="mdiCartOutline"
-        :number="7770"
+        color="text-yellow-500"
+        :icon="mdiWeatherPartlyRainy"
+        :number="states.weatherCountItem"
         prefix="$"
-        label="Sales"
+        label="ภูมิอากาศ"
       />
       <card-widget
         trend="Overflow"
         trend-type="alert"
-        color="text-red-500"
-        :icon="mdiChartTimelineVariant"
-        :number="256"
-        suffix="%"
-        label="Performance"
+        color="text-blue-500"
+        :icon="mdiAccount"
+        :number="customerCountItem"
+        label="Customer"
       />
     </div>
 
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
+    <!-- <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
       <div class="flex flex-col justify-between">
         <card-transaction-bar
           v-for="(transaction,index) in transactionBarItems"
@@ -122,12 +168,12 @@ const darkMode = computed(() => mainStore.darkMode)
           :progress="client.progress"
         />
       </div>
-    </div>
+    </div> -->
 
-    <title-sub-bar
+    <!-- <title-sub-bar
       :icon="mdiChartPie"
       title="Trends overview"
-    />
+    /> -->
 
     <!-- <card-component
       title="Performance"
@@ -144,24 +190,24 @@ const darkMode = computed(() => mainStore.darkMode)
       </div>
     </card-component> -->
 
-    <title-sub-bar
+    <!-- <title-sub-bar
       :icon="mdiAccountMultiple"
       title="Clients"
-    />
+    /> -->
 
-    <notification
+    <!-- <notification
       color="info"
       :icon="mdiMonitorCellphone"
     >
       <b>Responsive table.</b> Collapses on mobile
-    </notification>
+    </notification> -->
 
-    <card-component
+    <!-- <card-component
       :icon="mdiMonitorCellphone"
       title="Responsive table"
       has-table
     >
       <clients-table />
-    </card-component>
+    </card-component> -->
   </main-section>
 </template>
