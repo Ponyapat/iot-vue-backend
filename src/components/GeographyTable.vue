@@ -128,22 +128,48 @@ const pageNext = (page) => {
       states.geo = data.data.data;
     });
 };
+const spaceNatureDetail = (data) => {
+  if (!data) {
+    return 'ไม่มีข้อมูล'
+  } else {
+    if (data === 'low') {
+      return 'ต่ำ'
+    } else if ( data === 'medium') {
+      return 'ปานกลาง'
+    } else if (data === 'high') {
+      return 'สูง'
+    } else {
+      return 'ไม่มีข้อมูล'
+    }
+  }
+}
+const drainage = (data) => {
+  if (!data) {
+    return 'ไม่มีข้อมูล'
+  } else {
+    if (data === 'low') {
+      return 'ต่ำ'
+    } else if ( data === 'medium') {
+      return 'ปานกลาง'
+    } else if (data === 'high') {
+      return 'สูง'
+    } else {
+      return 'ไม่มีข้อมูล'
+    }
+  }
+}
 </script>
 
 <template>
   <table>
     <thead>
-      <tr class="text-base">
+      <tr class="text-sm">
         <th v-if="checkable" />
-        <th>#</th>
-        <th>Project Id</th>
+        <th>ID Project</th>
         <th>Lat, Lon</th>
-        <th>รายละเอียด</th>
-        <th>ดินชั้นบน</th>
-        <th>ดินชั้นล่าง</th>
-        <th>ความลาดชันของดิน</th>
-        <th>ข้อจำกัดของดิน</th>
-        <th></th>
+        <th>รายละเอียดดิน</th>
+        <th>ลักษณะของพื้นที่</th>
+        <th>แหล่งน้ำใกล้เคียง</th>
         <th />
       </tr>
     </thead>
@@ -151,42 +177,78 @@ const pageNext = (page) => {
       <tr
         v-for="(item, index) in states.geo"
         :key="item.id"
-        :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '', 'text-xs']"
+        :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '', 'text-sm ']"
       >
-        <td>
-          {{ key }}
-        </td>
-        <td data-label="">
+        <td data-label="ID Project" class="align-top font-bold">
           {{ item.projectId }}
         </td>
-        <td data-label="">
+        <td data-label="Lat, Lon" class="align-top">
           {{ item.lat }}, {{ item.lon}}
         </td>
-        <td data-label="">
+        <td data-label="รายละเอียดดิน" class="align-top">
           <!-- รายละเอียด -->
-          <p v-html="item.soilProperties"></p>
+          <div>
+            <div>
+              <label>คุณสมบัติของดิน</label>
+              <p v-html="item.soilProperties"></p>
+            </div>
+            <hr class="mt-2"/>
+            <div class="mt-2">
+              <label>ข้อจำกัดของดิน</label>
+              <p>{{ item.soilRestrictions }}</p>
+            </div>
+            <hr class="mt-2"/>
+            <div class="mt-2">
+              <label>การระบายน้ำ: </label><span>{{ drainage(item.drainage) }}</span>
+            </div>
+            <hr class="mt-2"/>
+            <div class="mt-2">
+              <label>ความอุดมสมบูรณ์:&nbsp;</label><span>{{ spaceNatureDetail(item.soilFertility) }}</span>
+            </div>
+            <hr class="mt-2"/>
+            <div class="mt-2">
+              <label>ดินชั้นบน</label>
+              <p>{{ item.topsoilDetail }}</p>
+              <p>ค่า pH ในดิน:&nbsp;{{ item.topsoilValueMin }} - {{ item.topsoilValueMax}}</p>
+            </div>
+            <hr class="mt-2"/>
+            <div class="mt-2">
+              <label>ดินชั้นล่าง</label>
+              <p>{{ item.subsoilDetail }}</p>
+              <p>ค่า pH ในดิน:&nbsp;{{ item.subsoilValueMin }} - {{ item.subsoilValueMax}}</p>
+            </div>
+          </div>
         </td>
-        <td data-label="">
-          <!-- รายละเอียด ดินชั้นบน -->
-          <p>{{ item.topsoilDetail }}</p>
-          <p>pH ในดิน {{ item.topsoilValueMin }} - {{ item.topsoilValueMax}}</p>
+        <td data-label="ลักษณะของพื้นที่" class="align-top">
+          <!-- ลักษณะของพื้นที่ -->
+          <div>
+            <label>ลักษณะ</label>
+            <ul class="list-disc mt-2">
+              <li v-if="item.spaceNaturePlain === 'true'">ที่ราบเรียบ</li>
+              <li v-if="item.spaceNaturePlateau === 'true'">ที่ราบสูง</li>
+              <li v-if="item.spaceNatureHill === 'true'">เนินเขา</li>
+              <li v-if="item.spaceNatureMountain === 'true'">ภูเขา</li>
+            </ul>
+          </div>
+          <div class="mt-2">
+            <label>รายละเอียด: </label>
+            {{ item.spaceNatureDetail }}
+          </div>
+          <div><label>ความลาดชัน: </label> <span>{{ item.slope }}</span></div>
         </td>
-        <td data-label="">
-          <!-- รายละเอียด ดินชั้นล่าง -->
-          <p>{{ item.subsoilDetail }}</p>
-          <p>pH ในดิน {{ item.subsoilValueMin }} - {{ item.subsoilValueMax}}</p>
-        </td>
-        <td data-label="">
-          {{ item.slope }}
-        </td>
-        <td data-label="">
-          {{ item.soilRestrictions }}
+        <td data-label="แหล่งน้ำใกล้เคียง" class="align-top">
+          <!-- แหล่งน้ำใกล้เคียง -->
+          <ul class="list-disc">
+            <li>แหล่งน้ำธรรมชาติ : {{ item.nearbyNaturalWater }}</li>
+            <li>แหล่งน้ำในไร่นานอกเขตชลประทาน : {{ item.nearbyInfarmWater }}</li>
+            <li>แหล่งน้ำขนาดเล็ก : {{ item.nearbySmallWater }}</li>
+            <li>บ่อน้ำบาดาล : {{ item.nearbyGroundWater }}</li>
+          </ul>
         </td>
         <td data-label="">
           
         </td>
-        <td class="actions-cell">
-          <jb-buttons type="justify-start lg:justify-end" no-wrap>
+        <td class="actions-cell align-top">
             <jb-button
               color="info"
               :icon="mdiGreasePencil"
@@ -194,12 +256,12 @@ const pageNext = (page) => {
               @click="edit(item.id)"
             />
             <jb-button
+              class="mt-2"
               color="danger"
               :icon="mdiTrashCan"
               small
               @click="del(item.id)"
             />
-          </jb-buttons>
         </td>
       </tr>
     </tbody>
@@ -224,3 +286,8 @@ const pageNext = (page) => {
     </level>
   </div>
 </template>
+<style scope>
+label {
+  font-weight: bold;
+}
+</style>
