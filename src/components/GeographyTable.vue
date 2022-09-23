@@ -133,48 +133,57 @@ const pageNext = (page) => {
 <template>
   <table>
     <thead>
-      <tr>
+      <tr class="text-base">
         <th v-if="checkable" />
         <th>#</th>
-        <th>หัวข้อ</th>
+        <th>Project Id</th>
+        <th>Lat, Lon</th>
         <th>รายละเอียด</th>
-        <th>เลขโฉนด</th>
-        <th>ขนาดที่ดิน(ไร่-งาน-ตรว)</th>
-        <th>Latitude</th>
-        <th>Longitude</th>
-        <th>Created</th>
+        <th>ดินชั้นบน</th>
+        <th>ดินชั้นล่าง</th>
+        <th>ความลาดชันของดิน</th>
+        <th>ข้อจำกัดของดิน</th>
+        <th></th>
         <th />
       </tr>
     </thead>
     <tbody>
       <tr
-        v-for="(client, index) in states.geo"
-        :key="client.id"
-        :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']"
+        v-for="(item, index) in states.geo"
+        :key="item.id"
+        :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '', 'text-xs']"
       >
         <td>
-          {{ client.id }}
+          {{ key }}
         </td>
-        <td data-label="Name">
-          {{ client.title }}
+        <td data-label="">
+          {{ item.projectId }}
         </td>
-        <td data-label="detail">
-          {{ client.detail }}
+        <td data-label="">
+          {{ item.lat }}, {{ item.lon}}
         </td>
-        <td data-label="detail">
-          {{ client.landCode }}
+        <td data-label="">
+          <!-- รายละเอียด -->
+          <p v-html="item.soilProperties"></p>
         </td>
-        <td data-label="landSize">
-          {{ client.landSize }}
+        <td data-label="">
+          <!-- รายละเอียด ดินชั้นบน -->
+          <p>{{ item.topsoilDetail }}</p>
+          <p>pH ในดิน {{ item.topsoilValueMin }} - {{ item.topsoilValueMax}}</p>
         </td>
-        <td data-label="Latitude">
-          {{ client.lat }}
+        <td data-label="">
+          <!-- รายละเอียด ดินชั้นล่าง -->
+          <p>{{ item.subsoilDetail }}</p>
+          <p>pH ในดิน {{ item.subsoilValueMin }} - {{ item.subsoilValueMax}}</p>
         </td>
-        <td data-label="Latitude">
-          {{ client.lon }}
+        <td data-label="">
+          {{ item.slope }}
         </td>
-        <td data-label="createdAt">
-          {{ moment(client.createdAt).format("DD-MM-YYYY") }}
+        <td data-label="">
+          {{ item.soilRestrictions }}
+        </td>
+        <td data-label="">
+          
         </td>
         <td class="actions-cell">
           <jb-buttons type="justify-start lg:justify-end" no-wrap>
@@ -182,13 +191,13 @@ const pageNext = (page) => {
               color="info"
               :icon="mdiGreasePencil"
               small
-              @click="edit(client.id)"
+              @click="edit(item.id)"
             />
             <jb-button
               color="danger"
               :icon="mdiTrashCan"
               small
-              @click="del(client.id)"
+              @click="del(item.id)"
             />
           </jb-buttons>
         </td>
