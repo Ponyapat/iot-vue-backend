@@ -43,7 +43,7 @@ const form = reactive({
 onMounted(async () => {
   const token = localStorage.getItem("tkfw");
   await axios
-      .get(import.meta.env.VITE_API_ENDPOINT + "/api/weather/"+id,
+      .get(import.meta.env.VITE_API_MAIN + "/api/weather/"+id,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -74,7 +74,7 @@ const submit = () => {
   console.log(form);
   axios
     .put(
-      import.meta.env.VITE_API_ENDPOINT + "/api/weather/"+id,
+      import.meta.env.VITE_API_MAIN + "/api/weather/"+id,
       {
         title: form.title,
         detail: form.detail,

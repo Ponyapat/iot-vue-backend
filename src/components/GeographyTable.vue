@@ -9,7 +9,6 @@ import Level from "@/components/Level.vue";
 import JbButtons from "@/components/JbButtons.vue";
 import JbButton from "@/components/JbButton.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
-import axios from "axios";
 import Swal from "sweetalert2";
 import moment from "moment";
 
@@ -48,12 +47,7 @@ const perPage = ref(10);
 const currentPage = ref(0);
 
 onBeforeMount(() => {
-  axios
-    .get(import.meta.env.VITE_API_ENDPOINT + "/api/geo", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
+    ApiMain.get("/geo")
     .then((data) => {
       console.log(data.data.meta.itemCount);
       states.geo = data.data.data;
@@ -75,12 +69,7 @@ const del = (id) => {
     confirmButtonText: "Ok",
   }).then((result) => {
     if (result.isConfirmed) {
-      axios
-        .delete(import.meta.env.VITE_API_ENDPOINT + "/api/geo/" + id, {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        })
+        ApiMain.delete("/geo"+id)
         .then((data) => {
           setInterval(function () {
             location.reload();
@@ -117,13 +106,7 @@ const pagesList = computed(() => {
 
 const pageNext = (page) => {
   currentPage.value = page;
-  //console.log("pageNext " + (page+1));
-  axios
-    .get(import.meta.env.VITE_API_ENDPOINT + "/api/geo?order=ASC&page="+(page+1)+"&take="+perPage.value, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
+    ApiMain.get("/geo?order=ASC&page="+(page+1)+"&take="+perPage.value)
     .then((data) => {
       states.geo = data.data.data;
     });

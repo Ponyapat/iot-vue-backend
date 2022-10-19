@@ -32,7 +32,7 @@ const router = useRouter();
 
 const submit = () => {
   axios
-    .post(import.meta.env.VITE_API_ENDPOINT+"/api/auth/login", {
+    .post(import.meta.env.VITE_API_MAIN+"/auth/login", {
       email: form.username,
       password: form.password,
     })

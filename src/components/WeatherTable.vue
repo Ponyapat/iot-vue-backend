@@ -53,7 +53,7 @@ const currentPage = ref(0);
 
 onBeforeMount(() => {
   axios
-    .get(import.meta.env.VITE_API_ENDPOINT + "/api/weather", {
+    .get(import.meta.env.VITE_API_MAIN + "/api/weather", {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -80,7 +80,7 @@ const del = (id) => {
   }).then((result) => {
     if (result.isConfirmed) {
       axios
-        .delete(import.meta.env.VITE_API_ENDPOINT + "/api/weather/"+id, {
+        .delete(import.meta.env.VITE_API_MAIN + "/api/weather/"+id, {
           headers: {
             Authorization: "Bearer " + token,
           },
@@ -92,7 +92,7 @@ const del = (id) => {
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
           console.log("del" + id);
 
-          axios.get(import.meta.env.VITE_API_ENDPOINT + "/api/weather", {
+          axios.get(import.meta.env.VITE_API_MAIN + "/api/weather", {
           headers: {
             Authorization: "Bearer " + token,
           }}).then((data) => {
