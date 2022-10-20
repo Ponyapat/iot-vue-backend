@@ -71,7 +71,7 @@ const upload_image = () => {
   formData.append("file", imagefile.files[0]);
   //console.log(formData)
   axios.post(
-      import.meta.env.VITE_API_ENDPOINT + "/api/image?imageableType=land",formData, 
+      import.meta.env.VITE_API_MAIN + "/api/image?imageableType=land",formData, 
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -119,7 +119,7 @@ const submit = () => {
   //console.log(form);
   axios
     .post(
-      import.meta.env.VITE_API_ENDPOINT + "/api/geo",
+      import.meta.env.VITE_API_MAIN + "/api/geo",
       {
         title: form.title,
         detail: form.detail,

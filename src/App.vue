@@ -7,7 +7,6 @@ import NavBar from '@/components/NavBar.vue'
 import AsideMenu from '@/components/AsideMenu.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import Overlay from '@/components/Overlay.vue'
-import axios from "axios";
 
 const mainStore = useMainStore()
 const router = useRouter();
@@ -15,25 +14,11 @@ const router = useRouter();
 mainStore.setStyle("basic")
 // mainStore.setDarkMode(false)
 
-// if (localStorage.getItem("nong") === null) {
-//   localStorage.setItem("nong", 
-//  JSON.stringify({name: 'Demo',
-//   email: 'Demo@test.com'
-//   }))
-// }
-
 onBeforeMount(()=>{
   //console.log(imyVar)
   if (localStorage.getItem("tkfw") !== null) {
-    const token = localStorage.getItem("tkfw")
     const userid = localStorage.getItem("userid")
-    //console.log("onBeforeMount")
-    //console.log(token)
-    axios.get(import.meta.env.VITE_API_ENDPOINT+'/api/users/'+userid+'/profile', {
-      headers: {
-        Authorization: 'Bearer ' + token
-      }
-    }).then((data) => {
+    ApiMain.get('/users/'+userid+'/profile').then((data) => {
         mainStore.setUser({
           name: data.data.user.name,
           email: data.data.user.email,

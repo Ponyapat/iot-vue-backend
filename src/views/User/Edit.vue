@@ -30,7 +30,7 @@ const token = localStorage.getItem("tkfw");
 onMounted(async () => {
   fetchRole()
   await axios
-    .get(import.meta.env.VITE_API_ENDPOINT + "/api/users/"+id+"/profile",
+    .get(import.meta.env.VITE_API_MAIN + "/api/users/"+id+"/profile",
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -49,7 +49,7 @@ onMounted(async () => {
 })
 const fetchRole = () => {
   axios
-    .get(import.meta.env.VITE_API_ENDPOINT+"/api/role", {
+    .get(import.meta.env.VITE_API_MAIN+"/api/role", {
       headers: {
         Authorization: "Bearer " + token,
       }
@@ -72,7 +72,7 @@ const submit = () => {
   console.log('update data user', form)
   axios
     .put(
-      import.meta.env.VITE_API_ENDPOINT + "/api/users/"+id+"/profile",
+      import.meta.env.VITE_API_MAIN + "/api/users/"+id+"/profile",
       {
         name: form.name,
         email: form.email,

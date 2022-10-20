@@ -46,7 +46,7 @@ const pageNext = (page) => {
   currentPage.value = page;
   //console.log("pageNext " + (page+1));
   axios
-    .get(import.meta.env.VITE_API_ENDPOINT + "/api/role?order=ASC&page="+(page+1)+"&take="+perPage.value, {
+    .get(import.meta.env.VITE_API_MAIN + "/api/role?order=ASC&page="+(page+1)+"&take="+perPage.value, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -58,7 +58,7 @@ const pageNext = (page) => {
 
 const fetchRoleData = () => {
   axios
-    .get(import.meta.env.VITE_API_ENDPOINT + "/api/role", {
+    .get(import.meta.env.VITE_API_MAIN + "/api/role", {
       headers: {
         Authorization: "Bearer " + token,
       }
@@ -89,7 +89,7 @@ const del = (role) => {
     if (result.isConfirmed) {
       console.log('ยืนยันการลบ')
       axios
-        .delete(import.meta.env.VITE_API_ENDPOINT + "/api/role/" + role.id, {
+        .delete(import.meta.env.VITE_API_MAIN + "/api/role/" + role.id, {
           headers: {
             Authorization: "Bearer " + token
           }

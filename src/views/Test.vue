@@ -25,7 +25,7 @@
   import LoginForm from "@/components/TestLoginForm.vue"
   import Icon from '@/components/Icon.vue'
    
-  const myVar = import.meta.env.VITE_API_ENDPOINT;
+  const myVar = import.meta.env.VITE_API_MAIN;
 
   let test = 1
   let test2 = ref("nongsonic")

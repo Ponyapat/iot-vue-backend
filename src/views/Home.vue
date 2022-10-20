@@ -1,6 +1,6 @@
 <script setup>
-import { computed, ref, onMounted } from 'vue'
-import { useMainStore } from '@/stores/main'
+import { computed, ref, onMounted } from "vue";
+import { useMainStore } from "@/stores/main";
 import {
   mdiAccountMultiple,
   mdiCartOutline,
@@ -12,85 +12,75 @@ import {
   mdiChartPie,
   mdiWeatherPartlyRainy,
   mdiEarth,
-  mdiAccount
-} from '@mdi/js'
-import * as chartConfig from '@/components/Charts/chart.config.js'
-import LineChart from '@/components/Charts/LineChart.vue'
-import MainSection from '@/components/MainSection.vue'
-import TitleBar from '@/components/TitleBar.vue'
-import HeroBar from '@/components/HeroBar.vue'
-import CardWidget from '@/components/CardWidget.vue'
-import CardComponent from '@/components/CardComponent.vue'
-import ClientsTable from '@/components/ClientsTable.vue'
-import Notification from '@/components/Notification.vue'
-import JbButton from '@/components/JbButton.vue'
-import CardTransactionBar from '@/components/CardTransactionBar.vue'
-import CardClientBar from '@/components/CardClientBar.vue'
-import TitleSubBar from '@/components/TitleSubBar.vue'
-import axios from 'axios'
-import { reactive } from 'vue'
+  mdiAccount,
+} from "@mdi/js";
+import * as chartConfig from "@/components/Charts/chart.config.js";
+import LineChart from "@/components/Charts/LineChart.vue";
+import MainSection from "@/components/MainSection.vue";
+import TitleBar from "@/components/TitleBar.vue";
+import HeroBar from "@/components/HeroBar.vue";
+import CardWidget from "@/components/CardWidget.vue";
+import CardComponent from "@/components/CardComponent.vue";
+import ClientsTable from "@/components/ClientsTable.vue";
+import Notification from "@/components/Notification.vue";
+import JbButton from "@/components/JbButton.vue";
+import CardTransactionBar from "@/components/CardTransactionBar.vue";
+import CardClientBar from "@/components/CardClientBar.vue";
+import TitleSubBar from "@/components/TitleSubBar.vue";
+import axios from "axios";
+import { reactive } from "vue";
 
-const titleStack = ref(['Admin', 'Dashboard'])
+const titleStack = ref(["Admin", "Dashboard"]);
 const token = localStorage.getItem("tkfw");
 
-const chartData = ref(null)
+const chartData = ref(null);
 const states = reactive({
   geoCountItem: 0,
   weatherCountItem: 0,
-  customerCountItem: 0
-})
+  customerCountItem: 0,
+});
 
 const fillChartData = () => {
-  chartData.value = chartConfig.sampleChartData()
-}
+  chartData.value = chartConfig.sampleChartData();
+};
 
 const geoData = () => {
-  axios
-    .get(import.meta.env.VITE_API_ENDPOINT + "/api/geo", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
+  ApiMain.get("/geo")
     .then((data) => {
       // console.log(data.data.meta.itemCount);
       states.geoCountItem = data.data.meta.itemCount;
-      console.log(states.geoCountItem)
+      console.log(states.geoCountItem);
     })
     .catch((error) => {
       console.log(error);
     });
-}
+};
 
 const weatherData = () => {
-  axios
-    .get(import.meta.env.VITE_API_ENDPOINT + "/api/weather", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
+    ApiMain.get("/weather")
     .then((data) => {
       // console.log(data.data.meta.itemCount);
       states.weatherCountItem = data.data.meta.itemCount;
-      console.log(states.weatherCountItem)
+      console.log(states.weatherCountItem);
     })
     .catch((error) => {
       console.log(error);
     });
-}
+};
 
 onMounted(() => {
-  fillChartData()
-  geoData()
-  weatherData()
-})
+  fillChartData();
+  geoData();
+  weatherData();
+});
 
-const mainStore = useMainStore()
+const mainStore = useMainStore();
 
-const clientBarItems = computed(() => mainStore.clients.slice(0, 3))
+const clientBarItems = computed(() => mainStore.clients.slice(0, 3));
 
-const transactionBarItems = computed(() => mainStore.history.slice(0, 3))
+const transactionBarItems = computed(() => mainStore.history.slice(0, 3));
 
-const darkMode = computed(() => mainStore.darkMode)
+const darkMode = computed(() => mainStore.darkMode);
 </script>
 
 <template>
@@ -140,7 +130,7 @@ const darkMode = computed(() => mainStore.darkMode)
         trend-type="alert"
         color="text-blue-500"
         :icon="mdiAccount"
-        :number="customerCountItem"
+        :number="states.customerCountItem"
         label="Customer"
       />
     </div>

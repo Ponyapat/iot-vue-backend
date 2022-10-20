@@ -66,7 +66,7 @@ const form = reactive({
 
 onMounted(async () => {
   await axios
-    .get(import.meta.env.VITE_API_ENDPOINT + "/api/geo/" + id, {
+    .get(import.meta.env.VITE_API_MAIN + "/api/geo/" + id, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -88,7 +88,7 @@ onMounted(async () => {
 
       form.land_code = response.data.data.landCode;
       if(response.data.data.landImg!=""){
-        form.land_img = import.meta.env.VITE_API_ENDPOINT + response.data.data.landImg;
+        form.land_img = import.meta.env.VITE_API_MAIN + response.data.data.landImg;
       }
       
       form.land_img_edit = response.data.data.landImg;
@@ -113,7 +113,7 @@ const upload_image = () => {
   formData.append("file", imagefile.files[0]);
   //console.log(formData)
   axios.post(
-      import.meta.env.VITE_API_ENDPOINT + "/api/image?imageableType=land",formData, 
+      import.meta.env.VITE_API_MAIN + "/api/image?imageableType=land",formData, 
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -172,7 +172,7 @@ const submit = () => {
   const token = localStorage.getItem("tkfw");
   axios
     .put(
-      import.meta.env.VITE_API_ENDPOINT + "/api/geo/" + id,
+      import.meta.env.VITE_API_MAIN + "/api/geo/" + id,
       {
         title: form.title,
         detail: form.detail,

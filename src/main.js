@@ -5,11 +5,32 @@ import App from './App.vue'
 import router from './router'
 import { useMainStore } from '@/stores/main'
 import { darkModeKey, styleKey } from '@/config.js'
-
+import axios from "axios";
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 import './css/main.css'
+
+const token = localStorage.getItem("tkfw")
+
+window.ApiMain= axios.create({
+  baseURL: import.meta.env.VITE_API_MAIN ,
+  headers: {
+    'Authorization' : `Bearer `+token
+  }
+});
+window.ApiSso= axios.create({
+  baseURL: import.meta.env.VITE_API_SSO ,
+  headers: {
+    'Authorization' : `Bearer `+token
+  }
+});
+window.ApiCore= axios.create({
+  baseURL: import.meta.env.VITE_API_CORE ,
+  headers: {
+    'Authorization' : `Bearer `+token
+  }
+});
 
 /* Init Pinia */
 const pinia = createPinia()

@@ -54,7 +54,7 @@ const clearData = () => {
 const fetchRole = () => {
   console.log('fetch role')
   axios
-    .get(import.meta.env.VITE_API_ENDPOINT+"/api/role", {
+    .get(import.meta.env.VITE_API_MAIN+"/api/role", {
       headers: {
         Authorization: "Bearer " + token,
       }
@@ -71,7 +71,7 @@ const submit = () => {
   console.log('add data user')
   console.log(form)
   axios
-    .post(import.meta.env.VITE_API_ENDPOINT+"/api/auth/register", {
+    .post(import.meta.env.VITE_API_MAIN+"/api/auth/register", {
       name: form.name,
       username: form.username,
       email: form.email,

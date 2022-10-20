@@ -27,7 +27,7 @@ const fetchRoleDataId = () => {
   console.log(url)
   if (id) {
     axios
-      .get(import.meta.env.VITE_API_ENDPOINT + "/api/role/"+id,
+      .get(import.meta.env.VITE_API_MAIN + "/api/role/"+id,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -44,7 +44,7 @@ const fetchRoleDataId = () => {
 const submit = () => {
   if (id) {
     axios
-      .put(import.meta.env.VITE_API_ENDPOINT + "/api/role/" + id, {
+      .put(import.meta.env.VITE_API_MAIN + "/api/role/" + id, {
         name: form.name
       },
       {
@@ -74,7 +74,7 @@ const submit = () => {
       })
   } else {
     axios
-      .post(import.meta.env.VITE_API_ENDPOINT + "/api/role", {
+      .post(import.meta.env.VITE_API_MAIN + "/api/role", {
         name: form.name
       },
       {

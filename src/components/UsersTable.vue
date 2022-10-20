@@ -52,7 +52,7 @@ const states = reactive({
 });
 const fetchData = () => {
   axios
-    .get(import.meta.env.VITE_API_ENDPOINT + "/api/users", {
+    .get(import.meta.env.VITE_API_MAIN + "/api/users", {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -70,7 +70,7 @@ const fetchData = () => {
 onBeforeMount(() => {
   fetchData()
   // axios
-  //   .get(import.meta.env.VITE_API_ENDPOINT + "/api/users", {
+  //   .get(import.meta.env.VITE_API_MAIN + "/api/users", {
   //     headers: {
   //       Authorization: "Bearer " + token,
   //     },
@@ -105,7 +105,7 @@ const del = (id) => {
       console.log('ยืนยันการลบ')
       // ส่งการลบไปยัง data base
       axios
-        .delete(import.meta.env.VITE_API_ENDPOINT + "/api/users/" + id, {
+        .delete(import.meta.env.VITE_API_MAIN + "/api/users/" + id, {
           headers: {
             Authorization: "Bearer " + token
           }
@@ -142,7 +142,7 @@ const onChangeActive = (id, isActive) => {
     if (result.isConfirmed) {
       console.log('confirmed')
       axios
-        .put(import.meta.env.VITE_API_ENDPOINT+"/api/users/"+id+"/update-status",
+        .put(import.meta.env.VITE_API_MAIN+"/api/users/"+id+"/update-status",
           {
             isActive: isActive
           },
@@ -164,7 +164,7 @@ const pageNext = (page) => {
   currentPage.value = page;
   //console.log("pageNext " + (page+1));
   axios
-    .get(import.meta.env.VITE_API_ENDPOINT + "/api/users?order=ASC&page="+(page+1)+"&take="+perPage.value, {
+    .get(import.meta.env.VITE_API_MAIN + "/api/users?order=ASC&page="+(page+1)+"&take="+perPage.value, {
       headers: {
         Authorization: "Bearer " + token,
       },

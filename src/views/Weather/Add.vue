@@ -44,7 +44,7 @@ const submit = () => {
   console.log(form);
   axios
     .post(
-      import.meta.env.VITE_API_ENDPOINT + "/api/weather",
+      import.meta.env.VITE_API_MAIN + "/api/weather",
       {
         title: form.title,
         detail: form.detail,

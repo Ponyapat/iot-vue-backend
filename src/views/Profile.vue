@@ -46,7 +46,7 @@ const submitProfile = () => {
   const userid = localStorage.getItem("userid");
   axios
     .put(
-      import.meta.env.VITE_API_ENDPOINT + "/api/users/" + userid + "/profile",
+      import.meta.env.VITE_API_MAIN + "/api/users/" + userid + "/profile",
       profileForm,
       {
         headers: {
@@ -83,7 +83,7 @@ const submitPass = () => {
   }else{
     console.log(passwordForm.password)
     console.log(passwordForm.password_confirmation)
-      axios.post(import.meta.env.VITE_API_ENDPOINT+"/api/auth/change-password", {
+      axios.post(import.meta.env.VITE_API_MAIN+"/api/auth/change-password", {
         email: profileForm.email,
         password: passwordForm.password,
       },{
