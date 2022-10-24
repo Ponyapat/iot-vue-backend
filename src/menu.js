@@ -38,11 +38,11 @@ export default [
       label: 'ภูมิอากาศ',
       icon: mdiWeatherPartlyRainy
     },
-    {
-      to: '/customers',
-      label: 'Customer',
-      icon: mdiAccount
-    },
+    // {
+    //   to: '/customers',
+    //   label: 'Customer',
+    //   icon: mdiAccount
+    // },
     {
       to: '/users',
       label: 'Admin',

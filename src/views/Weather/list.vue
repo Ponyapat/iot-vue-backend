@@ -5,7 +5,6 @@
       :icon="mdiMonitorCellphone"
       title="ภูมิอากาศ"
       has-table
-      addlink="/weather/add"
     >
       <WeatherTable />
     </card-component>

@@ -16,24 +16,9 @@ import JbButtons from "@/components/JbButtons.vue";
 import BottomOtherPagesSection from "@/components/BottomOtherPagesSection.vue";
 import TitledSection from "@/components/TitledSection.vue";
 import TitleSubBar from "@/components/TitleSubBar.vue";
-import axios from "axios"; 
 import Swal from "sweetalert2";
 
 const titleStack = ref(["Admin", "เพิ่มข้อมูลภูมิศาสตร์ (ที่ดิน)"]);
-
-// const selectOptions = [
-//   { id: 1, label: "Business development" },
-//   { id: 2, label: "Marketing" },
-//   { id: 3, label: "Sales" },
-// ];
-
-// const customElementsForm = reactive({
-//   checkbox: ["lorem"],
-//   radio: "one",
-//   switch: ["one"],
-//   file: null,
-// });
-
 const router = useRouter();
 
 const form = reactive({
@@ -58,44 +43,34 @@ const form = reactive({
   land_mineral: "land_mineral",
   land_limitation: "land_limitation",
 
-  fileupload:null,
+  fileupload: null,
   //department: selectOptions[0],
 });
 
 const upload_image = () => {
-  console.log("upload_image")
+  console.log("upload_image");
   //console.log(form.fileupload)
   const token = localStorage.getItem("tkfw");
   let formData = new FormData();
-  let imagefile = document.querySelector('#imgInp');
+  let imagefile = document.querySelector("#imgInp");
   formData.append("file", imagefile.files[0]);
   //console.log(formData)
-  axios.post(
-      import.meta.env.VITE_API_MAIN + "/api/image?imageableType=land",formData, 
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-          'Content-Type': 'multipart/form-data',
-          'accept': 'application/json'
-        },
-      }
-    )
+  ApiMain.post("/image?imageableType=land", formData)
     .then((data) => {
       console.log(data);
       if (data.status == 201) {
         //console.log(data.status);
-        form.land_img = "/api/image/"+data.data+"?imageableType=land"
+        form.land_img = "/image/" + data.data + "?imageableType=land";
         Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: 'อัพโหลดรูปสำเร็จ',
+          position: "top-end",
+          icon: "success",
+          title: "อัพโหลดรูปสำเร็จ",
           showConfirmButton: false,
-          timer: 1500
-        })
- 
+          timer: 1500,
+        });
       } else {
         Swal.fire({
-          position: 'top-end',
+          position: "top-end",
           icon: "warning",
           title: "ไม่สามารถอัพโหลดรูปได้",
           timer: 1500,
@@ -107,43 +82,30 @@ const upload_image = () => {
       console.log(error);
     });
 
-  const [file] = imgInp.files
+  const [file] = imgInp.files;
   if (file) {
-       blah.src = URL.createObjectURL(file)
+    blah.src = URL.createObjectURL(file);
   }
 };
 
-const submit = () => { 
-  const token = localStorage.getItem("tkfw");
-  //console.log(token);
-  //console.log(form);
-  axios
-    .post(
-      import.meta.env.VITE_API_MAIN + "/api/geo",
-      {
-        title: form.title,
-        detail: form.detail,
-        lat: form.lat,
-        lon: form.long,
-        landImg: form.land_img,
-        landDetail: form.land_detail,
-        landSize: form.ri+"-"+form.ngan+"-"+form.wa,
-        landCode: form.land_code,
-        landPriceRate: form.land_price_rate,
-        landPrice: form.land_price,
-        landType: form.land_type,
-        landProperties: form.land_properties,
-        landWater: form.land_water,
-        landMineral: form.land_mineral,
-        landLimitation: form.land_limitation,
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
-    )
-    .then((data) => {
+const submit = () => {
+  ApiMain.post("/geo", {
+    title: form.title,
+    detail: form.detail,
+    lat: form.lat,
+    lon: form.long,
+    landImg: form.land_img,
+    landDetail: form.land_detail,
+    landSize: form.ri + "-" + form.ngan + "-" + form.wa,
+    landCode: form.land_code,
+    landPriceRate: form.land_price_rate,
+    landPrice: form.land_price,
+    landType: form.land_type,
+    landProperties: form.land_properties,
+    landWater: form.land_water,
+    landMineral: form.land_mineral,
+    landLimitation: form.land_limitation,
+  }).then((data) => {
       console.log(data.data);
       if (data.data.status == 201) {
         console.log(data.data.status);
@@ -247,7 +209,6 @@ const submit = () => {
       </field>
 
       <div><img id="blah" src="/images/noimage.png" width="300" /></div>
-      
 
       <field label="ราคาประเมิน (บาท/ตารางวา)">
         <control

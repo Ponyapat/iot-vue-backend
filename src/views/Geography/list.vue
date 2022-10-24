@@ -5,7 +5,6 @@
       :icon="mdiMonitorCellphone"
       title="ภูมิศาสตร์ ที่ดิน"
       has-table
-      addlink="/geography/add"
     >
       <GeographyTable />
     </card-component>

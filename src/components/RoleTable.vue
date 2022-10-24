@@ -1,8 +1,6 @@
-
 <script setup>
 import { computed, ref, onBeforeMount, reactive, onMounted } from "vue";
 import { useMainStore } from "@/stores/main";
-import axios from "axios"
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import JbButtons from "@/components/JbButtons.vue";
@@ -21,10 +19,9 @@ const items = ref(0);
 const perPage = ref(10);
 const currentPage = ref(0);
 
-const token = localStorage.getItem("tkfw");
 const states = reactive({
-  roles: {}
-})
+  roles: {},
+});
 
 const numPages = computed(() => {
   return Math.ceil(items.value / perPage.value);
@@ -45,37 +42,26 @@ const pagesList = computed(() => {
 const pageNext = (page) => {
   currentPage.value = page;
   //console.log("pageNext " + (page+1));
-  axios
-    .get(import.meta.env.VITE_API_MAIN + "/api/role?order=ASC&page="+(page+1)+"&take="+perPage.value, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-    .then((data) => {
-      states.users = data.data.data;
-    });
-}
+  ApiMain.get("/role?order=ASC&page=" + (page + 1) + "&take=" + perPage.value)
+  .then((data) => {
+    states.roles = data.data.data;
+  });
+};
 
 const fetchRoleData = () => {
-  axios
-    .get(import.meta.env.VITE_API_MAIN + "/api/role", {
-      headers: {
-        Authorization: "Bearer " + token,
-      }
-    })
+  ApiMain.get("/role")
     .then((response) => {
-      console.log('DEBUG:DATAROLE ', response)
-      states.roles = response.data.data
+      states.roles = response.data.data;
       items.value = response.data.meta.itemCount;
-    })
-}
+    });
+};
+
 const edit = (id) => {
-//   console.log('edit', id)
   router.push("/role/edit/" + id);
-}
+};
 
 const del = (role) => {
-  console.log('del', role.id)
+  //console.log("del", role.id);
   Swal.fire({
     title: "ยืนยันการลบ",
     text: `คุณต้องการลบสถานะ ${role.name} ใช่หรือไม่`,
@@ -85,15 +71,10 @@ const del = (role) => {
     cancelButtonColor: "#d33",
     confirmButtonText: "Ok",
   }).then((result) => {
-    console.log(result)
+    console.log(result);
     if (result.isConfirmed) {
-      console.log('ยืนยันการลบ')
-      axios
-        .delete(import.meta.env.VITE_API_MAIN + "/api/role/" + role.id, {
-          headers: {
-            Authorization: "Bearer " + token
-          }
-        })
+      console.log("ยืนยันการลบ");
+      ApiMain.delete("/role/" + role.id)
         .then((data) => {
           setInterval(function () {
             location.reload();
@@ -105,13 +86,12 @@ const del = (role) => {
           console.log(error);
         });
     }
-  })
-}
+  });
+};
 
 onBeforeMount(() => {
-  fetchRoleData()
-})
-
+  fetchRoleData();
+});
 </script>
 
 <template>
@@ -125,13 +105,27 @@ onBeforeMount(() => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(role, index) in states.roles" :key="index" :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']">
+        <tr
+          v-for="(role, index) in states.roles"
+          :key="index"
+          :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']"
+        >
           <td class="p-3" data-label="ID">{{ role.id }}</td>
           <td class="p-3" data-label="Name">{{ role.name }}</td>
           <td class="actions-cell">
             <jb-buttons type="justify-start lg:justify-end" no-wrap>
-              <jb-button color="info" :icon="mdiGreasePencil" small @click="edit(role.id)" />
-              <jb-button color="danger" :icon="mdiTrashCan" small @click="del(role)"/>
+              <jb-button
+                color="info"
+                :icon="mdiGreasePencil"
+                small
+                @click="edit(role.id)"
+              />
+              <jb-button
+                color="danger"
+                :icon="mdiTrashCan"
+                small
+                @click="del(role)"
+              />
             </jb-buttons>
           </td>
         </tr>

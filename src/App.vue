@@ -22,7 +22,7 @@ onBeforeMount(()=>{
         mainStore.setUser({
           name: data.data.user.name,
           email: data.data.user.email,
-          avatar: 'https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair&options[accessoriesChance]=93'
+          avatar: '/images/avataaars.svg'
         });
     }).catch((error) => {
         router.push("/login");

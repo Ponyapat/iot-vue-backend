@@ -8,7 +8,6 @@ import Level from "@/components/Level.vue";
 import CheckRadioPicker from "@/components/CheckRadioPicker.vue";
 import { mdiTrashCan, mdiGreasePencil } from "@mdi/js";
 import Swal from "sweetalert2";
-import axios from "axios";
 
 const mainStore = useMainStore();
 
@@ -28,7 +27,6 @@ const perPage = ref(10);
 
 const currentPage = ref(0);
 
-
 const numPages = computed(() => {
   return Math.ceil(items.value / perPage.value);
 });
@@ -45,52 +43,30 @@ const pagesList = computed(() => {
   return pagesList;
 });
 
-const token = localStorage.getItem("tkfw");
-
 const states = reactive({
   users: {},
 });
 const fetchData = () => {
-  axios
-    .get(import.meta.env.VITE_API_MAIN + "/api/users", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
+  ApiMain.get("/users")
     .then((data) => {
-      console.log('DEBUG', data.data.data, data.data);
+      console.log("DEBUG", data.data.data, data.data);
       states.users = data.data.data;
       items.value = data.data.meta.itemCount;
     })
     .catch((error) => {
       console.log(error);
     });
-}
+};
 
 onBeforeMount(() => {
-  fetchData()
-  // axios
-  //   .get(import.meta.env.VITE_API_MAIN + "/api/users", {
-  //     headers: {
-  //       Authorization: "Bearer " + token,
-  //     },
-  //   })
-  //   .then((data) => {
-  //     console.log('DEBUG', data.data.data);
-  //     states.users = data.data.data;
-  //   //   items.value = data.data.meta.itemCount;
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
+  fetchData();
 });
 
 const edit = (id) => {
-  // console.log('Edit', id)
   router.push("/user/edit/" + id);
-}
+};
 const del = (id) => {
-  console.log('Delete', id)
+  console.log("Delete", id);
   Swal.fire({
     title: "ยืนยันการลบ",
     text: "คุณต้องการลบ Admin ท่านนี้ใช่หรือไม่",
@@ -100,34 +76,28 @@ const del = (id) => {
     cancelButtonColor: "#d33",
     confirmButtonText: "Ok",
   }).then((result) => {
-    console.log('result', result)
+    console.log("result", result);
     if (result.isConfirmed) {
-      console.log('ยืนยันการลบ')
+      console.log("ยืนยันการลบ");
       // ส่งการลบไปยัง data base
-      axios
-        .delete(import.meta.env.VITE_API_MAIN + "/api/users/" + id, {
-          headers: {
-            Authorization: "Bearer " + token
-          }
-        })
+      ApiMain.delete("/users/" + id)
         .then((data) => {
           setInterval(function () {
             location.reload();
           }, 1500);
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
-          // console.log("del" + id);
         })
         .catch((error) => {
           console.log(error);
         });
     }
-  })
-}
+  });
+};
 const onChangeActive = (id, isActive) => {
   if (isActive == 1) {
-    isActive = 0
+    isActive = 0;
   } else if (isActive == 0) {
-    isActive = 1
+    isActive = 1;
   }
   Swal.fire({
     title: "ยืนยันการเปลี่ยนสถานะ",
@@ -138,51 +108,38 @@ const onChangeActive = (id, isActive) => {
     cancelButtonColor: "#d33",
     confirmButtonText: "Ok",
   }).then((result) => {
-    console.log('DEBUG:', id, isActive, result)
+    console.log("DEBUG:", id, isActive, result);
     if (result.isConfirmed) {
-      console.log('confirmed')
-      axios
-        .put(import.meta.env.VITE_API_MAIN+"/api/users/"+id+"/update-status",
-          {
-            isActive: isActive
-          },
-          {
-            headers: {
-              Authorization: "Bearer " + token
-            }
-          }
-        ).then((data) => {
-          console.log(data)
-          fetchData()
-          // location.reload();
-        })
+      //console.log("confirmed");
+      ApiMain.put("/users/" + id + "/update-status", {
+        isActive: isActive,
+      }).then((data) => {
+        console.log(data);
+        fetchData();
+        // location.reload();
+      });
     }
-  })
-}
+  });
+};
 
 const pageNext = (page) => {
   currentPage.value = page;
   //console.log("pageNext " + (page+1));
-  axios
-    .get(import.meta.env.VITE_API_MAIN + "/api/users?order=ASC&page="+(page+1)+"&take="+perPage.value, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-    .then((data) => {
-      states.users = data.data.data;
-    });
-}
+  ApiMain.get(
+    "/users?order=ASC&page=" + (page + 1) + "&take=" + perPage.value
+  ).then((data) => {
+    states.users = data.data.data;
+  });
+};
 const statusText = (value) => {
   if (!value) {
-    return ''
-  } else if (value === '1') {
-    return 'Admin'
-  } else if (value === '2') {
-    return 'Super Admin'
+    return "";
+  } else if (value === "1") {
+    return "Admin";
+  } else if (value === "2") {
+    return "Super Admin";
   }
-}
-
+};
 </script>
 <template>
   <div>
@@ -200,7 +157,11 @@ const statusText = (value) => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(user, index) in states.users" :key="index" :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']">
+        <tr
+          v-for="(user, index) in states.users"
+          :key="index"
+          :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']"
+        >
           <td data-label="#">
             {{ index + 1 }}
           </td>
@@ -217,7 +178,7 @@ const statusText = (value) => {
             {{ user.email }}
           </td>
           <td class="p-3 text-gray-500" data-label="Role">
-            {{ user.role ? user.role.name : '' }}
+            {{ user.role ? user.role.name : "" }}
           </td>
           <td class="p-3" data-label="Status">
             <check-radio-picker
@@ -229,8 +190,18 @@ const statusText = (value) => {
           </td>
           <td class="actions-cell">
             <jb-buttons type="justify-start lg:justify-end" no-wrap>
-              <jb-button color="info" :icon="mdiGreasePencil" small @click="edit(user.id)" />
-              <jb-button color="danger" :icon="mdiTrashCan" small @click="del(user.id)"/>
+              <jb-button
+                color="info"
+                :icon="mdiGreasePencil"
+                small
+                @click="edit(user.id)"
+              />
+              <jb-button
+                color="danger"
+                :icon="mdiTrashCan"
+                small
+                @click="del(user.id)"
+              />
             </jb-buttons>
           </td>
         </tr>
