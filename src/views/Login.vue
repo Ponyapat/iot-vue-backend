@@ -31,22 +31,21 @@ const form = reactive({
 const router = useRouter();
 
 const submit = () => {
-  axios
-    .post(import.meta.env.VITE_API_MAIN+"/auth/login", {
+  ApiMain.post("/auth/login", {
       email: form.username,
       password: form.password,
-    })
-    .then((data) => {
+    }).then((data) => {
       //console.log(data.data);
       if (data.data.status == 200) {
         mainStore.setUser({
           name: data.data.user.name,
           email: data.data.user.email,
-          avatar: 'https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair&options[accessoriesChance]=93'
+          avatar: '/images/avataaars.svg'
         });
         localStorage.setItem("tkfw", data.data.accessToken);
         localStorage.setItem("userid", data.data.user.id);
-        router.push("/dashboard");
+        window.location.replace("/dashboard");
+        //router.push("/dashboard");
       }else{
         ck_login.value = 1;
       }
@@ -107,11 +106,11 @@ const submit = () => {
         />
       </field>
 
-      <check-radio-picker
+      <!-- <check-radio-picker
         v-model="form.remember"
         name="remember"
         :options="{ remember: 'Remember' }"
-      />
+      /> -->
 
       <divider />
 

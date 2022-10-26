@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted } from "vue";
+import { computed, ref, onMounted , onBeforeMount } from "vue";
 import { useMainStore } from "@/stores/main";
 import {
   mdiAccountMultiple,
@@ -27,11 +27,9 @@ import JbButton from "@/components/JbButton.vue";
 import CardTransactionBar from "@/components/CardTransactionBar.vue";
 import CardClientBar from "@/components/CardClientBar.vue";
 import TitleSubBar from "@/components/TitleSubBar.vue";
-import axios from "axios";
 import { reactive } from "vue";
 
 const titleStack = ref(["Admin", "Dashboard"]);
-const token = localStorage.getItem("tkfw");
 
 const chartData = ref(null);
 const states = reactive({
@@ -68,7 +66,7 @@ const weatherData = () => {
     });
 };
 
-onMounted(() => {
+onBeforeMount(() => {
   fillChartData();
   geoData();
   weatherData();

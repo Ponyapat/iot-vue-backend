@@ -1,83 +1,69 @@
 <script setup>
-import { useRouter } from 'vue-router'
-import { useMainStore } from '@/stores/main'
-import TitleBar from '@/components/TitleBar.vue'
-import { reactive, ref, onMounted } from 'vue'
-import MainSection from '@/components/MainSection.vue'
-import CardComponent from '@/components/CardComponent.vue'
-import Field from '@/components/Field.vue'
-import Control from '@/components/Control.vue'
-import { mdiBallot } from '@mdi/js'
-import BottomOtherPagesSection from '@/components/BottomOtherPagesSection.vue'
-import Divider from '@/components/Divider.vue'
-import JbButton from '@/components/JbButton.vue'
-import JbButtons from '@/components/JbButtons.vue'
-import axios from 'axios'
-import Swal from 'sweetalert2'
+import { useRouter } from "vue-router";
+import { useMainStore } from "@/stores/main";
+import TitleBar from "@/components/TitleBar.vue";
+import { reactive, ref, onMounted } from "vue";
+import MainSection from "@/components/MainSection.vue";
+import CardComponent from "@/components/CardComponent.vue";
+import Field from "@/components/Field.vue";
+import Control from "@/components/Control.vue";
+import { mdiBallot } from "@mdi/js";
+import BottomOtherPagesSection from "@/components/BottomOtherPagesSection.vue";
+import Divider from "@/components/Divider.vue";
+import JbButton from "@/components/JbButton.vue";
+import JbButtons from "@/components/JbButtons.vue";
+import Swal from "sweetalert2";
 // import CheckRadioPicker from '@/components/CheckRadioPicker.vue'
 
-const router = useRouter()
-const token = localStorage.getItem("tkfw");
+const router = useRouter();
+const titleStack = ref(["Admin", "เพิ่มข้อมูลผู้ใช้"]);
 
-const titleStack = ref(['Admin', 'เพิ่มข้อมูลผู้ใช้'])
-
-// const selectOptions = [
-//   { role: 'admin', label: 'Admin' },
-//   { role: 'super_admin', label: 'Super Admin' }
-// ]
 const states = reactive({
-  roles: "",
+  roles: [],
 });
 
 onMounted(() => {
-  clearData()
-  fetchRole()
-})
+  //clearData()
+  fetchRole();
+});
 
 const form = reactive({
-  name: '',
-  email: '',
-  username: '',
-  password: '',
-  role_id: states.roles[1]
-})
+  name: "",
+  email: "",
+  username: "",
+  password: "",
+  role_id: "",
+});
 
 const clearData = () => {
-  console.log('clearData')
-  form.name = ''
-  form.email = ''
-  form.username = ''
-  form.password = ''
-  form.role = states.roles[1]
-}
+  console.log("clearData");
+  form.name = "";
+  form.email = "";
+  form.username = "";
+  form.password = "";
+  form.role_id = "";
+};
 
 const fetchRole = () => {
-  console.log('fetch role')
-  axios
-    .get(import.meta.env.VITE_API_MAIN+"/api/role", {
-      headers: {
-        Authorization: "Bearer " + token,
-      }
-    })
-    .then((data) => {
-      // console.log('DEBUG ROLE: ', data)
-      states.roles = data.data.data
-      // set role default เป็น admin
-      form.role = states.roles[1]
-    })
-}
+  console.log("fetch role");
+  ApiMain.get("/role").then((data) => {
+    console.log("DEBUG ROLE: ", data.data.data);
+    states.roles = data.data.data;
+    // set role default เป็น admin id 2
+    form.role_id = "2";
+  });
+};
 
 const submit = () => {
-  console.log('add data user')
-  console.log(form)
-  axios
-    .post(import.meta.env.VITE_API_MAIN+"/api/auth/register", {
-      name: form.name,
-      username: form.username,
-      email: form.email,
-      password: form.password,
-      roleId: form.role.id
-    })
+  console.log("add data user");
+  //console.log(form)
+  ApiMain.post("/auth/register", {
+    name: form.name,
+    username: form.username,
+    email: form.email,
+    password: form.password,
+    roleId: form.role_id,
+  })
     .then((r) => {
       console.log("success");
       Swal.fire({
@@ -90,15 +76,15 @@ const submit = () => {
     })
     .catch((error) => {
       console.log(error.response.data.message);
-      if (error.response.data.message == "Error: User not registration!"){
+      if (error.response.data.message == "Error: User not registration!") {
         Swal.fire({
           icon: "warning",
           title: "มีผู้ใช้งานในระบบนี้แล้ว",
-          showConfirmButton: 1
+          showConfirmButton: 1,
         });
       }
     });
-}
+};
 </script>
 
 <template>
@@ -111,25 +97,17 @@ const submit = () => {
       @submit.prevent="submit"
     >
       <field label="Name" placeholder="กรอก Name ผู้ใช้" :require="true">
-        <control
-          v-model="form.name"
-          type="text"
-          placeholder="Name"
-        />
+        <control v-model="form.name" type="text" placeholder="Name" />
       </field>
-      <field label="Username" placeholder="กรอก Username ผู้ใช้" :require="true">
-        <control
-          v-model="form.username"
-          type="text"
-          placeholder="Username"
-        />
+      <field
+        label="Username"
+        placeholder="กรอก Username ผู้ใช้"
+        :require="true"
+      >
+        <control v-model="form.username" type="text" placeholder="Username" />
       </field>
       <field label="E-mail" placeholder="กรอก E-mail ผู้ใช้" :require="true">
-        <control
-          v-model="form.email"
-          type="email"
-          placeholder="E-mail"
-        />
+        <control v-model="form.email" type="email" placeholder="E-mail" />
       </field>
       <field label="Password" placeholder="กรอก Password" :require="true">
         <control
@@ -140,10 +118,7 @@ const submit = () => {
         />
       </field>
       <field label="กำหนดสิทธ์">
-        <control
-          v-model="form.role"
-          :options="states.roles"
-        />
+        <control v-model="form.role_id" :options="states.roles" />
       </field>
 
       <divider />

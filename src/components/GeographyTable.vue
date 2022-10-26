@@ -34,8 +34,6 @@ const states = reactive({
   geo: {},
 });
 
-const token = localStorage.getItem("tkfw");
-
 const isModalActive = ref(false);
 
 const isModalDangerActive = ref(false);

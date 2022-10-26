@@ -16,7 +16,6 @@ import { mdiBallot } from "@mdi/js";
 const router = useRouter();
 const url = window.location.href;
 const id = url.split("/")[5];
-const token = localStorage.getItem("tkfw");
 const titleStack = ref(id ? ["Admin", "แก้ไขสถานะ Admin"] : ["Admin", "เพิ่มสถานะ Admin"]);
 const buttonLabel = (id ? "อัพเดท" : "เพิ่ม");
 const form = reactive({
@@ -24,15 +23,9 @@ const form = reactive({
   name: ''
 })
 const fetchRoleDataId = () => {
-  console.log(url)
+  //console.log(url)
   if (id) {
-    axios
-      .get(import.meta.env.VITE_API_MAIN + "/api/role/"+id,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        })
+    ApiMain.get("/role/"+id)
       .then((response) => {
         if (response.data) {
           form.id = response.data.data.id
@@ -43,16 +36,9 @@ const fetchRoleDataId = () => {
 }
 const submit = () => {
   if (id) {
-    axios
-      .put(import.meta.env.VITE_API_MAIN + "/api/role/" + id, {
+    ApiMain.put("/role/" + id, {
         name: form.name
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        }
-      })
-      .then((data) => {
+      }).then((data) => {
         if (data.data.status == 204 || data.data.status == 200) {
           console.log(data.data.status);
           Swal.fire({
@@ -73,16 +59,9 @@ const submit = () => {
         }
       })
   } else {
-    axios
-      .post(import.meta.env.VITE_API_MAIN + "/api/role", {
+    ApiMain.post("/role", {
         name: form.name
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        }
-      })
-      .then((data) => {
+      }).then((data) => {
         if (data.data.status == 204 || data.data.status == 200 || data.data.status == 201) {
           console.log(data.data.status);
           Swal.fire({

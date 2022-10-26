@@ -16,26 +16,12 @@ import JbButtons from "@/components/JbButtons.vue";
 import BottomOtherPagesSection from "@/components/BottomOtherPagesSection.vue";
 import TitledSection from "@/components/TitledSection.vue";
 import TitleSubBar from "@/components/TitleSubBar.vue";
-import axios from "axios";
 import Swal from "sweetalert2";
 
-const titleStack = ref(["Admin", "แก้ไขข้อมูลภูมิศาสตร์ (ที่ดิน)"]);
+const titleStack = ref(["ADMIN", "แก้ไขข้อมูลภูมิศาสตร์ (ที่ดิน)"]);
 
-// const selectOptions = [
-//   { id: 1, label: "Business development" },
-//   { id: 2, label: "Marketing" },
-//   { id: 3, label: "Sales" },
-// ];
-
-// const customElementsForm = reactive({
-//   checkbox: ["lorem"],
-//   radio: "one",
-//   switch: ["one"],
-//   file: null,
-// });
-
-const token = localStorage.getItem("tkfw");
-axios.defaults.headers.common["Authorization"] = token;
+// const token = localStorage.getItem("tkfw");
+// axios.defaults.headers.common["Authorization"] = token;
 
 const router = useRouter();
 const url = window.location.href;
@@ -64,27 +50,16 @@ const form = reactive({
   fileupload:null,
 });
 
-onMounted(async () => {
-  await axios
-    .get(import.meta.env.VITE_API_MAIN + "/api/geo/" + id, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
+onMounted(() => {
+  ApiMain.get("/geo/" + id)
     .then((response) => {
       //console.log(response.data)
-      let landSize = response.data.data.landSize;
-      const landSize_split = landSize.split("-");
       //console.log(landSize_split)
       form.title = response.data.data.title;
       form.detail = response.data.data.detail;
       form.lat = response.data.data.lat;
       form.long = response.data.data.lon;
       form.land_detail = response.data.data.landDetail;
-
-      form.ri = landSize_split[0];
-      form.ngan = landSize_split[1];
-      form.wa = landSize_split[2];
 
       form.land_code = response.data.data.landCode;
       if(response.data.data.landImg!=""){
