@@ -34,6 +34,11 @@ export default [
       icon: mdiEarth
     },
     {
+      to: '/geography_base',
+      label: 'ภูมิศาสตร์(ข้อมูลกลาง)',
+      icon: mdiEarth
+    },
+    {
       to: '/weather',
       label: 'ภูมิอากาศ',
       icon: mdiWeatherPartlyRainy

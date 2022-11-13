@@ -43,12 +43,6 @@ const routes = [
     path: "/geography",
     name: "Geography",
     component: () => import("@/views/Geography/list.vue"),
-    // children: [
-    //   {
-    //     path: "add",
-    //     component: () => import(/* webpackChunkName: "ui" */ "@/views/Ui.vue"),
-    //   }
-    // ],
   },
   {
     meta: {
@@ -65,6 +59,22 @@ const routes = [
     path: "/geography/edit/:id",
     name: "EDITGeography",
     component: () => import("@/views/Geography/Edit.vue"),
+  },
+  {
+    meta: {
+      title: "GeographyBase",
+    },
+    path: "/geography_base",
+    name: "GeographyBase",
+    component: () => import("@/views/GeographyBase/list.vue"),
+  },
+  {
+    meta: {
+      title: "GeographyBaseForm",
+    },
+    path: "/geography_base/form",
+    name: "GeographyBaseForm",
+    component: () => import("@/views/GeographyBase/Form.vue"),
   },
   {
     meta: {
