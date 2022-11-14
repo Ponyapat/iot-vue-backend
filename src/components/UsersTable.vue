@@ -181,7 +181,7 @@ const statusText = (value) => {
   } else if (value === '2') {
     return 'Super Admin'
   }
-}
+};
 
 </script>
 <template>

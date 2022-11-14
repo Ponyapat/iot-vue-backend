@@ -16,7 +16,7 @@ mainStore.setStyle("basic")
 // mainStore.setDarkMode(false)
 
 // if (localStorage.getItem("nong") === null) {
-//   localStorage.setItem("nong", 
+//   localStorage.setItem("nong",
 //  JSON.stringify({name: 'Demo',
 //   email: 'Demo@test.com'
 //   }))
@@ -47,11 +47,11 @@ onBeforeMount(()=>{
   }
 })
 
-const isAsideLgActive = computed(() => mainStore.isAsideLgActive)
+const isAsideLgActive = computed(() => mainStore.isAsideLgActive);
 
 const overlayClick = () => {
   mainStore.asideLgToggle(false)
-}
+};
 </script>
 
 <template>

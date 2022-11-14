@@ -83,6 +83,7 @@ const submit = (e) => {
         :class="[icon ? 'px-4' : 'px-6']"
       >
         <icon v-if="icon" :path="icon" class="mr-3" />
+
         {{ title }}
       </p>
       <!-- <a
@@ -99,6 +100,7 @@ const submit = (e) => {
         <button
           class="bg-green-700 hover:bg-green-900 text-white font-bold m-2 py-2 px-4 rounded"
         >
+        <i class="fa-solid fa-plus"></i>
           เพิ่ม ​{{title}}
           <!-- {{ title }} -->
         </button>

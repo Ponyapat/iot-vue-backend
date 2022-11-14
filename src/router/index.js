@@ -38,6 +38,30 @@ const routes = [
   },
   {
     meta: {
+      title: "Fruits"
+    },
+    path: "/fruits",
+    name: 'Fruits',
+    component: () => import('@/views/Fruits/FruitList.vue'),
+  },
+  {
+    meta: {
+      title: "AddFruits",
+    },
+    path: "/fruits/add",
+    name: "AddFruits",
+    component: () => import("@/views/Fruits/FormFruits.vue"),
+  },
+  {
+    meta: {
+      title: "EditFruits",
+    },
+    path: "/fruits/edit",
+    name: "EditFruits",
+    component: () => import("@/views/Fruits/FormFruits.vue"),
+  },
+  {
+    meta: {
       title: "Geography",
     },
     path: "/geography",

@@ -35,7 +35,7 @@ const asideLgClose = () => {
 
 const menuClick = (event, item) => {
   //
-}
+};
 </script>
 
 <template>
@@ -64,7 +64,7 @@ const menuClick = (event, item) => {
       </nav-bar-item>
       <img
       src="/logo.png"
-      class="h-12 ml-10" 
+      class="h-12 ml-10"
        >
       <div class="flex-1 px-3">
         <span>Farm</span><b class="font-black">World</b>
