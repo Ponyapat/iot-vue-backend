@@ -14,7 +14,8 @@ import {
   mdiAccount,
   mdiEarth,
   mdiWeatherPartlyRainy,
-  mdiShieldAccountVariant
+  mdiShieldAccountVariant,
+  mdiFruitCherries
 } from '@mdi/js'
 
 export default [
@@ -43,11 +44,24 @@ export default [
       label: 'ภูมิอากาศ',
       icon: mdiWeatherPartlyRainy
     },
+<<<<<<< HEAD
     // {
     //   to: '/customers',
     //   label: 'Customer',
     //   icon: mdiAccount
     // },
+=======
+    {
+      to: '/fruits',
+      label: 'พืชพันธุ์ผลไม้',
+      icon: mdiFruitCherries
+    },
+    {
+      to: '/customers',
+      label: 'Customer',
+      icon: mdiAccount
+    },
+>>>>>>> Boat
     {
       to: '/users',
       label: 'Admin',
@@ -58,6 +72,7 @@ export default [
       label: 'Role',
       icon: mdiShieldAccountVariant
     },
+
     // {
     //   label: 'Submenus',
     //   subLabel: 'Submenus Example',

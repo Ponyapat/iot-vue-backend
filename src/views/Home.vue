@@ -168,7 +168,7 @@ const darkMode = computed(() => mainStore.darkMode);
       :icon="mdiFinance"
       :header-icon="mdiReload"
       class="mb-6"
-      @header-icon-click="fillChartData" 
+      @header-icon-click="fillChartData"
     >
       <div v-if="chartData">
         <line-chart
