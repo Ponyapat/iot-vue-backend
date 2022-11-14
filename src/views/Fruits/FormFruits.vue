@@ -1,3 +1,4 @@
+
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
@@ -8,15 +9,16 @@ import Swal from "sweetalert2";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const edit_id = ref('');
 const token = localStorage.getItem("tkfw");
 
 const code_rule = helpers.regex(/[0-9]/);
 
 const categories = ref([]) ;
 let image_upload = ref('');
+let img_file = ref('');
 let image_name = ref('');
-
+let documents = ref('');
+let formData_img = ref('');
 let type_form = ref('');
 let url = new URL(window.location.href);
 const id = url.searchParams.get("data_id");
@@ -99,13 +101,22 @@ onMounted(()=>{
   if(id){
     type_form.value = 'แก้ไขข้อมูล';
 
-    axios.get(import.meta.env.VITE_API_ENDPOINT + "/api/breed/" + id, {
+    ApiMain.get("/breed/" + id, {
       headers: {
         Authorization: "Bearer " + token,
       },
-    })
-    .then((response) => {
-      console.log(response.data.data.breedCategoryId);
+    }).then((response) => {
+
+        if(response.data.data.image!==''){
+          ApiMain.get('/image/'+response.data.data.image+'?imageableType=breed',{
+          headers: {
+            Authorization: "Bearer " + token,
+          }}).then((res)=>{
+            console.log('image == ',res);
+            image_upload.value =res.request.responseURL ;
+          })
+        image_name.value = response.data.data.image ;
+        }
         dataform.code  = response.data.data.code ;
         dataform.breedCategoryId = response.data.data.breedCategoryId ;
         dataform.name = response.data.data.name ;
@@ -134,7 +145,7 @@ onMounted(()=>{
         dataform.amountOfWaterMin = response.data.data.amountOfWaterMin ;// ปริมาณน้ำ Min
         dataform.lightIntensityMax = response.data.data.lightIntensityMax ;// ความเข้มแสง Max
         dataform.lightIntensityMin = response.data.data.lightIntensityMin ;// ความเข้มแสง Min
-        dataform.document_file = response.data.data.document_file ;// เอกสาร
+        dataform.document_file = response.data.data.document ;// เอกสาร
         dataform.link = response.data.data.link// ลิ้ง
         dataform.image = response.data.data.image;// รูป
         dataform.status = response.data.data.status;// สถานะ
@@ -143,9 +154,8 @@ onMounted(()=>{
   else {
     type_form.value = 'เพิ่มข้อมูล';
   }
-
   //ดึงเอาประเภทพืช breed-categorise
-   axios.get(import.meta.env.VITE_API_ENDPOINT + "/api/breed-categorise?order=ASC&page=1&take=10", {
+  ApiMain.get("/breed-categorise?order=ASC&page=1&take=10", {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -159,13 +169,10 @@ const upload_image = (event) => {
   let name = event.target.files[0].name ;
   image_name.value = event.target.files[0].name ;
   let image = event.target.files[0];
-
   const formdata = new FormData();
-  formdata.append('image', image , name);
-  dataform.image = formdata ;
+  formdata.append('file', image );
   image_upload.value =  URL.createObjectURL(image) ;
-
-  console.log(dataform.image);
+  formData_img.value = formdata ;
 
 };
 
@@ -174,13 +181,9 @@ const upload_document = (event) => {
   let name = event.target.files[0].name;
   let file_upload = event.target.files[0];
   // Real
-  // const formdata = new FormData();
-  // formdata.append('file', file_upload , name);
-  // dataform.document_file = formdata ;
-
-  // Test
-  dataform.document_file = name ;
-
+  const formdata = new FormData();
+  formdata.append('file', file_upload , name);
+  documents.value = formdata ;
 
 }
 const check_status = (event) => {
@@ -202,7 +205,7 @@ const submit = async () => {
 
   if(id){
     if (result) {
-    axios.put(import.meta.env.VITE_API_ENDPOINT + "/api/breed/"+ id,{
+      ApiMain.put("/breed/"+ id,{
         code: dataform.code,
         breedCategoryId: dataform.breedCategoryId,
         name: dataform.name,// ชื่อ
@@ -243,8 +246,6 @@ const submit = async () => {
       }
     )
     .then((data) => {
-
-      console.log(data);
       if (data.status == 200 || data.status == 201) {
         Swal.fire({
           icon: "success",
@@ -273,7 +274,38 @@ const submit = async () => {
   }
   else {
     if (result) {
-    axios.post(import.meta.env.VITE_API_ENDPOINT + "/api/breed",{
+      ApiMain.post("/image/upload?imageableType=breed",formData_img.value,{
+        headers: {
+          Authorization: "Bearer " + token,
+          'Content-Type': 'multipart/form-data',
+          'accept': 'application/json'
+        },
+      }
+    ).then((data) => {
+      if (data.status == 201) {
+        // dataform.image = '/image/'+ data.data+ '?imageableType=breed';
+        dataform.image = data.data;
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'อัพโหลดรูปสำเร็จ',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      } else {
+        Swal.fire({
+          position: 'top-end',
+          icon: "warning",
+          title: "ไม่สามารถอัพโหลดรูปได้",
+          timer: 1500,
+        });
+        return false;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    ApiMain.post("/breed",{
         code: dataform.code,
         breedCategoryId: dataform.breedCategoryId,
         name: dataform.name,// ชื่อ
@@ -344,6 +376,7 @@ const submit = async () => {
   }
   }
 };
+
 </script>
 
 <template>
@@ -654,3 +687,4 @@ const submit = async () => {
     margin-right: 20px;
 }
 </style>
+

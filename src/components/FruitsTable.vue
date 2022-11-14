@@ -49,8 +49,7 @@ const perPage = ref(10);
 const currentPage = ref(0);
 
 onBeforeMount(() => {
-  axios
-    .get(import.meta.env.VITE_API_ENDPOINT + "/api/breed?order=ASC&page=1&take=10", {
+  ApiMain.get("/breed?order=ASC&page=1&take=10", {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -121,8 +120,7 @@ const pagesList = computed(() => {
 const pageNext = (page) => {
   currentPage.value = page;
   //console.log("pageNext " + (page+1));
-  axios
-    .get(import.meta.env.VITE_API_ENDPOINT + "/api/fruits?order=ASC&page=" + (page + 1) + "&take=" + perPage.value, {
+  ApiMain.get("/fruits?order=ASC&page=" + (page + 1) + "&take=" + perPage.value, {
       headers: {
         Authorization: "Bearer " + token,
       },
