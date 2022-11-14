@@ -44,13 +44,6 @@ export default [
       label: 'ภูมิอากาศ',
       icon: mdiWeatherPartlyRainy
     },
-<<<<<<< HEAD
-    // {
-    //   to: '/customers',
-    //   label: 'Customer',
-    //   icon: mdiAccount
-    // },
-=======
     {
       to: '/fruits',
       label: 'พืชพันธุ์ผลไม้',
@@ -61,7 +54,6 @@ export default [
       label: 'Customer',
       icon: mdiAccount
     },
->>>>>>> Boat
     {
       to: '/users',
       label: 'Admin',

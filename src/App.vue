@@ -14,16 +14,6 @@ const router = useRouter();
 mainStore.setStyle("basic")
 // mainStore.setDarkMode(false)
 
-<<<<<<< HEAD
-=======
-// if (localStorage.getItem("nong") === null) {
-//   localStorage.setItem("nong",
-//  JSON.stringify({name: 'Demo',
-//   email: 'Demo@test.com'
-//   }))
-// }
-
->>>>>>> Boat
 onBeforeMount(()=>{
   //console.log(imyVar)
   if (localStorage.getItem("tkfw") !== null) {

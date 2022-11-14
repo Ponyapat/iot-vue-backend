@@ -140,10 +140,7 @@ const statusText = (value) => {
     return "Super Admin";
   }
 };
-<<<<<<< HEAD
-=======
 
->>>>>>> Boat
 </script>
 <template>
   <div>
