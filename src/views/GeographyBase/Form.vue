@@ -18,8 +18,12 @@ import TitledSection from "@/components/TitledSection.vue";
 import TitleSubBar from "@/components/TitleSubBar.vue";
 import Swal from "sweetalert2";
 
-const titleStack = ref(["Admin", "เพิ่มข้อมูลภูมิศาสตร์(ข้อมูลกลาง)"]);
+let titleStack = ref(["Admin", "เพิ่มข้อมูลภูมิศาสตร์(ข้อมูลกลาง)"]);
 const router = useRouter();
+
+let url = new URL(window.location.href);
+const id = url.searchParams.get("id");
+let type_form = ref("เพิ่ม");
 
 const form = reactive({
   province: [],
@@ -37,44 +41,85 @@ const form = reactive({
   provinceId: "",
   districtId: "",
   subdistrictId: "",
-  soilProperties: "soilProperties",
-  topsoilDetail: "topsoilDetail",
-  topsoilValueMin: 4,
-  topsoilValueMax: 5,
-  subsoilDetail: "subsoilDetail",
-  subsoilValueMin: 6,
-  subsoilValueMax: 7,
+  soilProperties: "",
+  topsoilDetail: "",
+  topsoilValueMin: "",
+  topsoilValueMax: "",
+  subsoilDetail: "",
+  subsoilValueMin: "",
+  subsoilValueMax: "",
   soilFertility: "high",
-  soilRestrictions: "soilRestrictions",
-  spaceNatureDetail: "spaceNatureDetail",
+  soilRestrictions: "",
+  spaceNatureDetail: "",
   spaceNatureAll: [],
   spaceNaturePlain: false,
   spaceNaturePlateau: false,
   spaceNatureHill: false,
   spaceNatureMountain: false,
-  slope: 5,
+  slope: "",
   drainage: "high",
-  nearbyNaturalWater: 1,
-  nearbyInfarmWater: 2,
-  nearbySmallWater: 3,
-  nearbyGroundWater: 4,
+  nearbyNaturalWater: 0,
+  nearbyInfarmWater: 0,
+  nearbySmallWater: 0,
+  nearbyGroundWater: 0,
 });
 
 onMounted(() => {
+  if (id) {
+    type_form.value = "แก้ไขข้อมูล";
+    titleStack.value = ["Admin", "แก้ไขข้อมูลภูมิศาสตร์(ข้อมูลกลาง)"];
+    ApiMain.get("/geobase/" + id).then((response) => {
+      const geobase = response.data.data
+      form.spaceNatureAll= [(geobase.spaceNaturePlain=="true"?"spaceNaturePlain":""),(geobase.spaceNaturePlateau=="true"?"spaceNaturePlateau":""),geobase.spaceNatureHill=="true"?"spaceNatureHill":"",geobase.spaceNatureMountain=="true"?"spaceNatureMountain":""]
+      form.province_id = geobase.provinceId;
+      select_province(geobase.provinceId,"edit");
+
+      form.district_id = geobase.districtId
+      select_district(geobase.districtId,"edit")
+
+      form.subdistrict_id = geobase.subdistrictId;
+      select_subdistrict(geobase.subdistrictId);
+
+      form.soilProperties = geobase.soilProperties
+      form.topsoilDetail= geobase.topsoilDetail
+      form.topsoilValueMin= geobase.topsoilValueMin
+      form.topsoilValueMax= geobase.topsoilValueMax
+      form.subsoilDetail= geobase.subsoilDetail
+      form.subsoilValueMin= geobase.subsoilValueMin
+      form.subsoilValueMax= geobase.subsoilValueMax
+      form.soilFertility= geobase.soilFertility
+      form.soilRestrictions= geobase.soilRestrictions
+      form.spaceNatureDetail= geobase.spaceNatureDetail
+      form.slope= geobase.slope
+      form.drainage= geobase.drainage
+      form.nearbyNaturalWater= geobase.nearbyNaturalWater
+      form.nearbyInfarmWater= geobase.nearbyInfarmWater
+      form.nearbySmallWater= geobase.nearbySmallWater
+      form.nearbyGroundWater= geobase.nearbyGroundWater
+    });
+  }
   ApiSso.get("/api/geo/provinces").then((response) => {
     form.province = response.data.data;
   });
 });
 
 const select_province = (event, type = "post") => {
-  console.log(event.target.options[event.target.selectedIndex].text); //name
-  ApiSso.get("/api/geo/provinces/" + event.target.value + "/districts").then((response) => {
-    form.district = response.data.data;
-    if (type == "post") {
-      form.district_id = "";
-      form.subdistrict_id = "";
+  let id = ""
+  if(type == "edit"){
+     id = event
+  }else{
+     id = event.target.value
+  }
+  //console.log(event.target.options[event.target.selectedIndex].text); //name
+  ApiSso.get("/api/geo/provinces/" + id + "/districts").then(
+    (response) => {
+      form.district = response.data.data;
+      if (type == "post") {
+        form.district_id = "";
+        form.subdistrict_id = "";
+      }
     }
-  });
+  );
 };
 
 const select_district = (id, type = "post") => {
@@ -124,57 +169,113 @@ const submit = () => {
     }
   });
 
-  ApiMain.post("/geobase", {
-    provinceId: form.province_id,
-    districtId: form.district_id,
-    subdistrictId: form.subdistrict_id,
+  if (id) {
+    console.log(form.soilFertility + " " +form.drainage)
+    ApiMain.put("/geobase/"+id, {
+      provinceId: form.province_id,
+      districtId: form.district_id,
+      subdistrictId: form.subdistrict_id,
 
-    soilProperties: form.soilProperties,
-    topsoilDetail: form.topsoilDetail,
-    topsoilValueMin: form.topsoilValueMin,
-    topsoilValueMax: form.topsoilValueMax,
-    subsoilDetail: form.subsoilDetail,
-    subsoilValueMin: form.subsoilValueMin,
-    subsoilValueMax: form.subsoilValueMax,
+      soilProperties: form.soilProperties,
+      topsoilDetail: form.topsoilDetail,
+      topsoilValueMin: form.topsoilValueMin,
+      topsoilValueMax: form.topsoilValueMax,
+      subsoilDetail: form.subsoilDetail,
+      subsoilValueMin: form.subsoilValueMin,
+      subsoilValueMax: form.subsoilValueMax,
 
-    soilFertility: form.soilFertility,
-    soilRestrictions: form.soilRestrictions,
-    spaceNatureDetail: form.spaceNatureDetail,
-    spaceNaturePlain: form.spaceNaturePlain,
-    spaceNaturePlateau: form.spaceNaturePlateau,
-    spaceNatureHill: form.spaceNatureHill,
-    spaceNatureMountain: form.spaceNatureMountain,
-    slope: form.slope,
-    drainage: form.drainage,
-    nearbyNaturalWater: form.nearbyNaturalWater,
-    nearbyInfarmWater: form.nearbyInfarmWater,
-    nearbySmallWater: form.nearbySmallWater,
-    nearbyGroundWater: form.nearbyGroundWater,
-  })
-    .then((data) => {
-      console.log(data.data);
-      if (data.data.status == 201) {
-        console.log(data.data.status);
-        Swal.fire({
-          icon: "success",
-          html: "เพิ่มข้อมูลภูมิศาสตร์(ข้อมูลกลาง) สำเร็จ",
-          timer: 2500,
-          showConfirmButton: 1,
-        });
-        router.push("/geography_base");
-      } else {
-        Swal.fire({
-          icon: "warning",
-          title: "ไม่สามารถเพิ่มข้อมูลภูมิศาสตร์ได้",
-          timer: 3000,
-          showConfirmButton: 1,
-        });
-        return false;
-      }
+      soilFertility: form.soilFertility,
+      soilRestrictions: form.soilRestrictions,
+      spaceNatureDetail: form.spaceNatureDetail,
+      spaceNaturePlain: form.spaceNaturePlain,
+      spaceNaturePlateau: form.spaceNaturePlateau,
+      spaceNatureHill: form.spaceNatureHill,
+      spaceNatureMountain: form.spaceNatureMountain,
+      slope: form.slope,
+      drainage: form.drainage,
+      nearbyNaturalWater: form.nearbyNaturalWater,
+      nearbyInfarmWater: form.nearbyInfarmWater,
+      nearbySmallWater: form.nearbySmallWater,
+      nearbyGroundWater: form.nearbyGroundWater,
     })
-    .catch((error) => {
-      console.log(error);
-    });
+      .then((data) => {
+        console.log(data.data);
+        if (data.data.status == 204) {
+          console.log(data.data.status);
+          Swal.fire({
+            icon: "success",
+            html: "แก้ไขข้อมูลภูมิศาสตร์(ข้อมูลกลาง) สำเร็จ",
+            timer: 2500,
+            showConfirmButton: 1,
+          });
+          router.push("/geography_base");
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: "ไม่สามารถแก้ไขข้อมูลภูมิศาสตร์ได้",
+            timer: 3000,
+            showConfirmButton: 1,
+          });
+          return false;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } else {
+    ApiMain.post("/geobase", {
+      provinceId: form.province_id,
+      districtId: form.district_id,
+      subdistrictId: form.subdistrict_id,
+
+      soilProperties: form.soilProperties,
+      topsoilDetail: form.topsoilDetail,
+      topsoilValueMin: form.topsoilValueMin,
+      topsoilValueMax: form.topsoilValueMax,
+      subsoilDetail: form.subsoilDetail,
+      subsoilValueMin: form.subsoilValueMin,
+      subsoilValueMax: form.subsoilValueMax,
+
+      soilFertility: form.soilFertility,
+      soilRestrictions: form.soilRestrictions,
+      spaceNatureDetail: form.spaceNatureDetail,
+      spaceNaturePlain: form.spaceNaturePlain,
+      spaceNaturePlateau: form.spaceNaturePlateau,
+      spaceNatureHill: form.spaceNatureHill,
+      spaceNatureMountain: form.spaceNatureMountain,
+      slope: form.slope,
+      drainage: form.drainage,
+      nearbyNaturalWater: form.nearbyNaturalWater,
+      nearbyInfarmWater: form.nearbyInfarmWater,
+      nearbySmallWater: form.nearbySmallWater,
+      nearbyGroundWater: form.nearbyGroundWater,
+    })
+      .then((data) => {
+        console.log(data.data);
+        if (data.data.status == 201) {
+          console.log(data.data.status);
+          Swal.fire({
+            icon: "success",
+            html: "เพิ่มข้อมูลภูมิศาสตร์(ข้อมูลกลาง) สำเร็จ",
+            timer: 2500,
+            showConfirmButton: 1,
+          });
+          router.push("/geography_base");
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: "ไม่สามารถเพิ่มข้อมูลภูมิศาสตร์ได้",
+            timer: 3000,
+            showConfirmButton: 1,
+          });
+          return false;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   //
 };
 </script>
@@ -362,7 +463,7 @@ const submit = () => {
       </field>
       <divider />
       <jb-buttons>
-        <jb-button type="submit" color="info" label="เพิ่ม" />
+        <jb-button type="submit" color="info" :label="type_form" />
         <jb-button type="reset" color="info" outline label="รีเซต" />
       </jb-buttons>
     </card-component>

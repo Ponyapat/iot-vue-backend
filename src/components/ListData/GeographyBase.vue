@@ -83,7 +83,7 @@ const del = (id) => {
 };
 
 const edit = (id) => {
-  router.push("/geography/edit/" + id);
+  router.push("/geography_base/form?id=" + id);
 };
 
 const numPages = computed(() => {
