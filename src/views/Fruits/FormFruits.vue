@@ -106,7 +106,6 @@ onMounted(()=>{
         Authorization: "Bearer " + token,
       },
     }).then((response) => {
-
         if(response.data.data.image!==''){
           ApiMain.get('/image/'+response.data.data.image+'?imageableType=breed',{
           headers: {
@@ -173,6 +172,36 @@ const upload_image = (event) => {
   formdata.append('file', image );
   image_upload.value =  URL.createObjectURL(image) ;
   formData_img.value = formdata ;
+  ApiMain.post("/image/upload?imageableType=breed",formdata,{
+        headers: {
+          Authorization: "Bearer " + token,
+          'Content-Type': 'multipart/form-data',
+          'accept': 'application/json'
+        },
+      }
+    ).then((data) => {
+      if (data.status == 201) {
+        dataform.image = data.data;
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'อัพโหลดรูปสำเร็จ',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      } else {
+        Swal.fire({
+          position: 'top-end',
+          icon: "warning",
+          title: "ไม่สามารถอัพโหลดรูปได้",
+          timer: 1500,
+        });
+        return false;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
 };
 
@@ -205,6 +234,37 @@ const submit = async () => {
 
   if(id){
     if (result) {
+      console.log('edit image == ',formData_img.value);
+      ApiMain.post("/image/upload?imageableType=breed",formData_img.value,{
+        headers: {
+          Authorization: "Bearer " + token,
+          'Content-Type': 'multipart/form-data',
+          'accept': 'application/json'
+        },
+      }
+    ).then((resp) => {
+      if (resp.status == 201) {
+        dataform.image = resp.data;
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'อัพโหลดรูปสำเร็จ',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      } else {
+        Swal.fire({
+          position: 'top-end',
+          icon: "warning",
+          title: "ไม่สามารถอัพโหลดรูปได้",
+          timer: 1500,
+        });
+        return false;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
       ApiMain.put("/breed/"+ id,{
         code: dataform.code,
         breedCategoryId: dataform.breedCategoryId,
@@ -274,37 +334,7 @@ const submit = async () => {
   }
   else {
     if (result) {
-      ApiMain.post("/image/upload?imageableType=breed",formData_img.value,{
-        headers: {
-          Authorization: "Bearer " + token,
-          'Content-Type': 'multipart/form-data',
-          'accept': 'application/json'
-        },
-      }
-    ).then((data) => {
-      if (data.status == 201) {
-        // dataform.image = '/image/'+ data.data+ '?imageableType=breed';
-        dataform.image = data.data;
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: 'อัพโหลดรูปสำเร็จ',
-          showConfirmButton: false,
-          timer: 1500
-        })
-      } else {
-        Swal.fire({
-          position: 'top-end',
-          icon: "warning",
-          title: "ไม่สามารถอัพโหลดรูปได้",
-          timer: 1500,
-        });
-        return false;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+
     ApiMain.post("/breed",{
         code: dataform.code,
         breedCategoryId: dataform.breedCategoryId,

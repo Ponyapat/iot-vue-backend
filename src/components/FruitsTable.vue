@@ -12,6 +12,7 @@ import UserAvatar from "@/components/UserAvatar.vue";
 import axios from "axios";
 import Swal from "sweetalert2";
 import moment from "moment";
+import vagetable from "@/assets/images/cabbage.png";
 
 defineProps({
   checkable: Boolean,
@@ -31,6 +32,8 @@ const tableTrStyle = computed(() => mainStore.tableTrStyle);
 const tableTrOddStyle = computed(() => mainStore.tableTrOddStyle);
 
 const darkMode = computed(() => mainStore.darkMode);
+
+
 
 const states = reactive({
   fruits: {},
@@ -99,6 +102,14 @@ const edit = (id) => {
   let path = '/fruits/edit?data_id=' + id;
   router.push(path);
 };
+const read_image = (img_name) => {
+  const link = ApiMain.get('/image/' + img_name + '?imageableType=breed').then((data)=>data.request.responseURL)
+  console.log('link == ',link);
+
+  return link;
+
+
+}
 
 
 const numPages = computed(() => {
@@ -133,7 +144,7 @@ const pageNext = (page) => {
 
 <template>
   <div class="overflow-x-auto relative">
-    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+    <table class="w-full text-sm text-left text-black">
       <thead class="text-base text-black uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
           <th scope="col" class="text-center py-3 px-6">ID</th>
@@ -142,6 +153,7 @@ const pageNext = (page) => {
           <!-- <th scope="col" class="text-center py-3 px-6">ชื่อวิทยาศาสตร์</th>
           <th scope="col" class="text-center py-3 px-6">ชื่อสามัญ</th> -->
           <!-- <th scope="col" class="text-center py-3 px-6">รายละเอียด</th> -->
+          <th scope="col" class="text-center py-3 px-6">ประเภท</th>
           <th scope="col" class="text-center py-3 px-6">อายุการเก็บเกี่ยว</th>
           <th scope="col" class="text-center py-3 px-6">อุณหภูมิในอากาศ</th>
           <th scope="col" class="text-center py-3 px-6">อุณหภูมิในดิน</th>
@@ -159,8 +171,24 @@ const pageNext = (page) => {
       <tbody>
         <tr v-for="(item, index) in states.fruits" :key="item.id" :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']">
           <td class="text-center">{{item.code}}</td>
-          <td class="text-center">{{item.name}}</td>
+          <td class="text-center">
+            <div class="flex flex-row items-center">
+              <div class="bg-green-100 p-1 rounded-lg mr-2 ">
+                <img v-if="item.image!=''" :src="`/api-main/image/${item.image}?imageableType=breed`" class="w-[30px] h-[30px]" alt="">
+                <img v-else :src="vagetable" alt="" class="w-[30px] h-[30px]">
+              </div>
+              <span>{{item.name}}</span>
+            </div>
+          </td>
           <td class="text-center">{{item.species}}</td>
+          <td class="text-center">
+            <div :class="item.breedCategoryId==1?'bg-red-200':item.breedCategoryId==2?'bg-green-200':item.breedCategoryId==3?'bg-purple-200':'bg-pink-200'" class="px-2 py-1 border-0 rounded-2xl">
+              <span v-if="item.breedCategoryId==1">ผลไม้</span>
+              <span v-else-if="item.breedCategoryId==2">พืชผัก</span>
+              <span v-else-if="item.breedCategoryId==3">พืชไร่</span>
+              <span v-else-if="item.breedCategoryId==4">ไม้ดอก</span>
+            </div>
+          </td>
           <td class="text-center">{{item.harvestPeriod}}</td>
           <td class="text-center">{{item.airTemperatureMin}} - {{item.airTemperatureMax}}</td>
           <td class="text-center">{{item.soilTemperatureMin}} - {{item.soilTemperatureMax}}</td>
