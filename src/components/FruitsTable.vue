@@ -147,25 +147,25 @@ const pageNext = (page) => {
     <table class="w-full text-sm text-left text-black">
       <thead class="text-base text-black uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
-          <th scope="col" class="text-center py-3 px-6">ID</th>
-          <th scope="col" class="text-center py-3 px-6">ชื่อ</th>
-          <th scope="col" class="text-center py-3 px-6">สายพันธุ์</th>
+          <th scope="col" class="text-center py-3 w-[100px]">ID</th>
+          <th scope="col" class="text-center py-3 w-[200px]">ชื่อ</th>
+          <th scope="col" class="text-center py-3 w-[100px]">สายพันธุ์</th>
           <!-- <th scope="col" class="text-center py-3 px-6">ชื่อวิทยาศาสตร์</th>
           <th scope="col" class="text-center py-3 px-6">ชื่อสามัญ</th> -->
           <!-- <th scope="col" class="text-center py-3 px-6">รายละเอียด</th> -->
-          <th scope="col" class="text-center py-3 px-6">ประเภท</th>
-          <th scope="col" class="text-center py-3 px-6">อายุการเก็บเกี่ยว</th>
-          <th scope="col" class="text-center py-3 px-6">อุณหภูมิในอากาศ</th>
-          <th scope="col" class="text-center py-3 px-6">อุณหภูมิในดิน</th>
-          <th scope="col" class="text-center py-3 px-6">ความชื้นในดิน</th>
-          <th scope="col" class="text-center py-3 px-6">pH ในดิน</th>
+          <th scope="col" class="text-center py-3 w-[150px]">ประเภท</th>
+          <th scope="col" class="text-center py-3 w-[100px]">อายุการเก็บเกี่ยว</th>
+          <th scope="col" class="text-center py-3 w-[150px]">อุณหภูมิในอากาศ</th>
+          <th scope="col" class="text-center py-3 w-[150px]">อุณหภูมิในดิน</th>
+          <th scope="col" class="text-center py-3 w-[150px]">ความชื้นในดิน</th>
+          <th scope="col" class="text-center py-3 w-[150px]">pH ในดิน</th>
           <!-- <th scope="col" class="text-center py-3 px-6">EC ในดิน</th> -->
           <!-- <th scope="col" class="text-center py-3 px-6">N</th> -->
           <!-- <th scope="col" class="text-center py-3 px-6">P</th> -->
           <!-- <th scope="col" class="text-center py-3 px-6">K</th> -->
           <!-- <th scope="col" class="text-center py-3 px-6">ปริมาณน้ำ</th> -->
           <!-- <th scope="col" class="text-center py-3 px-6">ความเข้มแสง</th> -->
-          <th scope="col" class="text-center py-3 px-6">Action</th>
+          <th scope="col" class="text-center py-3 w-[150px]">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -177,16 +177,16 @@ const pageNext = (page) => {
                 <img v-if="item.image!=''" :src="`/api-main/image/${item.image}?imageableType=breed`" class="w-[30px] h-[30px]" alt="">
                 <img v-else :src="vagetable" alt="" class="w-[30px] h-[30px]">
               </div>
-              <span>{{item.name}}</span>
+              <span class="truncate w-[100px]">{{item.name}}</span>
             </div>
           </td>
           <td class="text-center">{{item.species}}</td>
           <td class="text-center">
             <div :class="item.breedCategoryId==1?'bg-red-200':item.breedCategoryId==2?'bg-green-200':item.breedCategoryId==3?'bg-purple-200':'bg-pink-200'" class="px-2 py-1 border-0 rounded-2xl">
-              <span v-if="item.breedCategoryId==1">ผลไม้</span>
-              <span v-else-if="item.breedCategoryId==2">พืชผัก</span>
-              <span v-else-if="item.breedCategoryId==3">พืชไร่</span>
-              <span v-else-if="item.breedCategoryId==4">ไม้ดอก</span>
+              <span v-if="item.breedCategoryId==1"><i class="fa-sharp fa-solid fa-seedling text-red-600"></i> ผลไม้</span>
+              <span v-else-if="item.breedCategoryId==2"><i class="fa-sharp fa-solid fa-seedling text-green-600"></i> พืชผัก</span>
+              <span v-else-if="item.breedCategoryId==3"><i class="fa-sharp fa-solid fa-seedling text-green-800"></i> พืชไร่</span>
+              <span v-else-if="item.breedCategoryId==4"><i class="fa-sharp fa-solid fa-seedling text-pink-600"></i> ไม้ดอก</span>
             </div>
           </td>
           <td class="text-center">{{item.harvestPeriod}}</td>

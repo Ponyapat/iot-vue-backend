@@ -503,7 +503,7 @@ const submit = async () => {
             </div>
             <div class="w-full ml-2">
               <label for="airTemperatureMin" class=" font-medium text-sm">ค่าสูงสุด</label>
-              <input  type="number" v-model="dataform.airTemperatureMax" name="airTemperatureMax" id="airTemperatureMax"  :class="v$.airTemperatureMax.$error?'border-red-300':'border-gray-300'"
+              <input  type="number" step="any" v-model="dataform.airTemperatureMax" name="airTemperatureMax" id="airTemperatureMax"  :class="v$.airTemperatureMax.$error?'border-red-300':'border-gray-300'"
                 class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.airTemperatureMax.$error" class="text-red-500">{{ v$.airTemperatureMax.$errors[0].$message }}</small>
             </div>
@@ -515,14 +515,14 @@ const submit = async () => {
           <div class="flex flex-row justify-between ">
             <div class="w-full mr-2">
               <label for="soilTemperatureMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
-              <input type="number" v-model="dataform.soilTemperatureMin" name="soilTemperatureMin"
+              <input type="number" step="any" v-model="dataform.soilTemperatureMin" name="soilTemperatureMin"
                 id="soilTemperatureMin" :class="v$.soilTemperatureMin.$error?'border-red-300':'border-gray-300'"
                 class="mr-2 bg-gray-50 border  text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilTemperatureMin.$error" class="text-red-500">{{ v$.soilTemperatureMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="soilTemperatureMax" class=" font-medium text-sm">ค่าสูงสุด</label>
-              <input type="number" v-model="dataform.soilTemperatureMax" name="soilTemperatureMax"
+              <input type="number" step="any" v-model="dataform.soilTemperatureMax" name="soilTemperatureMax"
                 id="soilTemperatureMax" :class="v$.soilTemperatureMax.$error?'border-red-300':'border-gray-300'"
                 class="bg-gray-50 border  text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilTemperatureMax.$error" class="text-red-500">{{ v$.soilTemperatureMax.$errors[0].$message }}</small>
@@ -535,13 +535,13 @@ const submit = async () => {
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="soilMoistureMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
-              <input type="number" v-model="dataform.soilMoistureMin" name="soilMoistureMin" id="soilMoistureMin" :class="v$.soilMoistureMin.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.soilMoistureMin" name="soilMoistureMin" id="soilMoistureMin" :class="v$.soilMoistureMin.$error?'border-red-300':'border-gray-300'"
                 class="mr-2 bg-gray-50 border  text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilMoistureMin.$error" class="text-red-500">{{ v$.soilMoistureMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="soilMoistureMax" class=" font-medium text-sm">ค่าสูงสุด</label>
-              <input type="number" v-model="dataform.soilMoistureMax" name="soilMoistureMax" id="soilMoistureMax" :class="v$.soilMoistureMax.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.soilMoistureMax" name="soilMoistureMax" id="soilMoistureMax" :class="v$.soilMoistureMax.$error?'border-red-300':'border-gray-300'"
                 class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilMoistureMax.$error" class="text-red-500">{{ v$.soilMoistureMax.$errors[0].$message }}</small>
             </div>
@@ -552,13 +552,13 @@ const submit = async () => {
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="soilPhMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
-              <input type="number" v-model="dataform.soilPhMin" name="soilPhMin" id="soilPhMin" :class="v$.soilPhMin.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.soilPhMin" name="soilPhMin" id="soilPhMin" :class="v$.soilPhMin.$error?'border-red-300':'border-gray-300'"
                 class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilPhMin.$error" class="text-red-500">{{ v$.soilPhMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="soilPhMax" class=" font-medium text-sm">ค่าสูงสุด</label>
-              <input type="number" v-model="dataform.soilPhMax" name="soilPhMax" id="soilPhMax" :class="v$.soilPhMax.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.soilPhMax" name="soilPhMax" id="soilPhMax" :class="v$.soilPhMax.$error?'border-red-300':'border-gray-300'"
                 class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilPhMax.$error" class="text-red-500">{{ v$.soilPhMax.$errors[0].$message }}</small>
             </div>
@@ -569,13 +569,13 @@ const submit = async () => {
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="soilEcMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
-              <input type="number" v-model="dataform.soilEcMin" name="soilEcMin" id="soilEcMin" :class="v$.soilEcMin.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.soilEcMin" name="soilEcMin" id="soilEcMin" :class="v$.soilEcMin.$error?'border-red-300':'border-gray-300'"
                 class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilEcMin.$error" class="text-red-500">{{ v$.soilEcMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="soilEcMax" class=" font-medium text-sm">ค่าสูงสุด</label>
-              <input type="number" v-model="dataform.soilEcMax" name="soilEcMax" id="soilEcMax" :class="v$.soilEcMax.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.soilEcMax" name="soilEcMax" id="soilEcMax" :class="v$.soilEcMax.$error?'border-red-300':'border-gray-300'"
                 class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilEcMax.$error" class="text-red-500">{{ v$.soilEcMax.$errors[0].$message }}</small>
             </div>
@@ -586,13 +586,13 @@ const submit = async () => {
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="nitrogenMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
-              <input type="number" v-model="dataform.nitrogenMin" name="nitrogenMin" id="nitrogenMin" :class="v$.nitrogenMin.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.nitrogenMin" name="nitrogenMin" id="nitrogenMin" :class="v$.nitrogenMin.$error?'border-red-300':'border-gray-300'"
                 class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.nitrogenMin.$error" class="text-red-500">{{ v$.nitrogenMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="nitrogenMax" class=" font-medium text-sm">ค่าสูงสุด</label>
-              <input type="number" v-model="dataform.nitrogenMax" name="nitrogenMax" id="nitrogenMax" :class="v$.nitrogenMax.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.nitrogenMax" name="nitrogenMax" id="nitrogenMax" :class="v$.nitrogenMax.$error?'border-red-300':'border-gray-300'"
                 class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.nitrogenMax.$error" class="text-red-500">{{ v$.nitrogenMax.$errors[0].$message }}</small>
             </div>
@@ -603,13 +603,13 @@ const submit = async () => {
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="phosphorusMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
-              <input type="number" v-model="dataform.phosphorusMin" name="phosphorusMin" id="phosphorusMin" :class="v$.phosphorusMin.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.phosphorusMin" name="phosphorusMin" id="phosphorusMin" :class="v$.phosphorusMin.$error?'border-red-300':'border-gray-300'"
                 class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.phosphorusMin.$error" class="text-red-500">{{ v$.phosphorusMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="phosphorusMax" class=" font-medium text-sm">ค่าสูงสุด</label>
-              <input type="number" v-model="dataform.phosphorusMax" name="phosphorusMax" id="phosphorusMax" :class="v$.phosphorusMax.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.phosphorusMax" name="phosphorusMax" id="phosphorusMax" :class="v$.phosphorusMax.$error?'border-red-300':'border-gray-300'"
                 class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.phosphorusMax.$error" class="text-red-500">{{ v$.phosphorusMax.$errors[0].$message }}</small>
             </div>
@@ -620,13 +620,13 @@ const submit = async () => {
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="potassiumMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
-              <input type="number" v-model="dataform.potassiumMin" name="potassiumMin" id="potassiumMin" :class="v$.potassiumMin.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.potassiumMin" name="potassiumMin" id="potassiumMin" :class="v$.potassiumMin.$error?'border-red-300':'border-gray-300'"
                 class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.potassiumMin.$error" class="text-red-500">{{ v$.potassiumMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="potassiumMax" class=" font-medium text-sm">ค่าสูงสุด</label>
-              <input type="number" v-model="dataform.potassiumMax" name="potassiumMax" id="potassiumMax" :class="v$.potassiumMax.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.potassiumMax" name="potassiumMax" id="potassiumMax" :class="v$.potassiumMax.$error?'border-red-300':'border-gray-300'"
                 class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.potassiumMax.$error" class="text-red-500">{{ v$.potassiumMax.$errors[0].$message }}</small>
             </div>
@@ -638,13 +638,13 @@ const submit = async () => {
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="amountOfWaterMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
-              <input type="number" v-model="dataform.amountOfWaterMin" name="amountOfWaterMin" id="amountOfWaterMin" :class="v$.amountOfWaterMin.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.amountOfWaterMin" name="amountOfWaterMin" id="amountOfWaterMin" :class="v$.amountOfWaterMin.$error?'border-red-300':'border-gray-300'"
                 class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.amountOfWaterMin.$error" class="text-red-500">{{ v$.amountOfWaterMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="amountOfWaterMax" class=" font-medium text-sm">ค่าสูงสุด</label>
-              <input type="number" v-model="dataform.amountOfWaterMax" name="amountOfWaterMax" id="amountOfWaterMax" :class="v$.amountOfWaterMax.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.amountOfWaterMax" name="amountOfWaterMax" id="amountOfWaterMax" :class="v$.amountOfWaterMax.$error?'border-red-300':'border-gray-300'"
                 class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.amountOfWaterMax.$error" class="text-red-500">{{ v$.amountOfWaterMax.$errors[0].$message }}</small>
             </div>
@@ -656,13 +656,13 @@ const submit = async () => {
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="lightIntensityMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
-              <input type="number" v-model="dataform.lightIntensityMin" name="lightIntensityMin" id="lightIntensityMin" :class="v$.lightIntensityMin.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.lightIntensityMin" name="lightIntensityMin" id="lightIntensityMin" :class="v$.lightIntensityMin.$error?'border-red-300':'border-gray-300'"
                 class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.lightIntensityMin.$error" class="text-red-500">{{ v$.lightIntensityMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="lightIntensityMax" class=" font-medium text-sm">ค่าสูงสุด</label>
-              <input type="number" v-model="dataform.lightIntensityMax" name="lightIntensityMax" id="lightIntensityMax" :class="v$.lightIntensityMax.$error?'border-red-300':'border-gray-300'"
+              <input type="number" step="any" v-model="dataform.lightIntensityMax" name="lightIntensityMax" id="lightIntensityMax" :class="v$.lightIntensityMax.$error?'border-red-300':'border-gray-300'"
                 class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.lightIntensityMax.$error" class="text-red-500">{{ v$.lightIntensityMax.$errors[0].$message }}</small>
             </div>
