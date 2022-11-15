@@ -29,11 +29,11 @@ export default [
   ],
   'Admin',
   [
-    {
-      to: '/geography',
-      label: 'ภูมิศาสตร์',
-      icon: mdiEarth
-    },
+    // {
+    //   to: '/geography',
+    //   label: 'ภูมิศาสตร์',
+    //   icon: mdiEarth
+    // },
     {
       to: '/geography_base',
       label: 'ภูมิศาสตร์(ข้อมูลกลาง)',
@@ -49,11 +49,11 @@ export default [
       label: 'พืชพันธุ์ผลไม้',
       icon: mdiFruitCherries
     },
-    {
-      to: '/customers',
-      label: 'Customer',
-      icon: mdiAccount
-    },
+    // {
+    //   to: '/customers',
+    //   label: 'Customer',
+    //   icon: mdiAccount
+    // },
     {
       to: '/users',
       label: 'Admin',

@@ -58,10 +58,10 @@ const form = reactive({
   spaceNatureMountain: false,
   slope: "",
   drainage: "high",
-  nearbyNaturalWater: 0,
-  nearbyInfarmWater: 0,
-  nearbySmallWater: 0,
-  nearbyGroundWater: 0,
+  nearbyNaturalWater: "",
+  nearbyInfarmWater: "",
+  nearbySmallWater: "",
+  nearbyGroundWater: "",
 });
 
 onMounted(() => {
@@ -72,13 +72,16 @@ onMounted(() => {
       const geobase = response.data.data
       form.spaceNatureAll= [(geobase.spaceNaturePlain=="true"?"spaceNaturePlain":""),(geobase.spaceNaturePlateau=="true"?"spaceNaturePlateau":""),geobase.spaceNatureHill=="true"?"spaceNatureHill":"",geobase.spaceNatureMountain=="true"?"spaceNatureMountain":""]
       form.province_id = geobase.provinceId;
+      form.province_name = geobase.provinceName;
       select_province(geobase.provinceId,"edit");
 
-      form.district_id = geobase.districtId
+      form.district_id = geobase.districtId;
+      form.district_name = geobase.districtName;
       select_district(geobase.districtId,"edit")
 
       form.subdistrict_id = geobase.subdistrictId;
-      select_subdistrict(geobase.subdistrictId);
+      form.subdistrict_name = geobase.subdistrictName;
+      select_subdistrict(geobase.subdistrictId,"edit");
 
       form.soilProperties = geobase.soilProperties
       form.topsoilDetail= geobase.topsoilDetail
@@ -109,6 +112,7 @@ const select_province = (event, type = "post") => {
      id = event
   }else{
      id = event.target.value
+     form.province_name = event.target.options[event.target.selectedIndex].text
   }
   //console.log(event.target.options[event.target.selectedIndex].text); //name
   ApiSso.get("/api/geo/provinces/" + id + "/districts").then(
@@ -122,7 +126,15 @@ const select_province = (event, type = "post") => {
   );
 };
 
-const select_district = (id, type = "post") => {
+const select_district = (event, type = "post") => {
+  let id = ""
+  if(type == "edit"){
+     id = event
+  }else{
+     id = event.target.value
+     form.district_name = event.target.options[event.target.selectedIndex].text
+     console.log(form.district_name)
+  }
   ApiSso.get(
     "/api/geo/provinces/" +
       form.province_id +
@@ -137,9 +149,13 @@ const select_district = (id, type = "post") => {
   });
 };
 
-const select_subdistrict = (id, name) => {
-  form.subdistrict_id = id;
-  form.subdistrict_name = name;
+const select_subdistrict = (event, type = "post") => {
+  let id = ""
+  if(type == "edit"){
+     id = event
+  }else{
+     form.subdistrict_name = event.target.options[event.target.selectedIndex].text
+  }
   ApiSso.get(
     "/api/geo/provinces/" +
       form.province_id +
@@ -152,7 +168,6 @@ const select_subdistrict = (id, name) => {
 };
 
 const submit = () => {
-  console.log(form.drainage);
   form.spaceNatureAll.forEach((element) => {
     console.log(element);
     if (element == "spaceNaturePlain") {
@@ -170,11 +185,14 @@ const submit = () => {
   });
 
   if (id) {
-    console.log(form.soilFertility + " " +form.drainage)
+    //console.log(form.soilFertility + " " +form.drainage)
     ApiMain.put("/geobase/"+id, {
       provinceId: form.province_id,
       districtId: form.district_id,
       subdistrictId: form.subdistrict_id,
+      provinceName: form.province_name,
+      districtName: form.district_name,
+      subdistrictName: form.subdistrict_name,
 
       soilProperties: form.soilProperties,
       topsoilDetail: form.topsoilDetail,
@@ -223,10 +241,45 @@ const submit = () => {
         console.log(error);
       });
   } else {
+    console.log({
+      provinceId: form.province_id,
+      districtId: form.district_id,
+      subdistrictId: form.subdistrict_id,
+
+      provinceName: form.province_name,
+      districtName: form.district_name,
+      subdistrictName: form.subdistrict_name,
+
+      soilProperties: form.soilProperties,
+      topsoilDetail: form.topsoilDetail,
+      topsoilValueMin: form.topsoilValueMin,
+      topsoilValueMax: form.topsoilValueMax,
+      subsoilDetail: form.subsoilDetail,
+      subsoilValueMin: form.subsoilValueMin,
+      subsoilValueMax: form.subsoilValueMax,
+
+      soilFertility: form.soilFertility,
+      soilRestrictions: form.soilRestrictions,
+      spaceNatureDetail: form.spaceNatureDetail,
+      spaceNaturePlain: form.spaceNaturePlain,
+      spaceNaturePlateau: form.spaceNaturePlateau,
+      spaceNatureHill: form.spaceNatureHill,
+      spaceNatureMountain: form.spaceNatureMountain,
+      slope: form.slope,
+      drainage: form.drainage,
+      nearbyNaturalWater: form.nearbyNaturalWater,
+      nearbyInfarmWater: form.nearbyInfarmWater,
+      nearbySmallWater: form.nearbySmallWater,
+      nearbyGroundWater: form.nearbyGroundWater,
+    })
     ApiMain.post("/geobase", {
       provinceId: form.province_id,
       districtId: form.district_id,
       subdistrictId: form.subdistrict_id,
+
+      provinceName: form.province_name,
+      districtName: form.district_name,
+      subdistrictName: form.subdistrict_name,
 
       soilProperties: form.soilProperties,
       topsoilDetail: form.topsoilDetail,
@@ -298,6 +351,7 @@ const submit = () => {
       <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3">
         <field label="จังหวัด">
           <select
+            required
             @change="select_province($event)"
             id="province"
             v-model="form.province_id"
@@ -311,7 +365,8 @@ const submit = () => {
 
         <field label="อำเภอ">
           <select
-            @change="select_district(form.district_id)"
+            required
+            @change="select_district($event)"
             id="district"
             v-model="form.district_id"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -324,7 +379,8 @@ const submit = () => {
 
         <field label="ตำบล">
           <select
-            @change="select_subdistrict(form.subdistrict_id)"
+            required
+            @change="select_subdistrict($event)"
             id="subdistrict"
             v-model="form.subdistrict_id"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

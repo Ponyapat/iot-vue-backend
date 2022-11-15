@@ -167,13 +167,13 @@ const drainage = (data) => {
           {{ item.id }}
         </td>
         <td  class="align-top">
-          {{ item.subdistrictId }}
+          {{ item.subdistrictName }}
         </td>
         <td  class="align-top">
-          {{ item.districtId }}
+          {{ item.districtName }}
         </td>
         <td  class="align-top">
-          {{ item.provinceId }}
+          {{ item.provinceName }}
         </td>
         <td >
           {{ item.soilFertility }}
