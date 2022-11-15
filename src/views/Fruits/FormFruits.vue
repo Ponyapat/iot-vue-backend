@@ -497,7 +497,7 @@ const submit = async () => {
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="airTemperatureMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
-              <input :class="v$.airTemperatureMin.$error?'border-red-300':'border-gray-300'" type="number" v-model="dataform.airTemperatureMin" name="airTemperatureMin" id="airTemperatureMin"
+              <input step="any" :class="v$.airTemperatureMin.$error?'border-red-300':'border-gray-300'" type="number" v-model="dataform.airTemperatureMin" name="airTemperatureMin" id="airTemperatureMin"
                 class="mr-2 bg-gray-50 border  text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.airTemperatureMin.$error" class="text-red-500">{{ v$.airTemperatureMin.$errors[0].$message }}</small>
             </div>
