@@ -33,8 +33,6 @@ const tableTrOddStyle = computed(() => mainStore.tableTrOddStyle);
 
 const darkMode = computed(() => mainStore.darkMode);
 
-
-
 const states = reactive({
   fruits: {},
 });
@@ -45,26 +43,14 @@ const isModalActive = ref(false);
 
 const isModalDangerActive = ref(false);
 
-const items = ref(0);
+const items = ref(1);
 
 const perPage = ref(10);
 
 const currentPage = ref(0);
 
 onBeforeMount(() => {
-  ApiMain.get("/breed?order=ASC&page=1&take=10", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-    .then((result) => {
-
-      states.fruits = result.data.data;
-      console.log(states.fruits);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  fetchData();
 });
 
 const del = (id) => {
@@ -110,7 +96,13 @@ const read_image = (img_name) => {
 
 
 }
-
+const fetchData = () => {
+  ApiMain.get("/breed")
+    .then((response) => {
+      states.fruits = response.data.data;
+      items.value = response.data.meta.itemCount;
+    });
+};
 
 const numPages = computed(() => {
   return Math.ceil(items.value / perPage.value);
@@ -125,13 +117,15 @@ const pagesList = computed(() => {
     pagesList.push(i);
   }
 
+  console.log(pagesList);
+
   return pagesList;
 });
 
 const pageNext = (page) => {
   currentPage.value = page;
   //console.log("pageNext " + (page+1));
-  ApiMain.get("/fruits?order=ASC&page=" + (page + 1) + "&take=" + perPage.value, {
+  ApiMain.get("/breed?order=ASC&page=" + (page + 1) + "&take=" + perPage.value, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -144,8 +138,8 @@ const pageNext = (page) => {
 
 <template>
   <div class="overflow-x-auto relative">
-    <table class="w-full text-sm text-left text-black">
-      <thead class="text-base text-black uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <table class="w-full text-sm text-left text-black dark:text-white">
+      <thead class="text-base text-black uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
         <tr>
           <th scope="col" class="text-center py-3 w-[100px]">ID</th>
           <th scope="col" class="text-center py-3 w-[200px]">ชื่อ</th>
@@ -173,7 +167,7 @@ const pageNext = (page) => {
           <td class="text-center">{{item.code}}</td>
           <td class="text-center">
             <div class="flex flex-row items-center">
-              <div class="bg-green-100 p-1 rounded-lg mr-2 ">
+              <div class="bg-white p-1 rounded-lg mr-2 shadow">
                 <img v-if="item.image!=''" :src="`/api-main/image/${item.image}?imageableType=breed`" class="w-[30px] h-[30px]" alt="">
                 <img v-else :src="vagetable" alt="" class="w-[30px] h-[30px]">
               </div>
@@ -183,10 +177,10 @@ const pageNext = (page) => {
           <td class="text-center">{{item.species}}</td>
           <td class="text-center">
             <div :class="item.breedCategoryId==1?'bg-red-200':item.breedCategoryId==2?'bg-green-200':item.breedCategoryId==3?'bg-purple-200':'bg-pink-200'" class="px-2 py-1 border-0 rounded-2xl">
-              <span v-if="item.breedCategoryId==1"><i class="fa-sharp fa-solid fa-seedling text-red-600"></i> ผลไม้</span>
-              <span v-else-if="item.breedCategoryId==2"><i class="fa-sharp fa-solid fa-seedling text-green-600"></i> พืชผัก</span>
-              <span v-else-if="item.breedCategoryId==3"><i class="fa-sharp fa-solid fa-seedling text-green-800"></i> พืชไร่</span>
-              <span v-else-if="item.breedCategoryId==4"><i class="fa-sharp fa-solid fa-seedling text-pink-600"></i> ไม้ดอก</span>
+              <span v-if="item.breedCategoryId==1" class="dark:text-black"><i class="fa-sharp fa-solid fa-seedling text-red-600"></i> ผลไม้</span>
+              <span v-else-if="item.breedCategoryId==2" class="dark:text-black"><i class="fa-sharp fa-solid fa-seedling text-green-600"></i> พืชผัก</span>
+              <span v-else-if="item.breedCategoryId==3" class="dark:text-black"><i class="fa-sharp fa-solid fa-seedling text-green-800"></i> พืชไร่</span>
+              <span v-else-if="item.breedCategoryId==4" class="dark:text-black"><i class="fa-sharp fa-solid fa-seedling text-pink-600"></i> ไม้ดอก</span>
             </div>
           </td>
           <td class="text-center">{{item.harvestPeriod}}</td>
@@ -204,14 +198,13 @@ const pageNext = (page) => {
       </tbody>
     </table>
   </div>
-
   <div :class="lightBorderStyle" class="p-3 lg:px-6 border-t dark:border-gray-800">
-    <level>
+    <Level>
       <jb-buttons>
-        <jb-button v-for="page in pagesList" :key="page" :active="page === currentPage" :label="page + 1"
-          :outline="darkMode" small @click="pageNext(page)" />
+        <jb-button v-for="item in pagesList" :key="item" :active="item === currentPage" :label="item + 1"
+          :outline="darkMode" small @click="pageNext(item)" />
       </jb-buttons>
       <small>Page {{ currentPageHuman }} of {{ numPages }}</small>
-    </level>
+    </Level>
   </div>
 </template>

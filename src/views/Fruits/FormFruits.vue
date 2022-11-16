@@ -12,12 +12,15 @@ const router = useRouter();
 const token = localStorage.getItem("tkfw");
 
 const code_rule = helpers.regex(/[0-9]/);
+// const http_rule = helpers.regex(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi);
+
 
 const categories = ref([]) ;
 let image_upload = ref('');
 let img_file = ref('');
 let image_name = ref('');
 let documents = ref('');
+let document_name = ref('');
 let formData_img = ref('');
 let type_form = ref('');
 let url = new URL(window.location.href);
@@ -90,7 +93,7 @@ const rules = {
   lightIntensityMax: { required:helpers.withMessage('กรุณาระบุค่าสูงสุดของความเข้มแสง',required) },// ความเข้มแสง Max
   lightIntensityMin: { required:helpers.withMessage('กรุณาระบุค่าต่ำสุดของความเข้มแสง',required) },// ความเข้มแสง Min
   document_file: {  },// เอกสาร
-  link: {  },// ลิ้ง
+  link: {},// ลิ้ง
   image: {  },// รูป
   status: { required},// สถานะ
 }
@@ -207,12 +210,42 @@ const upload_image = (event) => {
 
 const upload_document = (event) => {
 
-  let name = event.target.files[0].name;
+  document_name.value = event.target.files[0].name;
   let file_upload = event.target.files[0];
   // Real
   const formdata = new FormData();
-  formdata.append('file', file_upload , name);
+  formdata.append('file', file_upload);
   documents.value = formdata ;
+  ApiMain.post("/image/upload?imageableType=breed",formdata,{
+        headers: {
+          Authorization: "Bearer " + token,
+          'Content-Type': 'multipart/form-data',
+          'accept': 'application/json'
+        },
+      }
+    ).then((data) => {
+      if (data.status == 201) {
+        dataform.document_file = data.data;
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'อัพโหลดรูปสำเร็จ',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      } else {
+        Swal.fire({
+          position: 'top-end',
+          icon: "warning",
+          title: "ไม่สามารถอัพโหลดรูปได้",
+          timer: 1500,
+        });
+        return false;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
 }
 const check_status = (event) => {
@@ -234,37 +267,6 @@ const submit = async () => {
 
   if(id){
     if (result) {
-      console.log('edit image == ',formData_img.value);
-      ApiMain.post("/image/upload?imageableType=breed",formData_img.value,{
-        headers: {
-          Authorization: "Bearer " + token,
-          'Content-Type': 'multipart/form-data',
-          'accept': 'application/json'
-        },
-      }
-    ).then((resp) => {
-      if (resp.status == 201) {
-        dataform.image = resp.data;
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: 'อัพโหลดรูปสำเร็จ',
-          showConfirmButton: false,
-          timer: 1500
-        })
-      } else {
-        Swal.fire({
-          position: 'top-end',
-          icon: "warning",
-          title: "ไม่สามารถอัพโหลดรูปได้",
-          timer: 1500,
-        });
-        return false;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
       ApiMain.put("/breed/"+ id,{
         code: dataform.code,
         breedCategoryId: dataform.breedCategoryId,
@@ -405,6 +407,9 @@ const submit = async () => {
     alert('submit Failed');
   }
   }
+};
+const closeForm = () => {
+  router.push('/fruits');
 };
 
 </script>
@@ -694,7 +699,7 @@ const submit = async () => {
           <button type="submit"
             class="text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base w-full sm:w-[256px] px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2"><i
               class="fa-solid fa-check mr-3"></i>บันทึกข้อมูล</button>
-          <button type="button"
+          <button type="button" @click="closeForm()"
             class="text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base w-full sm:w-[256px] px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-2"><i
               class="fa-solid fa-xmark mr-3"></i>ยกเลิก</button>
         </div>
