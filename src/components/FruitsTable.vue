@@ -65,7 +65,7 @@ const del = (id) => {
   }).then((result) => {
     console.log(result);
     if (result.isConfirmed == true) {
-      axios.delete(import.meta.env.VITE_API_ENDPOINT + "/api/breed/" + id, {
+      ApiMain.delete("/breed/" + id, {
           headers: {
             Authorization: "Bearer " + token,
           },
