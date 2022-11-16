@@ -65,12 +65,7 @@ const del = (id) => {
   }).then((result) => {
     console.log(result);
     if (result.isConfirmed == true) {
-      ApiMain.delete("/breed/" + id, {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        })
-        .then((data) => {
+      ApiMain.delete("/breed/" + id).then((data) => {
           setInterval(function () {
             location.reload();
           }, 1500);
@@ -97,8 +92,7 @@ const read_image = (img_name) => {
 
 }
 const fetchData = () => {
-  ApiMain.get("/breed")
-    .then((response) => {
+  ApiMain.get("/breed").then((response) => {
       states.fruits = response.data.data;
       items.value = response.data.meta.itemCount;
     });
@@ -125,12 +119,7 @@ const pagesList = computed(() => {
 const pageNext = (page) => {
   currentPage.value = page;
   //console.log("pageNext " + (page+1));
-  ApiMain.get("/breed?order=ASC&page=" + (page + 1) + "&take=" + perPage.value, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-    .then((data) => {
+  ApiMain.get("/breed?order=ASC&page=" + (page + 1) + "&take=" + perPage.value).then((data) => {
       states.fruits = data.data.data;
     });
 };

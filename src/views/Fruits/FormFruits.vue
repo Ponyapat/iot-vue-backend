@@ -21,6 +21,7 @@ let img_file = ref('');
 let image_name = ref('');
 let documents = ref('');
 let document_name = ref('');
+let file_pdf = ref('');
 let formData_img = ref('');
 let type_form = ref('');
 let url = new URL(window.location.href);
@@ -104,20 +105,15 @@ onMounted(()=>{
   if(id){
     type_form.value = 'แก้ไขข้อมูล';
 
-    ApiMain.get("/breed/" + id, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    }).then((response) => {
+    ApiMain.get("/breed/" + id).then((response) => {
         if(response.data.data.image!==''){
-          ApiMain.get('/image/'+response.data.data.image+'?imageableType=breed',{
-          headers: {
-            Authorization: "Bearer " + token,
-          }}).then((res)=>{
-            console.log('image == ',res);
+          ApiMain.get('/image/'+response.data.data.image+'?imageableType=breed').then((res)=>{
             image_upload.value =res.request.responseURL ;
           })
         image_name.value = response.data.data.image ;
+        }
+        if(response.data.data.document !=='' || response.data.data.document !=='string' ){
+          showlink_PDF(response.data.data.document);
         }
         dataform.code  = response.data.data.code ;
         dataform.breedCategoryId = response.data.data.breedCategoryId ;
@@ -157,11 +153,7 @@ onMounted(()=>{
     type_form.value = 'เพิ่มข้อมูล';
   }
   //ดึงเอาประเภทพืช breed-categorise
-  ApiMain.get("/breed-categorise?order=ASC&page=1&take=10", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    }).then((response) => {
+  ApiMain.get("/breed-categorise?order=ASC&page=1&take=10").then((response) => {
       categories.value = response.data.data;
     })
 
@@ -175,14 +167,7 @@ const upload_image = (event) => {
   formdata.append('file', image );
   image_upload.value =  URL.createObjectURL(image) ;
   formData_img.value = formdata ;
-  ApiMain.post("/image/upload?imageableType=breed",formdata,{
-        headers: {
-          Authorization: "Bearer " + token,
-          'Content-Type': 'multipart/form-data',
-          'accept': 'application/json'
-        },
-      }
-    ).then((data) => {
+  ApiMain.post("/image/upload?imageableType=breed",formdata).then((data) => {
       if (data.status == 201) {
         dataform.image = data.data;
         Swal.fire({
@@ -215,21 +200,16 @@ const upload_document = (event) => {
   // Real
   const formdata = new FormData();
   formdata.append('file', file_upload);
+  console.log('file_upload == ',file_upload);
   documents.value = formdata ;
-  ApiMain.post("/image/upload?imageableType=breed",formdata,{
-        headers: {
-          Authorization: "Bearer " + token,
-          'Content-Type': 'multipart/form-data',
-          'accept': 'application/json'
-        },
-      }
-    ).then((data) => {
+  ApiMain.post("/image/upload?imageableType=breed",formdata).then((data) => {
       if (data.status == 201) {
         dataform.document_file = data.data;
+        showlink_PDF(dataform.document_file);
         Swal.fire({
           position: 'top-end',
           icon: 'success',
-          title: 'อัพโหลดรูปสำเร็จ',
+          title: 'อัพโหลด PDF สำเร็จ',
           showConfirmButton: false,
           timer: 1500
         })
@@ -237,7 +217,7 @@ const upload_document = (event) => {
         Swal.fire({
           position: 'top-end',
           icon: "warning",
-          title: "ไม่สามารถอัพโหลดรูปได้",
+          title: "ไม่สามารถอัพโหลด PDF ได้",
           timer: 1500,
         });
         return false;
@@ -247,6 +227,15 @@ const upload_document = (event) => {
       console.log(error);
     });
 
+
+}
+
+const showlink_PDF = (doc_name) =>{
+
+  ApiMain.get('/image/'+doc_name+'?imageableType=breed').then((res)=>{
+      file_pdf.value =res.request.responseURL ;
+      console.log('link == ',file_pdf);
+  })
 }
 const check_status = (event) => {
 
@@ -300,11 +289,6 @@ const submit = async () => {
         link: dataform.link,// ลิ้ง
         image: dataform.image,// รูป
         status: dataform.status,// สถานะ
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + token
-        },
       }
     )
     .then((data) => {
@@ -370,13 +354,7 @@ const submit = async () => {
         link: dataform.link,// ลิ้ง
         image: dataform.image,// รูป
         status: dataform.status,// สถานะ
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + token
-        },
-      }
-    )
+      })
     .then((data) => {
 
       console.log(data);
@@ -673,11 +651,12 @@ const closeForm = () => {
             </div>
           </div>
         </div>
-        <div class="mb-4">
+        <div class="mb-6">
           <label for="document_file"
             class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">เอกสาร <span class="opacity-50">( ไม่บังคับ )</span></label>
-          <input id="document_file" type="file" @change="upload_document" accept=".pdf"  class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
+          <input id="document_file" type="file" @change="upload_document" accept=".pdf"  class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2" >
           <!-- <small v-if="v$.document_file.$error" class="text-red-500">{{ v$.document_file.$errors[0].$message }}</small> -->
+          <a :href="file_pdf" class="text-green-900 cursor-pointer"><span class="text-black cursor-default font-medium mr-2">ดาวน์โหลดไฟล์</span><span class="hover:underline">{{file_pdf}}</span></a>
         </div>
         <div class="mb-4">
           <label for="link"

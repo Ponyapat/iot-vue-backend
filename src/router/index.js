@@ -62,6 +62,30 @@ const routes = [
   },
   {
     meta: {
+      title: "FruitsType"
+    },
+    path: "/fruits-type",
+    name: 'FruitsType',
+    component: () => import('@/views/FruitsType/FruitsTypeList.vue'),
+  },
+  {
+    meta: {
+      title: "AddFruitsType",
+    },
+    path: "/fruits-type/add",
+    name: "AddFruitsType",
+    component: () => import("@/views/FruitsType/FruitsTypeForm.vue"),
+  },
+  {
+    meta: {
+      title: "EditFruitsType",
+    },
+    path: "/fruits-type/edit",
+    name: "EditFruitsType",
+    component: () => import("@/views/FruitsType/FruitsTypeForm.vue"),
+  },
+  {
+    meta: {
       title: "Geography",
     },
     path: "/geography",
