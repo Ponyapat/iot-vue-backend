@@ -32,11 +32,11 @@ onBeforeMount(()=>{
   }
 })
 
-const isAsideLgActive = computed(() => mainStore.isAsideLgActive)
+const isAsideLgActive = computed(() => mainStore.isAsideLgActive);
 
 const overlayClick = () => {
   mainStore.asideLgToggle(false)
-}
+};
 </script>
 
 <template>

@@ -38,17 +38,35 @@ const routes = [
   },
   {
     meta: {
+      title: "Fruits"
+    },
+    path: "/fruits",
+    name: 'Fruits',
+    component: () => import('@/views/Fruits/FruitList.vue'),
+  },
+  {
+    meta: {
+      title: "AddFruits",
+    },
+    path: "/fruits/add",
+    name: "AddFruits",
+    component: () => import("@/views/Fruits/FormFruits.vue"),
+  },
+  {
+    meta: {
+      title: "EditFruits",
+    },
+    path: "/fruits/edit",
+    name: "EditFruits",
+    component: () => import("@/views/Fruits/FormFruits.vue"),
+  },
+  {
+    meta: {
       title: "Geography",
     },
     path: "/geography",
     name: "Geography",
     component: () => import("@/views/Geography/list.vue"),
-    // children: [
-    //   {
-    //     path: "add",
-    //     component: () => import(/* webpackChunkName: "ui" */ "@/views/Ui.vue"),
-    //   }
-    // ],
   },
   {
     meta: {
@@ -65,6 +83,22 @@ const routes = [
     path: "/geography/edit/:id",
     name: "EDITGeography",
     component: () => import("@/views/Geography/Edit.vue"),
+  },
+  {
+    meta: {
+      title: "GeographyBase",
+    },
+    path: "/geography_base",
+    name: "GeographyBase",
+    component: () => import("@/views/GeographyBase/list.vue"),
+  },
+  {
+    meta: {
+      title: "GeographyBaseForm",
+    },
+    path: "/geography_base/form",
+    name: "GeographyBaseForm",
+    component: () => import("@/views/GeographyBase/Form.vue"),
   },
   {
     meta: {

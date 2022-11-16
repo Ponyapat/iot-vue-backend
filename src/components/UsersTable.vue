@@ -140,6 +140,7 @@ const statusText = (value) => {
     return "Super Admin";
   }
 };
+
 </script>
 <template>
   <div>

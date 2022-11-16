@@ -3,10 +3,11 @@
     <title-bar :title-stack="titleStack" />
     <card-component
       :icon="mdiMonitorCellphone"
-      title="ภูมิอากาศ"
+      title="ภูมิศาสตร์ข้อมูลกลาง"
       has-table
+      addlink="/geography_base/form"
     >
-      <WeatherTable />
+      <GeographyTableBase />
     </card-component>
   </div>
 </template>
@@ -18,9 +19,9 @@ import { useMainStore } from "@/stores/main";
 import TitleBar from "@/components/TitleBar.vue";
 import HeroBar from "@/components/HeroBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
-import WeatherTable from '@/components/ListData/WeatherTable.vue'
+import GeographyTableBase from '@/components/ListData/GeographyBase.vue'
 
-const titleStack = ref(["Admin", "ภูมิอากาศ"]);
+const titleStack = ref(["Admin", "ภูมิศาสตร์(ข้อมูลกลาง)"]);
 
 
 

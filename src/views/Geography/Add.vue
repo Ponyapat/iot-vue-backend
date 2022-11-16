@@ -55,12 +55,12 @@ const upload_image = () => {
   let imagefile = document.querySelector("#imgInp");
   formData.append("file", imagefile.files[0]);
   //console.log(formData)
-  ApiMain.post("/image?imageableType=land", formData)
+  ApiMain.post("/image/upload?imageableType=land", formData)
     .then((data) => {
       console.log(data);
       if (data.status == 201) {
         //console.log(data.status);
-        form.land_img = "/image/" + data.data + "?imageableType=land";
+        form.land_img = "/image/uplaod" + data.data + "?imageableType=land";
         Swal.fire({
           position: "top-end",
           icon: "success",
