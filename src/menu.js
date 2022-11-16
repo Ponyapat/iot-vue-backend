@@ -14,7 +14,8 @@ import {
   mdiAccount,
   mdiEarth,
   mdiWeatherPartlyRainy,
-  mdiShieldAccountVariant
+  mdiShieldAccountVariant,
+  mdiFruitCherries
 } from '@mdi/js'
 
 export default [
@@ -28,9 +29,14 @@ export default [
   ],
   'Admin',
   [
+    // {
+    //   to: '/geography',
+    //   label: 'ภูมิศาสตร์',
+    //   icon: mdiEarth
+    // },
     {
-      to: '/geography',
-      label: 'ภูมิศาสตร์',
+      to: '/geography_base',
+      label: 'ภูมิศาสตร์(ข้อมูลกลาง)',
       icon: mdiEarth
     },
     {
@@ -39,10 +45,15 @@ export default [
       icon: mdiWeatherPartlyRainy
     },
     {
-      to: '/customers',
-      label: 'Customer',
-      icon: mdiAccount
+      to: '/fruits',
+      label: 'พืชพันธุ์ผลไม้',
+      icon: mdiFruitCherries
     },
+    // {
+    //   to: '/customers',
+    //   label: 'Customer',
+    //   icon: mdiAccount
+    // },
     {
       to: '/users',
       label: 'Admin',
@@ -53,6 +64,7 @@ export default [
       label: 'Role',
       icon: mdiShieldAccountVariant
     },
+
     // {
     //   label: 'Submenus',
     //   subLabel: 'Submenus Example',

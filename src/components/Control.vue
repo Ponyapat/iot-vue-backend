@@ -136,7 +136,7 @@ if (props.ctrlKFocus) {
       <option
         v-for="option in options"
         :key="option.id ?? option"
-        :value="option"
+        :value="option.id"
       >
         <span v-if="option.label">{{ option.label }}</span>
         <span v-else-if="option.name">{{ option.name }}</span>

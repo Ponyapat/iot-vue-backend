@@ -1,6 +1,9 @@
 <script setup>
-import { computed, ref, onMounted } from "vue";
+import { computed, ref, onMounted , onBeforeMount } from "vue";
 import { useMainStore } from "@/stores/main";
+import {
+  mdiFruitCherries
+} from '@mdi/js'
 import {
   mdiAccountMultiple,
   mdiCartOutline,
@@ -27,17 +30,16 @@ import JbButton from "@/components/JbButton.vue";
 import CardTransactionBar from "@/components/CardTransactionBar.vue";
 import CardClientBar from "@/components/CardClientBar.vue";
 import TitleSubBar from "@/components/TitleSubBar.vue";
-import axios from "axios";
 import { reactive } from "vue";
 
 const titleStack = ref(["Admin", "Dashboard"]);
-const token = localStorage.getItem("tkfw");
 
 const chartData = ref(null);
 const states = reactive({
   geoCountItem: 0,
   weatherCountItem: 0,
   customerCountItem: 0,
+  breedCountItem:0
 });
 
 const fillChartData = () => {
@@ -45,11 +47,22 @@ const fillChartData = () => {
 };
 
 const geoData = () => {
-  ApiMain.get("/geo")
+  ApiMain.get("/geobase")
     .then((data) => {
       // console.log(data.data.meta.itemCount);
       states.geoCountItem = data.data.meta.itemCount;
       console.log(states.geoCountItem);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+const geoBreedData = () => {
+  ApiMain.get("/breed")
+    .then((data) => {
+      states.breedCountItem = data.data.meta.itemCount;
+      console.log(states.breedCountItem);
     })
     .catch((error) => {
       console.log(error);
@@ -68,10 +81,11 @@ const weatherData = () => {
     });
 };
 
-onMounted(() => {
+onBeforeMount(() => {
   fillChartData();
   geoData();
   weatherData();
+  geoBreedData();
 });
 
 const mainStore = useMainStore();
@@ -108,30 +122,30 @@ const darkMode = computed(() => mainStore.darkMode);
       </template>
     </notification> -->
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
-      <card-widget
+      <!-- 
         trend="12%"
+        prefix="$" 
+      -->
+      <card-widget
         trend-type="up"
         color="text-emerald-500"
         :icon="mdiEarth"
         :number="states.geoCountItem"
-        label="ภูมิศาสตร์"
+        label="ภูมิศาสตร์(ข้อมูลกลาง)"
       />
       <card-widget
-        trend="12%"
         trend-type="down"
         color="text-yellow-500"
         :icon="mdiWeatherPartlyRainy"
         :number="states.weatherCountItem"
-        prefix="$"
         label="ภูมิอากาศ"
       />
       <card-widget
-        trend="Overflow"
         trend-type="alert"
         color="text-blue-500"
-        :icon="mdiAccount"
-        :number="states.customerCountItem"
-        label="Customer"
+        :icon="mdiFruitCherries"
+        :number="states.breedCountItem"
+        label="พืชพันธ์ผลไม้"
       />
     </div>
 
@@ -170,7 +184,7 @@ const darkMode = computed(() => mainStore.darkMode);
       :icon="mdiFinance"
       :header-icon="mdiReload"
       class="mb-6"
-      @header-icon-click="fillChartData" 
+      @header-icon-click="fillChartData"
     >
       <div v-if="chartData">
         <line-chart

@@ -9,7 +9,6 @@ import Level from "@/components/Level.vue";
 import JbButtons from "@/components/JbButtons.vue";
 import JbButton from "@/components/JbButton.vue";
 import UserAvatar from "@/components/UserAvatar.vue";
-import axios from "axios";
 import Swal from "sweetalert2";
 import moment from 'moment'
 
@@ -18,48 +17,30 @@ defineProps({
 });
 
 const router = useRouter();
-
 const mainStore = useMainStore();
-
 const date_format = (date) => { 
       return date
 }
 
 const lightBorderStyle = computed(() => mainStore.lightBorderStyle);
-
 const lightBgStyle = computed(() => mainStore.lightBgStyle);
-
 const tableTrStyle = computed(() => mainStore.tableTrStyle);
-
 const tableTrOddStyle = computed(() => mainStore.tableTrOddStyle);
-
 const darkMode = computed(() => mainStore.darkMode);
 
 const states = reactive({
   weather: {},
 });
 
-const token = localStorage.getItem("tkfw");
-
 const isModalActive = ref(false);
-
 const isModalDangerActive = ref(false);
-
 const items = ref(0);
-
 const perPage = ref(10);
-
 const currentPage = ref(0);
 
 onBeforeMount(() => {
-  axios
-    .get(import.meta.env.VITE_API_MAIN + "/api/weather", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
+    ApiMain.get("/weather")
     .then((data) => {
-      //console.log(data.data.meta.itemCount);
       states.weather = data.data.data;
       items.value = data.data.meta.itemCount
     })
@@ -79,27 +60,14 @@ const del = (id) => {
     confirmButtonText: "Ok",
   }).then((result) => {
     if (result.isConfirmed) {
-      axios
-        .delete(import.meta.env.VITE_API_MAIN + "/api/weather/"+id, {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        })
+        ApiMain.delete("/weather/"+id)
         .then((data) => {
-          // setInterval(function () {
-          //   location.reload();
-          // }, 1500);
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
-          console.log("del" + id);
-
-          axios.get(import.meta.env.VITE_API_MAIN + "/api/weather", {
-          headers: {
-            Authorization: "Bearer " + token,
-          }}).then((data) => {
+          //console.log("del" + id);
+          ApiMain.get("/weather").then((data) => {
             states.weather = data.data.data;
             items.value = data.data.meta.itemCount
           })
-
         })
         .catch((error) => {
           console.log(error);
@@ -129,6 +97,14 @@ const pagesList = computed(() => {
   return pagesList
 })
 
+const pageNext = (page) => {
+  currentPage.value = page;
+  ApiMain.get("/weather?order=ASC&page=" + (page + 1) + "&take=" + perPage.value, {
+    })
+    .then((data) => {
+      states.weather = data.data.data;
+    });
+};
 </script>
 
 <template>
@@ -136,7 +112,7 @@ const pagesList = computed(() => {
     <thead>
       <tr>
         <th v-if="checkable" />
-        <th>#</th>
+        <th>ID</th>
         <th>หัวข้อ</th>
         <th>รายละเอียด</th>
         <th>วันที่วัดค่า</th>
@@ -154,7 +130,7 @@ const pagesList = computed(() => {
         :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']"
       >
         <td>
-          {{ index+1 }}
+          {{ client.id }}
         </td>
         <td data-label="title">
           {{ client.title }}
@@ -209,7 +185,7 @@ const pagesList = computed(() => {
           :label="page + 1"
           :outline="darkMode"
           small
-          @click="currentPage = page"
+          @click="pageNext(page)"
         />
       </jb-buttons>
       <small>Page {{ currentPageHuman }} of {{ numPages }}</small>

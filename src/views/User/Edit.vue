@@ -1,5 +1,5 @@
 <script setup>
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 // import { useMainStore } from '@/stores/main'
 import TitleBar from '@/components/TitleBar.vue'
 import { reactive, ref, onMounted } from 'vue'
@@ -12,48 +12,37 @@ import BottomOtherPagesSection from '@/components/BottomOtherPagesSection.vue'
 import Divider from '@/components/Divider.vue'
 import JbButton from '@/components/JbButton.vue'
 import JbButtons from '@/components/JbButtons.vue'
-import axios from 'axios'
 import Swal from 'sweetalert2';
 // import CheckRadioPicker from '@/components/CheckRadioPicker.vue'
-
-// const router = useRouter()
+const router = useRouter()
 
 const titleStack = ref(['Admin', 'แก้ไขข้อมูลผู้ใช้'])
 
 const states = reactive({
-  roles: "",
+  roles: [],
 });
 
 const url = window.location.href;
 const id = url.split("/")[5];
-const token = localStorage.getItem("tkfw");
+
 onMounted(async () => {
   fetchRole()
-  await axios
-    .get(import.meta.env.VITE_API_MAIN + "/api/users/"+id+"/profile",
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }).then(response => {
-      // console.log('DEBUG: ', response)
+  await ApiMain.get("/users/"+id+"/profile").then(response => {
+      console.log('DEBUG users: ', response)
       form.name = response.data.user.name
       form.username = response.data.user.username
       form.email = response.data.user.email
       if (!response.data.user.role) {
         form.role = states.roles[1]
       } else {
-        form.role = response.data.user.role
+        form.role = response.data.user.role.id
       }
     })
 })
+
 const fetchRole = () => {
-  axios
-    .get(import.meta.env.VITE_API_MAIN+"/api/role", {
-      headers: {
-        Authorization: "Bearer " + token,
-      }
-    })
+  ApiMain
+    .get("/role")
     .then((data) => {
       console.log('DEBUG ROLE: ', data)
       states.roles = data.data.data
@@ -70,20 +59,13 @@ const form = reactive({
 
 const submit = () => {
   console.log('update data user', form)
-  axios
-    .put(
-      import.meta.env.VITE_API_MAIN + "/api/users/"+id+"/profile",
+  ApiMain.put("/users/"+id+"/profile",
       {
         name: form.name,
         email: form.email,
         username: form.username,
-        roleId: form.role.id
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
+        roleId: form.role
+      } 
     ).then((data) => {
       console.log('DEBUG data', data)
       if (data.data.status == 204 || data.data.status == 200) {
