@@ -137,7 +137,7 @@ const pageNext = (page) => {
 </script>
 
 <template>
-  <div class="overflow-x-auto relative">
+  <div class=" relative">
     <table class="w-full text-sm text-left text-black dark:text-white">
       <thead class="text-base text-black uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
         <tr>
