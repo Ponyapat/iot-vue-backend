@@ -97,6 +97,14 @@ const pagesList = computed(() => {
   return pagesList
 })
 
+const pageNext = (page) => {
+  currentPage.value = page;
+  ApiMain.get("/weather?order=ASC&page=" + (page + 1) + "&take=" + perPage.value, {
+    })
+    .then((data) => {
+      states.weather = data.data.data;
+    });
+};
 </script>
 
 <template>
@@ -104,7 +112,7 @@ const pagesList = computed(() => {
     <thead>
       <tr>
         <th v-if="checkable" />
-        <th>#</th>
+        <th>ID</th>
         <th>หัวข้อ</th>
         <th>รายละเอียด</th>
         <th>วันที่วัดค่า</th>
@@ -122,7 +130,7 @@ const pagesList = computed(() => {
         :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']"
       >
         <td>
-          {{ index+1 }}
+          {{ client.id }}
         </td>
         <td data-label="title">
           {{ client.title }}
@@ -177,7 +185,7 @@ const pagesList = computed(() => {
           :label="page + 1"
           :outline="darkMode"
           small
-          @click="currentPage = page"
+          @click="pageNext(page)"
         />
       </jb-buttons>
       <small>Page {{ currentPageHuman }} of {{ numPages }}</small>

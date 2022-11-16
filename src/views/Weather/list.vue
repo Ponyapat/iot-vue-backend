@@ -18,7 +18,7 @@ import { useMainStore } from "@/stores/main";
 import TitleBar from "@/components/TitleBar.vue";
 import HeroBar from "@/components/HeroBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
-import WeatherTable from '@/components/WeatherTable.vue'
+import WeatherTable from '@/components/ListData/WeatherTable.vue'
 
 const titleStack = ref(["Admin", "ภูมิอากาศ"]);
 
