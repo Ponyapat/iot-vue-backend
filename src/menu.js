@@ -15,7 +15,8 @@ import {
   mdiEarth,
   mdiWeatherPartlyRainy,
   mdiShieldAccountVariant,
-  mdiFruitCherries
+  mdiFruitCherries,
+  mdiFruitWatermelon
 } from '@mdi/js'
 
 export default [
@@ -63,6 +64,11 @@ export default [
       to: '/roles',
       label: 'Role',
       icon: mdiShieldAccountVariant
+    },
+    {
+      to: '/fruits-type',
+      label: 'ประเภทพืชพันธุ์ผลไม้',
+      icon: mdiFruitWatermelon
     },
 
     // {
