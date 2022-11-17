@@ -409,21 +409,15 @@ const submit = () => {
         />
       </field>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
-        <field label="ค่าPH ดิดชั้นบน ต่ำสุด">
-          <control
-            v-model="form.topsoilValueMin"
-            type="number"
-            placeholder="ค่าPH ดิดชั้นบน ต่ำสุด"
-          />
-        </field>
+        <div>
+          <label >ค่าPH ดิดชั้นบน ต่ำสุด</label>
+          <input type="number" step="any"  v-model="form.topsoilValueMin" class="rounded-lg border-1 border-gray-500 w-full">
+        </div>
+       <div>
+        <label >ค่าPH ดิดชั้นบน สูงสุด</label>
+        <input type="number" step="any"  v-model="form.topsoilValueMax" class="rounded-lg border-1 border-gray-500 w-full">
+       </div>
 
-        <field label="ค่าPH ดิดชั้นบน สูงสุด">
-          <control
-            v-model="form.topsoilValueMax"
-            type="number"
-            placeholder="ค่าPH ดิดชั้นบน สูงสุด"
-          />
-        </field>
       </div>
 
       <field label="ดินชั้นล่าง">
@@ -434,21 +428,14 @@ const submit = () => {
         />
       </field>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
-        <field label="ค่าPH ดินชั้นล่าง ต่ำสุด">
-          <control
-            v-model="form.subsoilValueMin"
-            type="number"
-            placeholder="ค่าPH ดินชั้นล่าง ต่ำสุด"
-          />
-        </field>
-
-        <field label="ค่าPH ดินชั้นล่าง สูงสุด">
-          <control
-            v-model="form.subsoilValueMax"
-            type="number"
-            placeholder="ค่าPH ดินชั้นล่าง สูงสุด"
-          />
-        </field>
+        <div>
+          <label >ค่าPH ดินชั้นล่าง ต่ำสุด</label>
+          <input type="number" step="any"  v-model="form.subsoilValueMin" class="rounded-lg border-1 border-gray-500 w-full">
+        </div>
+       <div>
+        <label >ค่าPH ดินชั้นล่าง สูงสุด</label>
+        <input type="number" step="any"  v-model="form.subsoilValueMax" class="rounded-lg border-1 border-gray-500 w-full">
+       </div>
       </div>
 
       <field label="ความอุดมสมบูรณ์">
