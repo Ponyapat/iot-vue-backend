@@ -411,11 +411,11 @@ const submit = () => {
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
         <div>
           <label >ค่าPH ดิดชั้นบน ต่ำสุด</label>
-          <input type="number" step="any"  v-model="form.topsoilValueMin" class="rounded-lg border-1 border-gray-500 w-full">
+          <input type="number" step="any"  v-model="form.topsoilValueMin" class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
         </div>
        <div>
         <label >ค่าPH ดิดชั้นบน สูงสุด</label>
-        <input type="number" step="any"  v-model="form.topsoilValueMax" class="rounded-lg border-1 border-gray-500 w-full">
+        <input type="number" step="any"  v-model="form.topsoilValueMax" class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
        </div>
 
       </div>
@@ -430,11 +430,11 @@ const submit = () => {
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
         <div>
           <label >ค่าPH ดินชั้นล่าง ต่ำสุด</label>
-          <input type="number" step="any"  v-model="form.subsoilValueMin" class="rounded-lg border-1 border-gray-500 w-full">
+          <input type="number" step="any"  v-model="form.subsoilValueMin" class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
         </div>
        <div>
         <label >ค่าPH ดินชั้นล่าง สูงสุด</label>
-        <input type="number" step="any"  v-model="form.subsoilValueMax" class="rounded-lg border-1 border-gray-500 w-full">
+        <input type="number" step="any"  v-model="form.subsoilValueMax" class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
        </div>
       </div>
 

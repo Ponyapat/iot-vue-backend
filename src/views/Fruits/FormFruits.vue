@@ -12,8 +12,6 @@ const router = useRouter();
 const token = localStorage.getItem("tkfw");
 
 const code_rule = helpers.regex(/[0-9]/);
-// const http_rule = helpers.regex(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi);
-
 
 const categories = ref([]) ;
 let image_upload = ref('');
@@ -433,7 +431,7 @@ const closeForm = () => {
             <div class="mb-4">
               <label for="categories"
                 class="block mb-2 text-base font-medium text-black dark:text-gray-300">ประเภท <span class="text-red-500">*</span></label>
-                <select id="categories" v-model="dataform.breedCategoryId" :class="v$.breedCategoryId.$error?'border-red-300':'border-gray-300'" class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select id="categories" v-model="dataform.breedCategoryId" :class="v$.breedCategoryId.$error?'border-red-300':'border-gray-300'" class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                   <option value="" disabled selected >เลือกประเภทพืช</option>
                   <option v-for="val of categories" :key="val" :value="val.id">{{val.name}}</option>
                 </select>
@@ -661,7 +659,7 @@ const closeForm = () => {
         <div class="mb-4">
           <label for="link"
             class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">ลิ้งค์ <span class="opacity-50">( ไม่บังคับ )</span></label>
-            <input type="url" placeholder="https://example.com" pattern="https://.*" size="30" v-model="dataform.link" name="link" id="link"
+            <input type="text" placeholder="https://example.com"  v-model="dataform.link" name="link" id="link"
                 class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <!-- <small v-if="v$.link.$error" class="text-red-500">{{ v$.link.$errors[0].$message }}</small> -->
         </div>
