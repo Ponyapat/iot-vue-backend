@@ -412,7 +412,7 @@ const submit = () => {
         <field label="ค่าPH ดิดชั้นบน ต่ำสุด">
           <control
             v-model="form.topsoilValueMin"
-            type="text"
+            type="number"
             placeholder="ค่าPH ดิดชั้นบน ต่ำสุด"
           />
         </field>
@@ -420,7 +420,7 @@ const submit = () => {
         <field label="ค่าPH ดิดชั้นบน สูงสุด">
           <control
             v-model="form.topsoilValueMax"
-            type="text"
+            type="number"
             placeholder="ค่าPH ดิดชั้นบน สูงสุด"
           />
         </field>
@@ -437,7 +437,7 @@ const submit = () => {
         <field label="ค่าPH ดินชั้นล่าง ต่ำสุด">
           <control
             v-model="form.subsoilValueMin"
-            type="text"
+            type="number"
             placeholder="ค่าPH ดินชั้นล่าง ต่ำสุด"
           />
         </field>
@@ -445,7 +445,7 @@ const submit = () => {
         <field label="ค่าPH ดินชั้นล่าง สูงสุด">
           <control
             v-model="form.subsoilValueMax"
-            type="text"
+            type="number"
             placeholder="ค่าPH ดินชั้นล่าง สูงสุด"
           />
         </field>
