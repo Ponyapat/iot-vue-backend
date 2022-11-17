@@ -397,7 +397,7 @@ const submit = () => {
           v-model="form.soilProperties"
           type="textarea"
           col="10"
-          placeholder="คุณสมบัติของดิน"
+          placeholder="กรอกคุณสมบัติของดิน"
         />
       </field>
 
@@ -405,50 +405,37 @@ const submit = () => {
         <control
           v-model="form.topsoilDetail"
           type="text"
-          placeholder="รายละเอียดดินชั้นบน"
+          placeholder="กรอกรายละเอียดดินชั้นบน"
         />
       </field>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
-        <field label="ค่าPH ดิดชั้นบน ต่ำสุด">
-          <control
-            v-model="form.topsoilValueMin"
-            type="number"
-            placeholder="ค่าPH ดิดชั้นบน ต่ำสุด"
-          />
-        </field>
+        <div>
+          <label >ค่าPH ดิดชั้นบน ต่ำสุด</label>
+          <input type="number" step="any"  v-model="form.topsoilValueMin" class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
+        </div>
+       <div>
+        <label >ค่าPH ดิดชั้นบน สูงสุด</label>
+        <input type="number" step="any"  v-model="form.topsoilValueMax" class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
+       </div>
 
-        <field label="ค่าPH ดิดชั้นบน สูงสุด">
-          <control
-            v-model="form.topsoilValueMax"
-            type="number"
-            placeholder="ค่าPH ดิดชั้นบน สูงสุด"
-          />
-        </field>
       </div>
 
       <field label="ดินชั้นล่าง">
         <control
           v-model="form.subsoilDetail"
           type="text"
-          placeholder="รายละเอียดดินชั้นล่าง"
+          placeholder="กรอกรายละเอียดดินชั้นล่าง"
         />
       </field>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
-        <field label="ค่าPH ดินชั้นล่าง ต่ำสุด">
-          <control
-            v-model="form.subsoilValueMin"
-            type="number"
-            placeholder="ค่าPH ดินชั้นล่าง ต่ำสุด"
-          />
-        </field>
-
-        <field label="ค่าPH ดินชั้นล่าง สูงสุด">
-          <control
-            v-model="form.subsoilValueMax"
-            type="number"
-            placeholder="ค่าPH ดินชั้นล่าง สูงสุด"
-          />
-        </field>
+        <div>
+          <label >ค่าPH ดินชั้นล่าง ต่ำสุด</label>
+          <input type="number" step="any"  v-model="form.subsoilValueMin" class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
+        </div>
+       <div>
+        <label >ค่าPH ดินชั้นล่าง สูงสุด</label>
+        <input type="number" step="any"  v-model="form.subsoilValueMax" class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
+       </div>
       </div>
 
       <field label="ความอุดมสมบูรณ์">
@@ -472,19 +459,19 @@ const submit = () => {
         <control
           v-model="form.soilRestrictions"
           type="text"
-          placeholder="ข้อจํากัดของดิน"
+          placeholder="กรอกข้อจํากัดของดิน"
         />
       </field>
       <!--<divider /> -->
-      <field label="ความชัน">
-        <control v-model="form.slope" type="number" placeholder="ความชัน" />
+      <field label="ความชัน(หน่วยเมตร)">
+        <control v-model="form.slope" type="number" placeholder="กรอกความชัน(หน่วยเมตร)" />
       </field>
 
       <field label="รายละเอียดลักษณะของพื้นที่">
         <control
           v-model="form.spaceNatureDetail"
           type="text"
-          placeholder="รายละเอียดลักษณะของพื้นที่"
+          placeholder="กรอกรายละเอียดลักษณะของพื้นที่"
         />
       </field>
       <field label="ลักษณะของพื้นที่">

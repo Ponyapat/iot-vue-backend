@@ -65,12 +65,7 @@ const del = (id) => {
   }).then((result) => {
     console.log(result);
     if (result.isConfirmed == true) {
-      ApiMain.delete("/breed/" + id, {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        })
-        .then((data) => {
+      ApiMain.delete("/breed/" + id).then((data) => {
           setInterval(function () {
             location.reload();
           }, 1500);
@@ -97,8 +92,7 @@ const read_image = (img_name) => {
 
 }
 const fetchData = () => {
-  ApiMain.get("/breed")
-    .then((response) => {
+  ApiMain.get("/breed").then((response) => {
       states.fruits = response.data.data;
       items.value = response.data.meta.itemCount;
     });
@@ -125,12 +119,7 @@ const pagesList = computed(() => {
 const pageNext = (page) => {
   currentPage.value = page;
   //console.log("pageNext " + (page+1));
-  ApiMain.get("/breed?order=ASC&page=" + (page + 1) + "&take=" + perPage.value, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    })
-    .then((data) => {
+  ApiMain.get("/breed?order=ASC&page=" + (page + 1) + "&take=" + perPage.value).then((data) => {
       states.fruits = data.data.data;
     });
 };
@@ -148,12 +137,12 @@ const pageNext = (page) => {
           <th scope="col" class="text-center py-3 px-6">ชื่อสามัญ</th> -->
           <!-- <th scope="col" class="text-center py-3 px-6">รายละเอียด</th> -->
           <th scope="col" class="text-center py-3 w-[150px]">ประเภท</th>
-          <th scope="col" class="text-center py-3 w-[100px]">อายุการเก็บเกี่ยว</th>
-          <th scope="col" class="text-center py-3 w-[150px]">อุณหภูมิในอากาศ</th>
-          <th scope="col" class="text-center py-3 w-[150px]">อุณหภูมิในดิน</th>
-          <th scope="col" class="text-center py-3 w-[150px]">ความชื้นในดิน</th>
+          <th scope="col" class="text-center py-3 w-[150px]">อายุการเก็บเกี่ยว</th>
+          <th scope="col" class="text-center py-3 w-[150px]">อุณหภูมิในอากาศ (°C)</th>
+          <th scope="col" class="text-center py-3 w-[150px]">อุณหภูมิในดิน (°C)</th>
+          <th scope="col" class="text-center py-3 w-[150px]">ความชื้นในดิน (%)</th>
           <th scope="col" class="text-center py-3 w-[150px]">pH ในดิน</th>
-          <!-- <th scope="col" class="text-center py-3 px-6">EC ในดิน</th> -->
+          <th scope="col" class="text-center py-3 px-6">EC ในดิน (μs/cm)</th>
           <!-- <th scope="col" class="text-center py-3 px-6">N</th> -->
           <!-- <th scope="col" class="text-center py-3 px-6">P</th> -->
           <!-- <th scope="col" class="text-center py-3 px-6">K</th> -->
@@ -184,10 +173,11 @@ const pageNext = (page) => {
             </div>
           </td>
           <td class="text-center">{{item.harvestPeriod}}</td>
-          <td class="text-center">{{item.airTemperatureMin}} - {{item.airTemperatureMax}}</td>
-          <td class="text-center">{{item.soilTemperatureMin}} - {{item.soilTemperatureMax}}</td>
-          <td class="text-center">{{item.soilMoistureMin}} - {{item.soilMoistureMax}}</td>
-          <td class="text-center">{{item.soilPhMin}} - {{item.soilPhMax}}</td>
+          <td class="text-center">{{parseFloat(item.airTemperatureMin)}} - {{parseFloat(item.airTemperatureMax)}}</td>
+          <td class="text-center">{{parseFloat(item.soilTemperatureMin)}} - {{parseFloat(item.soilTemperatureMax)}}</td>
+          <td class="text-center">{{parseFloat(item.soilMoistureMin)}} - {{parseFloat(item.soilMoistureMax)}}</td>
+          <td class="text-center">{{parseFloat(item.soilPhMin)}} - {{parseFloat(item.soilPhMax)}}</td>
+          <td class="text-center">{{parseFloat(item.soilEcMin)}} - {{parseFloat(item.soilEcMax)}}</td>
           <td class="actions-cell">
             <jb-buttons  class="justify-center" no-wrap>
               <jb-button color="info" :icon="mdiGreasePencil" small @click="edit(item.id)" />
