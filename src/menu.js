@@ -30,11 +30,11 @@ export default [
   ],
   'Admin',
   [
-    // {
-    //   to: '/geography',
-    //   label: 'ภูมิศาสตร์',
-    //   icon: mdiEarth
-    // },
+    {
+      to: '/geography',
+      label: 'ภูมิศาสตร์(ข้อมูลลูกค้า)',
+      icon: mdiEarth
+    },
     {
       to: '/geography_base',
       label: 'ภูมิศาสตร์(ข้อมูลกลาง)',
