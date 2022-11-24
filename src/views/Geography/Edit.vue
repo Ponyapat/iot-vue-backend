@@ -18,166 +18,124 @@ import TitledSection from "@/components/TitledSection.vue";
 import TitleSubBar from "@/components/TitleSubBar.vue";
 import Swal from "sweetalert2";
 
-const titleStack = ref(["ADMIN", "แก้ไขข้อมูลภูมิศาสตร์ (ที่ดิน)"]);
-
-// const token = localStorage.getItem("tkfw");
-// axios.defaults.headers.common["Authorization"] = token;
+const titleStack = ref(["ADMIN", "แก้ไขข้อมูลภูมิศาสตร์(ข้อมูลลูกค้า)"]);
 
 const router = useRouter();
 const url = window.location.href;
 const id = url.split("/")[5];
 
 const form = reactive({
-  title: "",
-  detail: "",
+  customerId: 0,
+  projectId: 0,
   lat: "",
-  long: "",
-  land_detail: "",
-  ri: "",
-  ngan: "",
-  wa: "",
-  land_size: "",
-  land_code: "",
-  land_img: "/images/noimage.png",
-  land_img_edit: "",
-  land_price_rate: "",
-  land_price: "",
-  land_type: "",
-  land_properties: "",
-  land_water: "",
-  land_mineral: "",
-  land_limitation: "",
-  fileupload:null,
+  lon: "",
+
+  soilProperties: "",
+  topsoilDetail: "",
+  topsoilValueMin: "",
+  topsoilValueMax: "",
+  subsoilDetail: "",
+  subsoilValueMin: "",
+  subsoilValueMax: "",
+  soilFertility: "high",
+  soilRestrictions: "",
+  spaceNatureDetail: "",
+  spaceNatureAll: [],
+  spaceNaturePlain: false,
+  spaceNaturePlateau: false,
+  spaceNatureHill: false,
+  spaceNatureMountain: false,
+  slope: "",
+  drainage: "high",
+  nearbyNaturalWater: 0,
+  nearbyInfarmWater: 0,
+  nearbySmallWater: 0,
+  nearbyGroundWater: 0,
 });
 
 onMounted(() => {
-  ApiMain.get("/geo/" + id)
-    .then((response) => {
-      //console.log(response.data)
-      //console.log(landSize_split)
-      form.title = response.data.data.title;
-      form.detail = response.data.data.detail;
-      form.lat = response.data.data.lat;
-      form.long = response.data.data.lon;
-      form.land_detail = response.data.data.landDetail;
-
-      form.land_code = response.data.data.landCode;
-      if(response.data.data.landImg!=""){
-        form.land_img = import.meta.env.VITE_API_MAIN + response.data.data.landImg;
-      }
-      
-      form.land_img_edit = response.data.data.landImg;
-
-      form.land_price_rate = response.data.data.landPriceRate;
-      form.land_price = response.data.data.landPrice;
-
-      form.land_type = response.data.data.landType;
-      form.land_properties = response.data.data.landProperties;
-      form.land_water = response.data.data.landWater;
-
-      form.land_mineral = response.data.data.landMineral;
-      form.land_limitation = response.data.data.landLimitation;
-    });
+  ApiMain.get("/geo/" + id).then((response) => {
+    const geobase = response.data.data;
+    form.customerId = geobase.customerId;
+    form.projectId = geobase.projectId;
+    form.lat = geobase.lat;
+    form.lon = geobase.lon;
+    form.spaceNatureAll = [
+      geobase.spaceNaturePlain == "true" ? "spaceNaturePlain" : "",
+      geobase.spaceNaturePlateau == "true" ? "spaceNaturePlateau" : "",
+      geobase.spaceNatureHill == "true" ? "spaceNatureHill" : "",
+      geobase.spaceNatureMountain == "true" ? "spaceNatureMountain" : "",
+    ];
+    form.soilProperties = geobase.soilProperties;
+    form.topsoilDetail = geobase.topsoilDetail;
+    form.topsoilValueMin = geobase.topsoilValueMin;
+    form.topsoilValueMax = geobase.topsoilValueMax;
+    form.subsoilDetail = geobase.subsoilDetail;
+    form.subsoilValueMin = geobase.subsoilValueMin;
+    form.subsoilValueMax = geobase.subsoilValueMax;
+    form.soilFertility = geobase.soilFertility;
+    form.soilRestrictions = geobase.soilRestrictions;
+    form.spaceNatureDetail = geobase.spaceNatureDetail;
+    form.slope = geobase.slope;
+    form.drainage = geobase.drainage;
+    form.nearbyNaturalWater = geobase.nearbyNaturalWater;
+    form.nearbyInfarmWater = geobase.nearbyInfarmWater;
+    form.nearbySmallWater = geobase.nearbySmallWater;
+    form.nearbyGroundWater = geobase.nearbyGroundWater;
+  });
 });
 
-const upload_image = () => {
-  console.log("edit_image")
-  const token = localStorage.getItem("tkfw");
-  let formData = new FormData();
-  let imagefile = document.querySelector('#imgInp');
-  formData.append("file", imagefile.files[0]);
-  //console.log(formData)
-  axios.post(
-      import.meta.env.VITE_API_MAIN + "/api/image?imageableType=land",formData, 
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-          'Content-Type': 'multipart/form-data',
-          'accept': 'application/json'
-        },
-      }
-    )
-    .then((data) => {
-      console.log(data);
-      if (data.status == 201) {
-        //console.log(data.status);
-        form.land_img_edit = "/api/image/"+data.data+"?imageableType=land"
-        console.log(form.land_img)
-        
-        axios.delete(form.land_img,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-            'Content-Type': 'multipart/form-data',
-            'accept': 'application/json'
-          },
-        }).then((data) => {
-          console.log("deleted");
-        })
-
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: 'อัพโหลดรูปสำเร็จ',
-          showConfirmButton: false,
-          timer: 1500
-        })
- 
-      } else {
-        Swal.fire({
-          position: 'top-end',
-          icon: "warning",
-          title: "ไม่สามารถอัพโหลดรูปได้",
-          timer: 1500,
-        });
-        return false;
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-
-  const [file] = imgInp.files
-  if (file) {
-       blah.src = URL.createObjectURL(file)
-  }
-};
-
 const submit = () => {
-  const token = localStorage.getItem("tkfw");
-  axios
-    .put(
-      import.meta.env.VITE_API_MAIN + "/api/geo/" + id,
-      {
-        title: form.title,
-        detail: form.detail,
-        lat: form.lat,
-        lon: form.long,
-        landImg: form.land_img_edit,
-        landDetail: form.land_detail,
-        landSize: form.ri + "-" + form.ngan + "-" + form.wa,
-        landCode: form.land_code,
-        landPriceRate: form.land_price_rate,
-        landPrice: form.land_price,
-        landType: form.land_type,
-        landProperties: form.land_properties,
-        landWater: form.land_water,
-        landMineral: form.land_mineral,
-        landLimitation: form.land_limitation,
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
-    )
+  form.spaceNatureAll.forEach((element) => {
+    console.log(element);
+    if (element == "spaceNaturePlain") {
+      form.spaceNaturePlain = true;
+    }
+    if (element == "spaceNaturePlateau") {
+      form.spaceNaturePlateau = true;
+    }
+    if (element == "spaceNatureHill") {
+      form.spaceNatureHill = true;
+    }
+    if (element == "spaceNatureMountain") {
+      form.spaceNatureMountain = true;
+    }
+  });
+
+  ApiMain.put("/geo/" + id, {
+    customerId: form.customerId,
+    projectId: form.projectId,
+    lat: form.lat,
+    lon: form.lon,
+    soilProperties: form.soilProperties,
+    topsoilDetail: form.topsoilDetail,
+    topsoilValueMin: form.topsoilValueMin,
+    topsoilValueMax: form.topsoilValueMax,
+    subsoilDetail: form.subsoilDetail,
+    subsoilValueMin: form.subsoilValueMin,
+    subsoilValueMax: form.subsoilValueMax,
+    soilFertility: form.soilFertility,
+    soilRestrictions: form.soilRestrictions,
+    spaceNatureDetail: form.spaceNatureDetail,
+    spaceNaturePlain: form.spaceNaturePlain,
+    spaceNaturePlateau: form.spaceNaturePlateau,
+    spaceNatureHill: form.spaceNatureHill,
+    spaceNatureMountain: form.spaceNatureMountain,
+    slope: form.slope,
+    drainage: form.drainage,
+    nearbyNaturalWater: form.nearbyNaturalWater,
+    nearbyInfarmWater: form.nearbyInfarmWater,
+    nearbySmallWater: form.nearbySmallWater,
+    nearbyGroundWater: form.nearbyGroundWater,
+    status: "active",
+  })
     .then((data) => {
-      //console.log(data.data);
+      //onsole.log(data.data);
       if (data.data.status == 204) {
-        //console.log(data.data.status);
+        console.log(data.data.status);
         Swal.fire({
           icon: "success",
-          title: "แก้ไขข้อมูลภูมิศาสตร์ (ที่ดิน) สำเร็จ",
+          html: "แก้ไขข้อมูลภูมิศาสตร์(ข้อมูลลูกค้า) สำเร็จ",
           timer: 2500,
           showConfirmButton: 1,
         });
@@ -195,7 +153,6 @@ const submit = () => {
     .catch((error) => {
       console.log(error);
     });
-  //
 };
 </script>
 
@@ -203,176 +160,174 @@ const submit = () => {
   <title-bar :title-stack="titleStack" />
   <main-section>
     <card-component
-      title="แก้ไขข้อมูลภูมิศาสตร์ (ที่ดิน)"
+      title="กรอกข้อมูลภูมิศาสตร์(ข้อมูลกลาง)"
       :icon="mdiBallot"
       form
       @submit.prevent="submit"
     >
-      <field label="หัวข้อ" placeholder="กรอกชื่อหัวข้อ">
-        <control
-          v-model="form.title"
-          type="text"
-          placeholder="กรอกชื่อหัวข้อ"
-        />
-      </field>
-
-      <field label="รายละเอียด">
-        <control
-          v-model="form.detail"
-          type="text"
-          placeholder="กรอกรายละเอียด"
-        />
-      </field>
-
-      <field label="พิกัดที่ดิน" help="Latitude , Longitude">
-        <control v-model="form.lat" type="text" placeholder="พิกัดละติจูด" />
-        <control v-model="form.long" type="text" placeholder="พิกัดลองจิจูด" />
-      </field>
-
-      <!-- <field label="Dropdown">
-        <control v-model="form.department" :options="selectOptions" />
-      </field> -->
-
-      <divider />
-
-      <field label="รายละเอียดที่ดิน">
-        <control
-          v-model="form.land_detail"
-          type="textarea"
-          placeholder="กรอกข้อมูลรายละเอียดที่ดิน"
-        />
-      </field>
-
-      <field label="ขนาดที่ดิน (ไร่-งาน-วา)">
-        <control v-model="form.ri" type="text" placeholder="ไร่" />
-        <control v-model="form.ngan" type="text" placeholder="งาน" />
-        <control v-model="form.wa" type="text" placeholder="ตารางวา" />
-      </field>
-
-      <field label="เลขโฉนดที่ดิน">
-        <control
-          v-model="form.land_code"
-          type="text"
-          placeholder="กรอกเลขโฉนดที่ดิน"
-        />
-      </field>
-
-      <field label="รูปภาพขอบเขตที่ดิน">
-        <control
-          type="file"
-          placeholder="รูปภาพขอบเขตที่ดิน"
-          name="imgInp"
-          id="imgInp"
-          @change="upload_image"
-          v-model="form.fileupload"
-        />
-      </field>
-
-      <div>
-        <div><img id="blah" :src="form.land_img" width="300" /></div>
+      <div class="mb-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3">
+        <div>
+          <label>FarmID : {{form.projectId}}</label>
+        </div>
+        <div>
+          <label>ละติจูด : {{form.lat}}</label>
+        </div>
+        <div>
+          <label>ลองติจูด : {{form.lon}}</label>
+        </div>
       </div>
-
-      <field label="ราคาประเมิน (บาท/ตารางวา)">
-        <control
-          v-model="form.land_price_rate"
-          type="text"
-          placeholder="กรอกราคาประเมิน"
-        />
-      </field>
-
-      <field label="ราคาประเมินทั้งแปลง">
-        <control
-          v-model="form.land_price"
-          type="text"
-          placeholder="ราคาประเมินทั้งแปลง"
-        />
-      </field>
-
-      <field label="ชนิดของดิน">
-        <control
-          v-model="form.land_type"
-          type="text"
-          placeholder="ชนิดของดิน"
-        />
-      </field>
 
       <field label="คุณสมบัติของดิน">
         <control
-          v-model="form.land_properties"
-          type="text"
-          placeholder="คุณสมบัติของดิน"
+          v-model="form.soilProperties"
+          type="textarea"
+          required
+          col="10"
+          placeholder="กรอกคุณสมบัติของดิน"
         />
       </field>
-      <field label="แหล่งน้ำใกล้เคียง">
+
+      <field label="ดินชั้นบน">
         <control
-          v-model="form.land_water"
+          v-model="form.topsoilDetail"
           type="text"
-          placeholder="แหล่งน้ำใกล้เคียง"
+          required
+          placeholder="กรอกรายละเอียดดินชั้นบน"
         />
       </field>
-      <field label="แหล่งแร่ธาตุใกล้เคียง">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
+        <div>
+          <label>ค่าPH ดิดชั้นบน ต่ำสุด</label>
+          <input
+            type="number"
+            required
+            step="any"
+            v-model="form.topsoilValueMin"
+            class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800"
+          />
+        </div>
+        <div>
+          <label>ค่าPH ดิดชั้นบน สูงสุด</label>
+          <input
+            type="number"
+            required
+            step="any"
+            v-model="form.topsoilValueMax"
+            class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800"
+          />
+        </div>
+      </div>
+
+      <field label="ดินชั้นล่าง">
         <control
-          v-model="form.land_mineral"
+          required
+          v-model="form.subsoilDetail"
           type="text"
-          placeholder="แหล่งแร่ธาตุใกล้เคียง"
+          placeholder="กรอกรายละเอียดดินชั้นล่าง"
         />
       </field>
-      <field label="ข้อจำกัดของดิน">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
+        <div>
+          <label>ค่าPH ดินชั้นล่าง ต่ำสุด</label>
+          <input
+            required
+            type="number"
+            step="any"
+            v-model="form.subsoilValueMin"
+            class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800"
+          />
+        </div>
+        <div>
+          <label>ค่าPH ดินชั้นล่าง สูงสุด</label>
+          <input
+            required
+            type="number"
+            step="any"
+            v-model="form.subsoilValueMax"
+            class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800"
+          />
+        </div>
+      </div>
+
+      <field label="ความอุดมสมบูรณ์">
+        <check-radio-picker
+          name="soilFertility"
+          v-model="form.soilFertility"
+          type="radio"
+          :options="{ low: 'ต่ำ', medium: 'กลาง', high: 'สูง' }"
+        />
+      </field>
+
+      <field label="การระบายน้ำ">
+        <check-radio-picker
+          name="drainage"
+          v-model="form.drainage"
+          type="radio"
+          :options="{ low: 'ต่ำ', medium: 'กลาง', high: 'สูง' }"
+        />
+      </field>
+      <field label="ข้อจํากัดของดิน">
         <control
-          v-model="form.land_limitation"
+          required
+          v-model="form.soilRestrictions"
           type="text"
-          placeholder="ข้อจำกัดของดิน"
+          placeholder="กรอกข้อจํากัดของดิน"
+        />
+      </field>
+      <!--<divider /> -->
+      <field label="ความชัน(หน่วยเมตร)">
+        <control
+          required
+          v-model="form.slope"
+          type="number"
+          placeholder="กรอกความชัน(หน่วยเมตร)"
+        />
+      </field>
+
+      <field label="รายละเอียดลักษณะของพื้นที่">
+        <control
+          required
+          v-model="form.spaceNatureDetail"
+          type="text"
+          placeholder="กรอกรายละเอียดลักษณะของพื้นที่"
+        />
+      </field>
+      <field label="ลักษณะของพื้นที่">
+        <check-radio-picker
+          v-model="form.spaceNatureAll"
+          name="spaceNature"
+          :options="{
+            spaceNaturePlain: 'ที่ราบเรียบ',
+            spaceNaturePlateau: 'ที่ราบสูง',
+            spaceNatureHill: 'เนินเขา',
+            spaceNatureMountain: 'ภูเขา',
+          }"
         />
       </field>
 
       <divider />
-
+      <field label="แหล่งน้ำใกล้เคียง">
+        <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-3">
+          <field label="แหล่งน้ำธรรมชาติ">
+            <control v-model="form.nearbyNaturalWater" type="number" required/>
+          </field>
+          <field label="แหล่งน้ำในไร่นานอกเขตชลประทาน">
+            <control v-model="form.nearbyInfarmWater" type="number" required/>
+          </field>
+          <field label="แหล่งน้ำขนาดเล็ก">
+            <control v-model="form.nearbySmallWater" type="number" required/>
+          </field>
+          <field label="บ่อน้ำบาดาล">
+            <control v-model="form.nearbyGroundWater" type="number" required/>
+          </field>
+        </div>
+      </field>
+      <divider />
       <jb-buttons>
         <jb-button type="submit" color="info" label="อัพเดท" />
-        <!-- <jb-button type="reset" color="info" outline label="Reset" /> -->
+        <jb-button type="reset" color="info" outline label="รีเซต" />
       </jb-buttons>
     </card-component>
   </main-section>
-
-  <!-- <titled-section> Custom elements </titled-section>
-
-  <main-section>
-    <card-component title="Custom elements" :icon="mdiBallotOutline">
-      <field label="Checkbox" wrap-body>
-        <check-radio-picker
-          v-model="customElementsForm.checkbox"
-          name="sample-checkbox"
-          :options="{ lorem: 'Lorem', ipsum: 'Ipsum', dolore: 'Dolore' }"
-        />
-      </field>
-
-      <divider />
-
-      <field label="Radio" wrap-body>
-        <check-radio-picker
-          v-model="customElementsForm.radio"
-          name="sample-radio"
-          type="radio"
-          :options="{ one: 'One', two: 'Two' }"
-        />
-      </field>
-
-      <divider />
-
-      <field label="Switch">
-        <check-radio-picker
-          v-model="customElementsForm.switch"
-          name="sample-switch"
-          type="switch"
-          :options="{ one: 'One', two: 'Two' }"
-        />
-      </field>
-
-      <divider />
-
-      <file-picker v-model="customElementsForm.file" />
-    </card-component>
-  </main-section> -->
-
   <bottom-other-pages-section />
 </template>

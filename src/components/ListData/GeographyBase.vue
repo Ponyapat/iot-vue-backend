@@ -45,7 +45,7 @@ const perPage = ref(10);
 const currentPage = ref(0);
 
 onBeforeMount(() => {
-    ApiMain.get("/geobase")
+    ApiMain.get("/geobase?order=DESC&page=1&take="+perPage.value)
     .then((data) => {
       console.log(data.data.meta.itemCount);
       states.geo = data.data.data;
@@ -104,7 +104,7 @@ const pagesList = computed(() => {
 
 const pageNext = (page) => {
   currentPage.value = page;
-    ApiMain.get("/geo?order=ASC&page="+(page+1)+"&take="+perPage.value)
+    ApiMain.get("/geobase?order=DESC&page="+(page+1)+"&take="+perPage.value)
     .then((data) => {
       states.geo = data.data.data;
     });
