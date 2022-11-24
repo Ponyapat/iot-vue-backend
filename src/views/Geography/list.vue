@@ -3,7 +3,7 @@
     <title-bar :title-stack="titleStack" />
     <card-component
       :icon="mdiMonitorCellphone"
-      title="ภูมิศาสตร์ ที่ดิน"
+      title="ภูมิศาสตร์(ข้อมูลลูกค้า)"
       has-table
     >
       <GeographyTable />
@@ -20,7 +20,7 @@ import HeroBar from "@/components/HeroBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import GeographyTable from '@/components/ListData/GeographyTable.vue'
 
-const titleStack = ref(["Admin", "ภูมิศาสตร์(ที่ดิน)"]);
+const titleStack = ref(["Admin", "ภูมิศาสตร์(ข้อมูลลูกค้า)"]);
 
 
 

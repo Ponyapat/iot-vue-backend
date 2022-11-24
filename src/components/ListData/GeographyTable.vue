@@ -45,7 +45,7 @@ const perPage = ref(10);
 const currentPage = ref(0);
 
 onBeforeMount(() => {
-    ApiMain.get("/geo")
+    ApiMain.get("/geo?order=DESC&page=1&take="+perPage.value)
     .then((data) => {
       console.log(data.data.meta.itemCount);
       states.geo = data.data.data;
@@ -104,7 +104,7 @@ const pagesList = computed(() => {
 
 const pageNext = (page) => {
   currentPage.value = page;
-    ApiMain.get("/geo?order=ASC&page="+(page+1)+"&take="+perPage.value)
+    ApiMain.get("/geo?order=DESC&page="+(page+1)+"&take="+perPage.value)
     .then((data) => {
       states.geo = data.data.data;
     });
@@ -146,11 +146,14 @@ const drainage = (data) => {
     <thead>
       <tr class="text-sm">
         <th v-if="checkable" />
-        <th>ID Project</th>
-        <th>Lat, Lon</th>
-        <th>รายละเอียดดิน</th>
-        <th>ลักษณะของพื้นที่</th>
-        <th>แหล่งน้ำใกล้เคียง</th>
+        <th>FarmID</th>
+        <th>ละติจูด</th>
+        <th>ลองติจูด</th>
+        <th>สถานะ</th>
+        <th>ความอุดมสมบูรณ์</th>
+        <th>การระบายน้ำ</th>
+        <th>ความลาดชัน</th>
+        <th width="200">ข้อจํากัดของดิน</th>
         <th />
       </tr>
     </thead>
@@ -160,74 +163,31 @@ const drainage = (data) => {
         :key="item.id"
         :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '', 'text-sm ']"
       >
-        <td data-label="ID Project" class="align-top font-bold">
+        <td class="align-top font-bold">
           {{ item.projectId }}
         </td>
-        <td data-label="Lat, Lon" class="align-top">
-          {{ item.lat }}, {{ item.lon}}
+        <td  class="align-top">
+          {{ item.lat }}
         </td>
-        <td data-label="รายละเอียดดิน" class="align-top">
-          <!-- รายละเอียด -->
-          <div>
-            <div>
-              <label>คุณสมบัติของดิน</label>
-              <p v-html="item.soilProperties"></p>
-            </div>
-            <hr class="mt-2"/>
-            <div class="mt-2">
-              <label>ข้อจำกัดของดิน</label>
-              <p>{{ item.soilRestrictions }}</p>
-            </div>
-            <hr class="mt-2"/>
-            <div class="mt-2">
-              <label>การระบายน้ำ: </label><span>{{ drainage(item.drainage) }}</span>
-            </div>
-            <hr class="mt-2"/>
-            <div class="mt-2">
-              <label>ความอุดมสมบูรณ์:&nbsp;</label><span>{{ spaceNatureDetail(item.soilFertility) }}</span>
-            </div>
-            <hr class="mt-2"/>
-            <div class="mt-2">
-              <label>ดินชั้นบน</label>
-              <p>{{ item.topsoilDetail }}</p>
-              <p>ค่า pH ในดิน:&nbsp;{{ item.topsoilValueMin }} - {{ item.topsoilValueMax}}</p>
-            </div>
-            <hr class="mt-2"/>
-            <div class="mt-2">
-              <label>ดินชั้นล่าง</label>
-              <p>{{ item.subsoilDetail }}</p>
-              <p>ค่า pH ในดิน:&nbsp;{{ item.subsoilValueMin }} - {{ item.subsoilValueMax}}</p>
-            </div>
-          </div>
+        <td  class="align-top">
+          {{ item.lon }}
         </td>
-        <td data-label="ลักษณะของพื้นที่" class="align-top">
-          <!-- ลักษณะของพื้นที่ -->
-          <div>
-            <label>ลักษณะ</label>
-            <ul class="list-disc mt-2">
-              <li v-if="item.spaceNaturePlain === 'true'">ที่ราบเรียบ</li>
-              <li v-if="item.spaceNaturePlateau === 'true'">ที่ราบสูง</li>
-              <li v-if="item.spaceNatureHill === 'true'">เนินเขา</li>
-              <li v-if="item.spaceNatureMountain === 'true'">ภูเขา</li>
-            </ul>
-          </div>
-          <div class="mt-2">
-            <label>รายละเอียด: </label>
-            {{ item.spaceNatureDetail }}
-          </div>
-          <div><label>ความลาดชัน: </label> <span>{{ item.slope }}</span></div>
+        <td  class="align-top">
+          <span v-if="item.status=='waiting'" class="bg-orange-300 px-2 py-1 border-0 rounded-2xl">รอกรอกข้อมูล</span>
+          <span v-else-if="item.status=='active'" class="bg-green-200 px-2 py-1 border-0 rounded-2xl">กรอกข้อมูลแล้ว</span>
+          <span v-else-if="item.status=='inactive'" class="bg-green-200 px-2 py-1 border-0 rounded-2xl">ไม่แสดงข้อมูล</span>
         </td>
-        <td data-label="แหล่งน้ำใกล้เคียง" class="align-top">
-          <!-- แหล่งน้ำใกล้เคียง -->
-          <ul class="list-disc">
-            <li>แหล่งน้ำธรรมชาติ : {{ item.nearbyNaturalWater }}</li>
-            <li>แหล่งน้ำในไร่นานอกเขตชลประทาน : {{ item.nearbyInfarmWater }}</li>
-            <li>แหล่งน้ำขนาดเล็ก : {{ item.nearbySmallWater }}</li>
-            <li>บ่อน้ำบาดาล : {{ item.nearbyGroundWater }}</li>
-          </ul>
+        <td >
+          {{ item.soilFertility }}
         </td>
-        <td data-label="">
-          
+        <td >
+          {{ item.drainage }}
+        </td>
+        <td >
+          {{ item.slope }}
+        </td>
+        <td >
+          {{ item.soilRestrictions }}
         </td>
         <td class="actions-cell align-top">
             <jb-button
@@ -236,13 +196,13 @@ const drainage = (data) => {
               small
               @click="edit(item.id)"
             />
-            <jb-button
+            <!-- <jb-button
               class="mt-2"
               color="danger"
               :icon="mdiTrashCan"
               small
               @click="del(item.id)"
-            />
+            /> -->
         </td>
       </tr>
     </tbody>

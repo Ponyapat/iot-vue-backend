@@ -3,7 +3,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email ,minLength,maxLength ,helpers} from '@vuelidate/validators'
-import vagetable from "@/assets/images/cabbage.png";
+import vagetable from "../../../public/images/cabbage.png";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "vue-router";
@@ -24,6 +24,10 @@ let formData_img = ref('');
 let type_form = ref('');
 let url = new URL(window.location.href);
 const id = url.searchParams.get("data_id");
+// const page_current = url.searchParams.get("page");
+
+const page_current = localStorage.getItem("page_active");
+
 const dataform = reactive({
   code:'',
   name: '',// ชื่อ
@@ -53,7 +57,7 @@ const dataform = reactive({
   amountOfWaterMin: 0,// ปริมาณน้ำ Min
   lightIntensityMax: 0,// ความเข้มแสง Max
   lightIntensityMin: 0,// ความเข้มแสง Min
-  document_file: 'string',// เอกสาร
+  document_file: '',// เอกสาร
   link: '',// ลิ้ง
   image: '',// รูป
   status: 'active',// สถานะ
@@ -104,13 +108,13 @@ onMounted(()=>{
     type_form.value = 'แก้ไขข้อมูล';
 
     ApiMain.get("/breed/" + id).then((response) => {
-        if(response.data.data.image!==''){
+        if(response.data.data.image){
           ApiMain.get('/image/'+response.data.data.image+'?imageableType=breed').then((res)=>{
             image_upload.value =res.request.responseURL ;
-          })
-        image_name.value = response.data.data.image ;
+          });
+          image_name.value = response.data.data.image ;
         }
-        if(response.data.data.document !=='' || response.data.data.document !=='string' ){
+        if(response.data.data.document != 'string' && response.data.data.document !=='' ){
           showlink_PDF(response.data.data.document);
         }
         dataform.code  = response.data.data.code ;
@@ -203,13 +207,14 @@ const upload_document = (event) => {
   ApiMain.post("/image/upload?imageableType=breed",formdata).then((data) => {
       if (data.status == 201) {
         dataform.document_file = data.data;
-        showlink_PDF(dataform.document_file);
         Swal.fire({
           position: 'top-end',
           icon: 'success',
           title: 'อัพโหลด PDF สำเร็จ',
           showConfirmButton: false,
           timer: 1500
+        }).then(()=>{
+          showlink_PDF(dataform.document_file);
         })
       } else {
         Swal.fire({
@@ -228,12 +233,27 @@ const upload_document = (event) => {
 
 }
 
-const showlink_PDF = (doc_name) =>{
+const showlink_PDF =  (doc_name) =>{
 
-  ApiMain.get('/image/'+doc_name+'?imageableType=breed').then((res)=>{
-      file_pdf.value =res.request.responseURL ;
-      console.log('link == ',file_pdf);
-  })
+  if(doc_name) {
+    //ถ้า size ไฟล์ใหญ่ก็จะช้า  ต่อไปทำการ loading และ กำหนด size ห้ามเกิน 500KB
+    ApiMain.get('/image/'+doc_name+'?imageableType=breed').then((res)=>{
+
+      if(res.status==200 || res.status==201){
+        file_pdf.value =res.request.responseURL ;
+        console.log('link == ',file_pdf);
+      }
+
+    }).catch((error) => {
+      console.log(error);
+    });
+
+  }
+  else {
+    file_pdf.value  = '';
+    console.log('not document');
+  }
+
 }
 const check_status = (event) => {
 
@@ -243,7 +263,7 @@ if(check==true){
   dataform.status = 'active';
 }
 else {
-  dataform.status = 'notactive';
+  dataform.status = 'inactive';
 }
 console.log( dataform.status);
 };
@@ -254,6 +274,7 @@ const submit = async () => {
 
   if(id){
     if (result) {
+      // localStorage.setItem('page',page_current);
       ApiMain.put("/breed/"+ id,{
         code: dataform.code,
         breedCategoryId: dataform.breedCategoryId,
@@ -654,7 +675,9 @@ const closeForm = () => {
             class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">เอกสาร <span class="opacity-50">( ไม่บังคับ )</span></label>
           <input id="document_file" type="file" @change="upload_document" accept=".pdf"  class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2" >
           <!-- <small v-if="v$.document_file.$error" class="text-red-500">{{ v$.document_file.$errors[0].$message }}</small> -->
-          <a :href="file_pdf" class="text-green-900 cursor-pointer"><span class="text-black cursor-default font-medium mr-2">ดาวน์โหลดไฟล์</span><span class="hover:underline">{{file_pdf}}</span></a>
+          <div v-if="file_pdf">
+            <a :href="file_pdf" class="text-green-900 cursor-pointer"><span class="text-black cursor-default font-medium mr-2">ดาวน์โหลดไฟล์</span><span class="hover:underline">{{file_pdf}}</span></a>
+          </div>
         </div>
         <div class="mb-4">
           <label for="link"

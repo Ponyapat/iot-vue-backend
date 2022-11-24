@@ -12,7 +12,7 @@ import UserAvatar from "@/components/UserAvatar.vue";
 import axios from "axios";
 import Swal from "sweetalert2";
 import moment from "moment";
-import vagetable from "@/assets/images/cabbage.png";
+import vagetable from "../../public/images/cabbage.png";
 
 defineProps({
   checkable: Boolean,
@@ -48,9 +48,19 @@ const items = ref(1);
 const perPage = ref(10);
 
 const currentPage = ref(0);
+let url = new URL(window.location.href);
+const page_current = url.searchParams.get("page");
 
 onBeforeMount(() => {
-  fetchData();
+
+  if(page_current){
+    currentPage.value = page_current ;
+    fetchData();
+  }
+  else {
+    currentPage.value = 0 ;
+    fetchData();
+  }
 });
 
 const del = (id) => {
@@ -79,20 +89,13 @@ const del = (id) => {
   });
 };
 
-const edit = (id) => {
+const edit = (id,page) => {
   let path = '/fruits/edit?data_id=' + id;
+  localStorage.setItem('page_active',page);
   router.push(path);
 };
-const read_image = (img_name) => {
-  const link = ApiMain.get('/image/' + img_name + '?imageableType=breed').then((data)=>data.request.responseURL)
-  console.log('link == ',link);
-
-  return link;
-
-
-}
 const fetchData = () => {
-  ApiMain.get("/breed").then((response) => {
+  ApiMain.get("/breed?order=DESC&page=1&take=10").then((response) => {
       states.fruits = response.data.data;
       items.value = response.data.meta.itemCount;
     });
@@ -110,19 +113,17 @@ const pagesList = computed(() => {
   for (let i = 0; i < numPages.value; i++) {
     pagesList.push(i);
   }
-
-  console.log(pagesList);
-
   return pagesList;
 });
 
 const pageNext = (page) => {
+  console.log('page in Next page == ',page);
   currentPage.value = page;
-  //console.log("pageNext " + (page+1));
-  ApiMain.get("/breed?order=ASC&page=" + (page + 1) + "&take=" + perPage.value).then((data) => {
-      states.fruits = data.data.data;
+  ApiMain.get("/breed?order=DESC&page=" + (page + 1) + "&take=" + perPage.value).then((res) => {
+      states.fruits = res.data.data;
     });
 };
+
 </script>
 
 <template>
@@ -157,7 +158,7 @@ const pageNext = (page) => {
           <td class="text-center">
             <div class="flex flex-row items-center">
               <div class="bg-white p-1 rounded-lg mr-2 shadow">
-                <img v-if="item.image!=''" :src="`/api-main/image/${item.image}?imageableType=breed`" class="w-[30px] h-[30px]" alt="">
+                <img v-if="item.image" :src="`/api-main/image/${item.image}?imageableType=breed`" class="w-[30px] h-[30px]" alt="">
                 <img v-else :src="vagetable" alt="" class="w-[30px] h-[30px]">
               </div>
               <span class="truncate w-[100px]">{{item.name}}</span>
@@ -180,7 +181,7 @@ const pageNext = (page) => {
           <td class="text-center">{{parseFloat(item.soilEcMin)}} - {{parseFloat(item.soilEcMax)}}</td>
           <td class="actions-cell">
             <jb-buttons  class="justify-center" no-wrap>
-              <jb-button color="info" :icon="mdiGreasePencil" small @click="edit(item.id)" />
+              <jb-button color="info" :icon="mdiGreasePencil" small @click="edit(item.id,currentPage)" />
               <jb-button color="danger" :icon="mdiTrashCan" small @click="del(item.id)" />
             </jb-buttons>
           </td>
