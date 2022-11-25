@@ -39,7 +39,7 @@ const perPage = ref(10);
 const currentPage = ref(0);
 
 onBeforeMount(() => {
-    ApiMain.get("/weather")
+    ApiMain.get("/weather?order=DESC&page=1&take="+perPage.value)
     .then((data) => {
       states.weather = data.data.data;
       items.value = data.data.meta.itemCount
@@ -99,7 +99,7 @@ const pagesList = computed(() => {
 
 const pageNext = (page) => {
   currentPage.value = page;
-  ApiMain.get("/weather?order=ASC&page=" + (page + 1) + "&take=" + perPage.value, {
+  ApiMain.get("/weather?order=DESC&page=" + (page + 1) + "&take=" + perPage.value, {
     })
     .then((data) => {
       states.weather = data.data.data;
