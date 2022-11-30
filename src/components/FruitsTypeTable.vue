@@ -45,7 +45,7 @@ const isModalDangerActive = ref(false);
 
 const items = ref(1);
 
-const perPage = ref(2);
+const perPage = ref(10);
 
 const currentPage = ref(0);
 
@@ -181,7 +181,7 @@ const previousPage = () =>{
     </table>
   </div>
 
-<nav aria-label="Page navigation example" class="py-2 mx-3 lg:mx-6 border-t border-b">
+<!-- <nav aria-label="Page navigation example" class="py-2 mx-3 lg:mx-6 border-t border-b">
   <ul class="inline-flex items-center -space-x-px">
     <li  @click="previousPage">
       <a href="#" class="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
@@ -199,7 +199,7 @@ const previousPage = () =>{
       </a>
     </li>
   </ul>
-</nav>
+</nav> -->
 
   <div :class="lightBorderStyle" class="p-3 lg:px-6 border-t dark:border-gray-800">
     <Level>
