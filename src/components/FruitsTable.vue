@@ -171,6 +171,7 @@ const pageNext = (page) => {
               <span v-else-if="item.breedCategoryId==2" class="dark:text-black"><i class="fa-sharp fa-solid fa-seedling text-green-600"></i> พืชผัก</span>
               <span v-else-if="item.breedCategoryId==3" class="dark:text-black"><i class="fa-sharp fa-solid fa-seedling text-green-800"></i> พืชไร่</span>
               <span v-else-if="item.breedCategoryId==4" class="dark:text-black"><i class="fa-sharp fa-solid fa-seedling text-pink-600"></i> ไม้ดอก</span>
+              <span v-else class="dark:text-black"><i class="fa-sharp fa-solid fa-seedling text-pink-600"></i> อื่นๆ</span>
             </div>
           </td>
           <td class="text-center">{{item.harvestPeriod}}</td>

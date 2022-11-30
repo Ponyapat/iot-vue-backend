@@ -1,6 +1,6 @@
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted ,computed} from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email ,minLength,maxLength ,helpers} from '@vuelidate/validators'
 import vagetable from "../../../public/images/cabbage.png";
@@ -194,8 +194,17 @@ const upload_image = (event) => {
     });
 
 };
+let progress = ref(0);
+let percent = computed(()=>progress.value) ;
 
-const upload_document = (event) => {
+const upload_document = async (event) => {
+  const config = await {
+    onUploadProgress: function(progressEvent) {
+      progress.value = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
+      console.log('process : '+progress.value+'%');
+
+    }
+  }
 
   document_name.value = event.target.files[0].name;
   let file_upload = event.target.files[0];
@@ -204,7 +213,7 @@ const upload_document = (event) => {
   formdata.append('file', file_upload);
   console.log('file_upload == ',file_upload);
   documents.value = formdata ;
-  ApiMain.post("/image/upload?imageableType=breed",formdata).then((data) => {
+  ApiMain.post("/image/upload?imageableType=breed",formdata,config).then((data) => {
       if (data.status == 201) {
         dataform.document_file = data.data;
         Swal.fire({
@@ -314,7 +323,7 @@ const submit = async () => {
       if (data.status == 200 || data.status == 201) {
         Swal.fire({
           icon: "success",
-          title: "เพิ่มข้อมูลสำเร็จ",
+          title: "แก้ไขข้อมูลสำเร็จ",
           timer: 2500,
           showConfirmButton: 1,
         });
@@ -412,18 +421,18 @@ const closeForm = () => {
 </script>
 
 <template>
-  <div class="flex justify-center bg-white m-4 p-10 rounded-2xl shadow-custom">
+  <div class="flex justify-center bg-white dark:bg-slate-700 m-4 p-10 rounded-2xl shadow-custom">
     <div class="w-full md:w-[800px] h-full">
-      <h1 class="text-center font-semibold text-black text-2xl mb-10">{{type_form}}</h1>
+      <h1 class="text-center font-semibold text-black text-2xl mb-10 dark:text-white">{{type_form}}</h1>
       <form @submit.prevent="submit">
         <div class="grid grid-cols-2 gap-6 mb-10">
           <div class="flex justify-center items-center w-full h-full">
             <label v-if="image_upload ==''" for="dropzone-file"
-              class="flex flex-col justify-center items-center w-full h-full bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+              class="flex flex-col justify-center items-center w-full h-full bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-white dark:hover:border-white dark:hover:bg-gray-600">
               <div class="flex flex-col justify-center items-center pt-5 pb-6">
                 <img :src="vagetable" alt="">
-                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">คลิกเพื่ออัปโหลด</span> หรือ ลากและวาง</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400">.Webp, PNG or JPG (MAX. 800x400px)</p>
+                <p class="mb-2 text-sm text-gray-500 dark:text-white"><span class="font-semibold">คลิกเพื่ออัปโหลด</span> หรือ ลากและวาง</p>
+                <p class="text-xs text-gray-500 dark:text-white">.Webp, PNG or JPG (MAX. 800x400px)</p>
               </div>
               <input id="dropzone-file" type="file" accept=".webp, .jpg, .jpeg , .png ,.tif" class="hidden" @change="upload_image">
             </label>
@@ -438,21 +447,21 @@ const closeForm = () => {
           </div>
           <div class="w-full h-full">
             <div class="mb-4">
-              <label for="name" class="block mb-2 text-base font-medium text-black dark:text-gray-300">รหัสพืช <span class="text-red-500">*</span></label>
+              <label for="name" class="block mb-2 text-base font-medium text-black dark:text-white">รหัสพืช <span class="text-red-500">*</span></label>
               <input type="text" v-model="dataform.code" :class="v$.code.$error?'border-red-300':'border-gray-300'"
-                class="bg-gray-50 border text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <span v-if="v$.code.$error" class="text-xs text-red-500 font-medium float-right">{{v$.code.$errors[0].$message}}</span>
             </div>
             <div class="mb-4">
-              <label for="name" class="block mb-2 text-base font-medium text-black dark:text-gray-300">ชื่อ <span class="text-red-500">*</span></label>
+              <label for="name" class="block mb-2 text-base font-medium text-black dark:text-white">ชื่อ <span class="text-red-500">*</span></label>
               <input type="text" v-model="dataform.name" :class="v$.name.$error?'border-red-300':'border-gray-300'"
-                class="bg-gray-50 border text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
               <small v-if="v$.name.$error" class="text-red-500 float-right">{{ v$.name.$errors[0].$message }}</small>
             </div>
             <div class="mb-4">
               <label for="categories"
-                class="block mb-2 text-base font-medium text-black dark:text-gray-300">ประเภท <span class="text-red-500">*</span></label>
-                <select id="categories" v-model="dataform.breedCategoryId" :class="v$.breedCategoryId.$error?'border-red-300':'border-gray-300'" class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="block mb-2 text-base font-medium text-black dark:text-white">ประเภท <span class="text-red-500">*</span></label>
+                <select id="categories" v-model="dataform.breedCategoryId" :class="v$.breedCategoryId.$error?'border-red-300':'border-gray-300'" class="bg-gray-50 border text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                   <option value="" disabled selected >เลือกประเภทพืช</option>
                   <option v-for="val of categories" :key="val" :value="val.id">{{val.name}}</option>
                 </select>
@@ -460,9 +469,9 @@ const closeForm = () => {
             </div>
             <div class="mb-4">
               <label for="species"
-                class="block mb-2 text-base font-medium text-black dark:text-gray-300">สายพันธุ์ <span class="text-red-500">*</span></label>
+                class="block mb-2 text-base font-medium text-black dark:text-white">สายพันธุ์ <span class="text-red-500">*</span></label>
               <input type="text" v-model="dataform.species" name="species" id="species" :class="v$.species.$error?'border-red-300':'border-gray-300'"
-                class="bg-gray-50 border text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.species.$error" class="text-red-500 float-right">{{ v$.species.$errors[0].$message }}</small>
             </div>
           </div>
@@ -470,225 +479,232 @@ const closeForm = () => {
         <div class="mb-10 flex flex-row justify-between">
           <div class="w-full mr-2">
               <label for="scientificName"
-                class="block mb-2 text-base font-medium text-black dark:text-gray-300">ชื่อวิทยาศาสตร์ <span class="text-red-500">*</span></label>
+                class="block mb-2 text-base font-medium text-black dark:text-white">ชื่อวิทยาศาสตร์ <span class="text-red-500">*</span></label>
               <input type="text" v-model="dataform.scientificName" name="scientificName" id="scientificName" :class="v$.scientificName.$error?'border-red-300':'border-gray-300'"
-                class="bg-gray-50 border text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.scientificName.$error" class="text-red-500">{{ v$.scientificName.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
-              <label for="" class="block mb-2 text-base font-medium text-black dark:text-gray-300">ชื่อสามัญ <span class="text-red-500">*</span></label>
+              <label for="" class="block mb-2 text-base font-medium text-black dark:text-white">ชื่อสามัญ <span class="text-red-500">*</span></label>
               <input type="text" v-model="dataform.commonName" name="commonName" id="commonName" :class="v$.commonName.$error?'border-red-300':'border-gray-300'"
-                class="bg-gray-50 border text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.commonName.$error" class="text-red-500">{{ v$.commonName.$errors[0].$message }}</small>
             </div>
         </div>
         <div class="mb-10">
           <label for="detail" class="block mb-2 text-base font-medium text-black dark:text-gray-400">รายละเอียด <span class="opacity-50">( ไม่บังคับ )</span></label>
           <textarea rows="3" v-model="dataform.detail" name="detail" id="detail"
-            class="block p-2.5 w-full text-base text-black bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+            class="block p-2.5 w-full text-base text-black bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
         </div>
         <div class="mb-10">
-          <label for="" class="block mb-2 text-base font-medium text-black dark:text-gray-300">อายุการเก็บเกี่ยว <span class="text-red-500">*</span></label>
+          <label for="" class="block mb-2 text-base font-medium text-black dark:text-white">อายุการเก็บเกี่ยว <span class="text-red-500">*</span></label>
           <input type="text" v-model="dataform.harvestPeriod" name="harvestPeriod" id="harvestPeriod"  :class="v$.harvestPeriod.$error?'border-red-300':'border-gray-300'"
-            class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <small v-if="v$.harvestPeriod.$error" class="text-red-500 float-right">{{ v$.harvestPeriod.$errors[0].$message }}</small>
         </div>
         <div class="mb-10">
           <label for="airTemperature"
-            class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">อุณหภูมิในอากาศ <span class="text-red-500">*</span></label>
+            class="block mb-2 text-base font-medium text-black dark:text-white ">อุณหภูมิในอากาศ <span class="text-red-500">*</span></label>
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="airTemperatureMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
               <input step="any" :class="v$.airTemperatureMin.$error?'border-red-300':'border-gray-300'" type="number" v-model="dataform.airTemperatureMin" name="airTemperatureMin" id="airTemperatureMin"
-                class="mr-2 bg-gray-50 border  text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="mr-2 bg-gray-50 border  text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.airTemperatureMin.$error" class="text-red-500">{{ v$.airTemperatureMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="airTemperatureMin" class=" font-medium text-sm">ค่าสูงสุด</label>
               <input  type="number" step="any" v-model="dataform.airTemperatureMax" name="airTemperatureMax" id="airTemperatureMax"  :class="v$.airTemperatureMax.$error?'border-red-300':'border-gray-300'"
-                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.airTemperatureMax.$error" class="text-red-500">{{ v$.airTemperatureMax.$errors[0].$message }}</small>
             </div>
           </div>
         </div>
         <div class="mb-10">
           <label for="soilTemperature"
-            class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">อุณหภูมิในดิน <span class="text-red-500">*</span></label>
+            class="block mb-2 text-base font-medium text-black dark:text-white ">อุณหภูมิในดิน <span class="text-red-500">*</span></label>
           <div class="flex flex-row justify-between ">
             <div class="w-full mr-2">
               <label for="soilTemperatureMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
               <input type="number" step="any" v-model="dataform.soilTemperatureMin" name="soilTemperatureMin"
                 id="soilTemperatureMin" :class="v$.soilTemperatureMin.$error?'border-red-300':'border-gray-300'"
-                class="mr-2 bg-gray-50 border  text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="mr-2 bg-gray-50 border  text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilTemperatureMin.$error" class="text-red-500">{{ v$.soilTemperatureMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="soilTemperatureMax" class=" font-medium text-sm">ค่าสูงสุด</label>
               <input type="number" step="any" v-model="dataform.soilTemperatureMax" name="soilTemperatureMax"
                 id="soilTemperatureMax" :class="v$.soilTemperatureMax.$error?'border-red-300':'border-gray-300'"
-                class="bg-gray-50 border  text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border  text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilTemperatureMax.$error" class="text-red-500">{{ v$.soilTemperatureMax.$errors[0].$message }}</small>
             </div>
           </div>
         </div>
         <div class="mb-10">
           <label for="soilMoisture"
-            class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">ความชื้นในดิน <span class="text-red-500">*</span></label>
+            class="block mb-2 text-base font-medium text-black dark:text-white ">ความชื้นในดิน <span class="text-red-500">*</span></label>
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="soilMoistureMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
               <input type="number" step="any" v-model="dataform.soilMoistureMin" name="soilMoistureMin" id="soilMoistureMin" :class="v$.soilMoistureMin.$error?'border-red-300':'border-gray-300'"
-                class="mr-2 bg-gray-50 border  text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="mr-2 bg-gray-50 border  text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilMoistureMin.$error" class="text-red-500">{{ v$.soilMoistureMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="soilMoistureMax" class=" font-medium text-sm">ค่าสูงสุด</label>
               <input type="number" step="any" v-model="dataform.soilMoistureMax" name="soilMoistureMax" id="soilMoistureMax" :class="v$.soilMoistureMax.$error?'border-red-300':'border-gray-300'"
-                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilMoistureMax.$error" class="text-red-500">{{ v$.soilMoistureMax.$errors[0].$message }}</small>
             </div>
           </div>
         </div>
         <div class="mb-10">
-          <label for="soilPh" class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">pH ในดิน <span class="text-red-500">*</span></label>
+          <label for="soilPh" class="block mb-2 text-base font-medium text-black dark:text-white ">pH ในดิน <span class="text-red-500">*</span></label>
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="soilPhMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
               <input type="number" step="any" v-model="dataform.soilPhMin" name="soilPhMin" id="soilPhMin" :class="v$.soilPhMin.$error?'border-red-300':'border-gray-300'"
-                class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilPhMin.$error" class="text-red-500">{{ v$.soilPhMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="soilPhMax" class=" font-medium text-sm">ค่าสูงสุด</label>
               <input type="number" step="any" v-model="dataform.soilPhMax" name="soilPhMax" id="soilPhMax" :class="v$.soilPhMax.$error?'border-red-300':'border-gray-300'"
-                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilPhMax.$error" class="text-red-500">{{ v$.soilPhMax.$errors[0].$message }}</small>
             </div>
           </div>
         </div>
         <div class="mb-6">
-          <label for="soilEc" class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">EC ในดิน <span class="text-red-500">*</span></label>
+          <label for="soilEc" class="block mb-2 text-base font-medium text-black dark:text-white ">EC ในดิน <span class="text-red-500">*</span></label>
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="soilEcMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
               <input type="number" step="any" v-model="dataform.soilEcMin" name="soilEcMin" id="soilEcMin" :class="v$.soilEcMin.$error?'border-red-300':'border-gray-300'"
-                class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilEcMin.$error" class="text-red-500">{{ v$.soilEcMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="soilEcMax" class=" font-medium text-sm">ค่าสูงสุด</label>
               <input type="number" step="any" v-model="dataform.soilEcMax" name="soilEcMax" id="soilEcMax" :class="v$.soilEcMax.$error?'border-red-300':'border-gray-300'"
-                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.soilEcMax.$error" class="text-red-500">{{ v$.soilEcMax.$errors[0].$message }}</small>
             </div>
           </div>
         </div>
         <div class="mb-6">
-          <label for="nitrogen" class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">ไนโตรเจน ( N ) <span class="text-red-500">*</span></label>
+          <label for="nitrogen" class="block mb-2 text-base font-medium text-black dark:text-white ">ไนโตรเจน ( N ) <span class="text-red-500">*</span></label>
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="nitrogenMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
               <input type="number" step="any" v-model="dataform.nitrogenMin" name="nitrogenMin" id="nitrogenMin" :class="v$.nitrogenMin.$error?'border-red-300':'border-gray-300'"
-                class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.nitrogenMin.$error" class="text-red-500">{{ v$.nitrogenMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="nitrogenMax" class=" font-medium text-sm">ค่าสูงสุด</label>
               <input type="number" step="any" v-model="dataform.nitrogenMax" name="nitrogenMax" id="nitrogenMax" :class="v$.nitrogenMax.$error?'border-red-300':'border-gray-300'"
-                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.nitrogenMax.$error" class="text-red-500">{{ v$.nitrogenMax.$errors[0].$message }}</small>
             </div>
           </div>
         </div>
         <div class="mb-6">
-          <label for="phosphorus" class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">ฟอสฟอรัส ( P ) <span class="text-red-500">*</span></label>
+          <label for="phosphorus" class="block mb-2 text-base font-medium text-black dark:text-white ">ฟอสฟอรัส ( P ) <span class="text-red-500">*</span></label>
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="phosphorusMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
               <input type="number" step="any" v-model="dataform.phosphorusMin" name="phosphorusMin" id="phosphorusMin" :class="v$.phosphorusMin.$error?'border-red-300':'border-gray-300'"
-                class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.phosphorusMin.$error" class="text-red-500">{{ v$.phosphorusMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="phosphorusMax" class=" font-medium text-sm">ค่าสูงสุด</label>
               <input type="number" step="any" v-model="dataform.phosphorusMax" name="phosphorusMax" id="phosphorusMax" :class="v$.phosphorusMax.$error?'border-red-300':'border-gray-300'"
-                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.phosphorusMax.$error" class="text-red-500">{{ v$.phosphorusMax.$errors[0].$message }}</small>
             </div>
           </div>
         </div>
         <div class="mb-6">
-          <label for="potassium" class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">โพแทสเซียม ( K ) <span class="text-red-500">*</span></label>
+          <label for="potassium" class="block mb-2 text-base font-medium text-black dark:text-white ">โพแทสเซียม ( K ) <span class="text-red-500">*</span></label>
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="potassiumMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
               <input type="number" step="any" v-model="dataform.potassiumMin" name="potassiumMin" id="potassiumMin" :class="v$.potassiumMin.$error?'border-red-300':'border-gray-300'"
-                class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.potassiumMin.$error" class="text-red-500">{{ v$.potassiumMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="potassiumMax" class=" font-medium text-sm">ค่าสูงสุด</label>
               <input type="number" step="any" v-model="dataform.potassiumMax" name="potassiumMax" id="potassiumMax" :class="v$.potassiumMax.$error?'border-red-300':'border-gray-300'"
-                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.potassiumMax.$error" class="text-red-500">{{ v$.potassiumMax.$errors[0].$message }}</small>
             </div>
           </div>
         </div>
         <div class="mb-6">
           <label for="amountOfWaterMin"
-            class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">ปริมาณน้ำ <span class="text-red-500">*</span></label>
+            class="block mb-2 text-base font-medium text-black dark:text-white ">ปริมาณน้ำ <span class="text-red-500">*</span></label>
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="amountOfWaterMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
               <input type="number" step="any" v-model="dataform.amountOfWaterMin" name="amountOfWaterMin" id="amountOfWaterMin" :class="v$.amountOfWaterMin.$error?'border-red-300':'border-gray-300'"
-                class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.amountOfWaterMin.$error" class="text-red-500">{{ v$.amountOfWaterMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="amountOfWaterMax" class=" font-medium text-sm">ค่าสูงสุด</label>
               <input type="number" step="any" v-model="dataform.amountOfWaterMax" name="amountOfWaterMax" id="amountOfWaterMax" :class="v$.amountOfWaterMax.$error?'border-red-300':'border-gray-300'"
-                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.amountOfWaterMax.$error" class="text-red-500">{{ v$.amountOfWaterMax.$errors[0].$message }}</small>
             </div>
           </div>
         </div>
         <div class="mb-4">
           <label for="lightIntensity"
-            class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">ความเข้มแสง <span class="text-red-500">*</span></label>
+            class="block mb-2 text-base font-medium text-black dark:text-white ">ความเข้มแสง <span class="text-red-500">*</span></label>
           <div class="flex flex-row justify-between">
             <div class="w-full mr-2">
               <label for="lightIntensityMin" class=" font-medium text-sm">ค่าต่ำสุด</label>
               <input type="number" step="any" v-model="dataform.lightIntensityMin" name="lightIntensityMin" id="lightIntensityMin" :class="v$.lightIntensityMin.$error?'border-red-300':'border-gray-300'"
-                class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="mr-2 bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.lightIntensityMin.$error" class="text-red-500">{{ v$.lightIntensityMin.$errors[0].$message }}</small>
             </div>
             <div class="w-full ml-2">
               <label for="lightIntensityMax" class=" font-medium text-sm">ค่าสูงสุด</label>
               <input type="number" step="any" v-model="dataform.lightIntensityMax" name="lightIntensityMax" id="lightIntensityMax" :class="v$.lightIntensityMax.$error?'border-red-300':'border-gray-300'"
-                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <small v-if="v$.lightIntensityMax.$error" class="text-red-500">{{ v$.lightIntensityMax.$errors[0].$message }}</small>
             </div>
           </div>
         </div>
         <div class="mb-6">
           <label for="document_file"
-            class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">เอกสาร <span class="opacity-50">( ไม่บังคับ )</span></label>
-          <input id="document_file" type="file" @change="upload_document" accept=".pdf"  class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2" >
-          <!-- <small v-if="v$.document_file.$error" class="text-red-500">{{ v$.document_file.$errors[0].$message }}</small> -->
-          <div v-if="file_pdf">
+            class="block mb-2 text-base font-medium text-black dark:text-white ">เอกสาร <span class="opacity-50">( ไม่บังคับ )</span></label>
+          <input id="document_file" type="file" @change="upload_document" accept=".pdf"  class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2" >
+
+          <!-- progress -->
+          <div v-if="percent !=0" class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+            <div class="bg-blue-600 h-2.5 rounded-full" style="width:0%" :style="{'width':percent+'%'}" ></div>
+            <span>{{percent}}%</span>
+
+          </div>
+          <div v-if="file_pdf" class="mt-10">
             <a :href="file_pdf" class="text-green-900 cursor-pointer"><span class="text-black cursor-default font-medium mr-2">ดาวน์โหลดไฟล์</span><span class="hover:underline">{{file_pdf}}</span></a>
           </div>
+
         </div>
         <div class="mb-4">
           <label for="link"
-            class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">ลิ้งค์ <span class="opacity-50">( ไม่บังคับ )</span></label>
+            class="block mb-2 text-base font-medium text-black dark:text-white ">ลิ้งค์ <span class="opacity-50">( ไม่บังคับ )</span></label>
             <input type="text" placeholder="https://example.com"  v-model="dataform.link" name="link" id="link"
-                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border border-gray-300 text-black text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <!-- <small v-if="v$.link.$error" class="text-red-500">{{ v$.link.$errors[0].$message }}</small> -->
         </div>
         <div class="mb-10">
           <label for="status_"
-            class="block mb-2 text-base font-medium text-black dark:text-gray-300 ">สถานะ</label>
+            class="block mb-2 text-base font-medium text-black dark:text-white ">สถานะ</label>
           <label for="status" class="inline-flex relative items-center mr-5 cursor-pointer">
             <input type="checkbox" @change="check_status($event.target.checked)"  id="status" class="sr-only peer" checked>
             <div class="w-[68px] h-9 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-8 after:w-8 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
@@ -697,10 +713,10 @@ const closeForm = () => {
 
         <div class="flex flex-row items-center justify-center">
           <button type="submit"
-            class="text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base w-full sm:w-[256px] px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-2"><i
+            class="text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base w-full sm:w-[256px] px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mr-2"><i
               class="fa-solid fa-check mr-3"></i>บันทึกข้อมูล</button>
           <button type="button" @click="closeForm()"
-            class="text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base w-full sm:w-[256px] px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ml-2"><i
+            class="text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base w-full sm:w-[256px] px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 ml-2"><i
               class="fa-solid fa-xmark mr-3"></i>ยกเลิก</button>
         </div>
       </form>
