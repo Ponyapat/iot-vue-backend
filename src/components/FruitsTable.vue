@@ -95,7 +95,7 @@ const edit = (id,page) => {
   router.push(path);
 };
 const fetchData = () => {
-  ApiMain.get("/breed?order=DESC&page=1&take=10").then((response) => {
+  ApiMain.get("/breed?order=DESC&page=" + (currentPage.value  + 1) + "&take=" + perPage.value).then((response) => {
       states.fruits = response.data.data;
       items.value = response.data.meta.itemCount;
     });
