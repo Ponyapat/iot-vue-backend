@@ -7,7 +7,6 @@
       addlink="/fruits/add"
     >
     <FruitsTable />
-    <!-- <DataTable /> -->
     </card-component>
 </template>
 
@@ -16,7 +15,6 @@ import { computed, ref, onMounted } from "vue";
 import TitleBar from "@/components/TitleBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import FruitsTable from '@/components/FruitsTable.vue'
-import DataTable from "./DataTable.vue";
 import { mdiFruitCherries } from '@mdi/js'
 const titleStack = ref(["พืชพันธุ์ผลไม้", "ผู้ดูแลระบบ"]);
 </script>
