@@ -37,10 +37,10 @@ spec:
           resources:
             requests:
               cpu: 128m
-              memory: 256M
+              memory: 128M
             limits:
               cpu: 128m
-              memory: 256M
+              memory: 128M
       imagePullSecrets:
         - name: gcr-json-key
       volumes:
