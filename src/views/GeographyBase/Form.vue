@@ -102,9 +102,41 @@ onMounted(() => {
     });
   }
   ApiSso.get("/api/geo/provinces").then((response) => {
-    form.province = response.data.data;
+    // form.province = response.data.data;
+    let obj = response.data.data ;
+    let arr_th = [] ;
+
+    obj.forEach((element,index) => {
+      if(element.name.th == 'กรุงเทพมหานคร'){
+        let x  = 'จ. กรุงเทพมหานคร'
+        arr_th.push(x);
+      }
+      else {
+        arr_th.push(element.name.th);
+      }
+    });
+
+    let province_arr = [] ;
+    let sort_name = sortThaiDictionary(arr_th);  //เรียงชื่อ
+
+    sort_name.forEach((name)=>{
+      let obj_province = obj.filter(x=>x.name.th == name);
+      if(obj_province.length == 0){
+        province_arr.push({ id:10,name:{en:'Bangkok',th:'จ. กรุงเทพมหานคร'}});
+      }
+      else {
+        province_arr.push(obj_province[0]);
+      }
+    });
+    form.province = province_arr ;
   });
+
 });
+const sortThaiDictionary = (list) => {
+  const newList = [...list]
+  newList.sort((a, b) => a.localeCompare(b, 'th'))
+  return newList
+}
 
 const select_province = (event, type = "post") => {
   let id = ""
@@ -115,9 +147,25 @@ const select_province = (event, type = "post") => {
      form.province_name = event.target.options[event.target.selectedIndex].text
   }
   //console.log(event.target.options[event.target.selectedIndex].text); //name
-  ApiSso.get("/api/geo/provinces/" + id + "/districts").then(
-    (response) => {
-      form.district = response.data.data;
+  ApiSso.get("/api/geo/provinces/" + id + "/districts").then((response) => {
+
+      let obj = response.data.data ;
+      let arr_th = [] ;
+
+    obj.forEach((element,index) => {
+
+        arr_th.push(element.name.th);
+
+    });
+
+    let district = [] ;
+    let sort_name = sortThaiDictionary(arr_th);  //เรียงชื่อ
+
+    sort_name.forEach((name)=>{
+      let obj_district= obj.filter(x=>x.name.th == name);
+      district.push(obj_district[0]);
+    });
+    form.district = district;
       if (type == "post") {
         form.district_id = "";
         form.subdistrict_id = "";
@@ -142,7 +190,24 @@ const select_district = (event, type = "post") => {
       id +
       "/sub-districts"
   ).then((response) => {
-    form.subdistrict = response.data.data;
+
+    let obj = response.data.data ;
+      let arr_th = [] ;
+
+    obj.forEach((element,index) => {
+
+        arr_th.push(element.name.th);
+
+    });
+
+    let subdistrict = [] ;
+    let sort_name = sortThaiDictionary(arr_th);  //เรียงชื่อ
+
+    sort_name.forEach((name)=>{
+      let obj_subdistrict= obj.filter(x=>x.name.th == name);
+      subdistrict.push(obj_subdistrict[0]);
+    });
+    form.subdistrict = subdistrict;
     if (type == "post") {
       form.subdistrict_id = "";
     }
