@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import { mdiBallot, mdiBallotOutline, mdiAccount, mdiMail } from "@mdi/js";
 import MainSection from "@/components/MainSection.vue";
@@ -22,7 +22,7 @@ let titleStack = ref(["Admin", "เพิ่มข้อมูลภูมิศ
 const router = useRouter();
 
 let url = new URL(window.location.href);
-const id = url.searchParams.get("id");
+const edit_id = url.searchParams.get("id");
 let type_form = ref("เพิ่ม");
 
 const form = reactive({
@@ -65,71 +65,99 @@ const form = reactive({
 });
 
 onMounted(() => {
-  if (id) {
+  getProvinceAll();
+  if (edit_id) {
     type_form.value = "แก้ไขข้อมูล";
     titleStack.value = ["Admin", "แก้ไขข้อมูลภูมิศาสตร์(ข้อมูลกลาง)"];
-    ApiMain.get("/geobase/" + id).then((response) => {
+    ApiMain.get("/geobase/" + edit_id).then((response) => {
       const geobase = response.data.data
-      form.spaceNatureAll= [(geobase.spaceNaturePlain=="true"?"spaceNaturePlain":""),(geobase.spaceNaturePlateau=="true"?"spaceNaturePlateau":""),geobase.spaceNatureHill=="true"?"spaceNatureHill":"",geobase.spaceNatureMountain=="true"?"spaceNatureMountain":""]
+      form.spaceNatureAll = [(geobase.spaceNaturePlain == "true" ? "spaceNaturePlain" : ""), (geobase.spaceNaturePlateau == "true" ? "spaceNaturePlateau" : ""), geobase.spaceNatureHill == "true" ? "spaceNatureHill" : "", geobase.spaceNatureMountain == "true" ? "spaceNatureMountain" : ""]
       form.province_id = geobase.provinceId;
       form.province_name = geobase.provinceName;
-      select_province(geobase.provinceId,"edit");
+
+      searchProvince.value =  geobase.provinceName ;
+      searchDistrict.value = geobase.districtName ;
+      searchSubDistrict.value = geobase.subdistrictName ;
 
       form.district_id = geobase.districtId;
       form.district_name = geobase.districtName;
-      select_district(geobase.districtId,"edit")
 
       form.subdistrict_id = geobase.subdistrictId;
       form.subdistrict_name = geobase.subdistrictName;
-      select_subdistrict(geobase.subdistrictId,"edit");
+
+      ApiSso.get("/api/geo/provinces/" + form.province_id + "/districts").then((response) => {
+        let obj = response.data.data;
+        let arr_th = [];
+
+        obj.forEach((element, index) => {
+          arr_th.push(element.name.th);
+        });
+
+        let district = [];
+        let sort_name = sortThaiDictionary(arr_th);  //เรียงชื่อ
+
+        sort_name.forEach((name) => {
+          let obj_district = obj.filter(x => x.name.th == name);
+          district.push(obj_district[0]);
+        });
+        form.district = district;
+
+        console.log('district in province == ', form.district);
+      });
+
+      ApiSso.get("/api/geo/provinces/" + form.province_id + "/districts/" + form.district_id + "/sub-districts").then((response) => {
+        form.subdistrict = response.data.data;
+      });
+
 
       form.soilProperties = geobase.soilProperties
-      form.topsoilDetail= geobase.topsoilDetail
-      form.topsoilValueMin= geobase.topsoilValueMin
-      form.topsoilValueMax= geobase.topsoilValueMax
-      form.subsoilDetail= geobase.subsoilDetail
-      form.subsoilValueMin= geobase.subsoilValueMin
-      form.subsoilValueMax= geobase.subsoilValueMax
-      form.soilFertility= geobase.soilFertility
-      form.soilRestrictions= geobase.soilRestrictions
-      form.spaceNatureDetail= geobase.spaceNatureDetail
-      form.slope= geobase.slope
-      form.drainage= geobase.drainage
-      form.nearbyNaturalWater= geobase.nearbyNaturalWater
-      form.nearbyInfarmWater= geobase.nearbyInfarmWater
-      form.nearbySmallWater= geobase.nearbySmallWater
-      form.nearbyGroundWater= geobase.nearbyGroundWater
+      form.topsoilDetail = geobase.topsoilDetail
+      form.topsoilValueMin = geobase.topsoilValueMin
+      form.topsoilValueMax = geobase.topsoilValueMax
+      form.subsoilDetail = geobase.subsoilDetail
+      form.subsoilValueMin = geobase.subsoilValueMin
+      form.subsoilValueMax = geobase.subsoilValueMax
+      form.soilFertility = geobase.soilFertility
+      form.soilRestrictions = geobase.soilRestrictions
+      form.spaceNatureDetail = geobase.spaceNatureDetail
+      form.slope = geobase.slope
+      form.drainage = geobase.drainage
+      form.nearbyNaturalWater = geobase.nearbyNaturalWater
+      form.nearbyInfarmWater = geobase.nearbyInfarmWater
+      form.nearbySmallWater = geobase.nearbySmallWater
+      form.nearbyGroundWater = geobase.nearbyGroundWater
     });
   }
-  ApiSso.get("/api/geo/provinces").then((response) => {
-    // form.province = response.data.data;
-    let obj = response.data.data ;
-    let arr_th = [] ;
+  else {
+    ApiSso.get("/api/geo/provinces").then((response) => {
+      let obj = response.data.data;
+      let arr_th = [];
 
-    obj.forEach((element,index) => {
-      if(element.name.th == 'กรุงเทพมหานคร'){
-        let x  = 'จ. กรุงเทพมหานคร'
-        arr_th.push(x);
-      }
-      else {
-        arr_th.push(element.name.th);
-      }
+      obj.forEach((element, index) => {
+        if (element.name.th == 'กรุงเทพมหานคร') {
+          let x = 'จ. กรุงเทพมหานคร'
+          arr_th.push(x);
+        }
+        else {
+          arr_th.push(element.name.th);
+        }
+      });
+
+      let province_arr = [];
+      let sort_name = sortThaiDictionary(arr_th);  //เรียงชื่อ
+
+      sort_name.forEach((name) => {
+        let obj_province = obj.filter(x => x.name.th == name);
+        if (obj_province.length == 0) {
+          province_arr.push({ id: 10, name: { en: 'Bangkok', th: 'จ. กรุงเทพมหานคร' } });
+        }
+        else {
+          province_arr.push(obj_province[0]);
+        }
+      });
+      form.province = province_arr;
     });
-
-    let province_arr = [] ;
-    let sort_name = sortThaiDictionary(arr_th);  //เรียงชื่อ
-
-    sort_name.forEach((name)=>{
-      let obj_province = obj.filter(x=>x.name.th == name);
-      if(obj_province.length == 0){
-        province_arr.push({ id:10,name:{en:'Bangkok',th:'จ. กรุงเทพมหานคร'}});
-      }
-      else {
-        province_arr.push(obj_province[0]);
-      }
-    });
-    form.province = province_arr ;
-  });
+  }
 
 });
 const sortThaiDictionary = (list) => {
@@ -138,103 +166,151 @@ const sortThaiDictionary = (list) => {
   return newList
 }
 
-const select_province = (event, type = "post") => {
-  let id = ""
-  if(type == "edit"){
-     id = event
-  }else{
-     id = event.target.value
-     form.province_name = event.target.options[event.target.selectedIndex].text
-  }
-  //console.log(event.target.options[event.target.selectedIndex].text); //name
-  ApiSso.get("/api/geo/provinces/" + id + "/districts").then((response) => {
 
-      let obj = response.data.data ;
-      let arr_th = [] ;
+const getProvinceAll = () => {
+  ApiSso.get("/api/geo/provinces").then((response) => {
+    let obj = response.data.data;
+    let arr_th = [];
 
-    obj.forEach((element,index) => {
-
+    obj.forEach((element, index) => {
+      if (element.name.th == 'กรุงเทพมหานคร') {
+        let x = 'จ. กรุงเทพมหานคร'
+        arr_th.push(x);
+      }
+      else {
         arr_th.push(element.name.th);
-
+      }
     });
 
-    let district = [] ;
+    let province_arr = [];
     let sort_name = sortThaiDictionary(arr_th);  //เรียงชื่อ
 
-    sort_name.forEach((name)=>{
-      let obj_district= obj.filter(x=>x.name.th == name);
+    sort_name.forEach((name) => {
+      let obj_province = obj.filter(x => x.name.th == name);
+      if (obj_province.length == 0) {
+        province_arr.push({ id: 10, name: { en: 'Bangkok', th: 'จ. กรุงเทพมหานคร' } });
+      }
+      else {
+        province_arr.push(obj_province[0]);
+      }
+    });
+    form.province = province_arr;
+  });
+}
+
+const select_province = (data) => {
+  searchProvince.value = data.provinceName || data.name.th;
+  form.province_name = data.provinceName || data.name.th;
+  form.province_id = data.id;
+  ApiSso.get("/api/geo/provinces/" + form.province_id + "/districts").then((response) => {
+    let obj = response.data.data;
+    let arr_th = [];
+
+    obj.forEach((element, index) => {
+      arr_th.push(element.name.th);
+    });
+
+    let district = [];
+    let sort_name = sortThaiDictionary(arr_th);  //เรียงชื่อ
+
+    sort_name.forEach((name) => {
+      let obj_district = obj.filter(x => x.name.th == name);
       district.push(obj_district[0]);
     });
     form.district = district;
-      if (type == "post") {
-        form.district_id = "";
-        form.subdistrict_id = "";
-      }
-    }
-  );
+
+    console.log('district in province == ', form.district);
+  });
+
 };
 
-const select_district = (event, type = "post") => {
-  let id = ""
-  if(type == "edit"){
-     id = event
-  }else{
-     id = event.target.value
-     form.district_name = event.target.options[event.target.selectedIndex].text
-     console.log(form.district_name)
-  }
-  ApiSso.get(
-    "/api/geo/provinces/" +
-      form.province_id +
-      "/districts/" +
-      id +
-      "/sub-districts"
-  ).then((response) => {
+const select_district = (data) => {
+  searchDistrict.value = data.districtName || data.name.th;
+  form.district_name = data.districtName || data.name.th;
+  form.district_id = data.id;
+  ApiSso.get("/api/geo/provinces/" + form.province_id + "/districts/" + form.district_id + "/sub-districts").then((response) => {
+    let obj = response.data.data;
+    let arr_th = [];
 
-    let obj = response.data.data ;
-      let arr_th = [] ;
-
-    obj.forEach((element,index) => {
-
-        arr_th.push(element.name.th);
-
+    obj.forEach((element, index) => {
+      arr_th.push(element.name.th);
     });
 
-    let subdistrict = [] ;
+    let subdistrict = [];
     let sort_name = sortThaiDictionary(arr_th);  //เรียงชื่อ
 
-    sort_name.forEach((name)=>{
-      let obj_subdistrict= obj.filter(x=>x.name.th == name);
+    sort_name.forEach((name) => {
+      let obj_subdistrict = obj.filter(x => x.name.th == name);
       subdistrict.push(obj_subdistrict[0]);
     });
     form.subdistrict = subdistrict;
-    if (type == "post") {
-      form.subdistrict_id = "";
-    }
+    console.log('sub district in function select district ==',form.subdistrict);
   });
+
 };
 
-const select_subdistrict = (event, type = "post") => {
-  let id = ""
-  if(type == "edit"){
-     id = event
-  }else{
-     form.subdistrict_name = event.target.options[event.target.selectedIndex].text
-  }
-  ApiSso.get(
-    "/api/geo/provinces/" +
-      form.province_id +
-      "/districts/" +
-      form.district_id +
-      "/sub-districts"
-  ).then((response) => {
+const select_subdistrict = (data) => {
+
+  searchSubDistrict.value = data.subdistrictName || data.name.th;
+  form.subdistrict_name = data.subdistrictName || data.name.th;
+  form.subdistrict_id = data.id;
+
+  ApiSso.get("/api/geo/provinces/" + form.province_id + "/districts/" + form.district_id + "/sub-districts").then((response) => {
     form.subdistrict = response.data.data;
   });
 };
+// --------- New ----------------
+let searchProvince = ref('');
+let searchDistrict = ref('');
+let searchSubDistrict = ref('');
+let show1 = ref(false);
+let show2 = ref(false);
+let show3 = ref(false);
+
+
+const filter_province = computed(() => {
+  let province_list = form.province;
+  return province_list.filter(data => {
+    const province = data.name.th.toLowerCase() || data.provinceName.toLowerCase();
+    return province.includes(searchProvince.value)
+  });
+});
+
+const filter_district = computed(() => {
+  let district_list = form.district;
+  return district_list.filter(data => {
+    const district_ = data.name.th.toLowerCase()|| data.districtName.toLowerCase();
+    return district_.includes(searchDistrict.value)
+  });
+});
+const filter_subdistrict = computed(() => {
+  let sub_list = form.subdistrict;
+  return sub_list.filter(data => {
+    const subdistrict_ = data.name.th.toLowerCase() || data.subdistrictName.toLowerCase();
+    return subdistrict_.includes(searchSubDistrict.value)
+  });
+});
+
+const input_province = computed(() => {
+  if(searchProvince.value == ""){
+    searchDistrict.value = "";
+    searchSubDistrict.value = "" ;
+    form.district_name = '' ;
+    form.district_id = '' ;
+    form.subdistrict_name = '' ;
+    form.subdistrict_id = '' ;
+  }
+})
+const input_district = computed(() => {
+  if(searchDistrict.value == ""){
+    searchSubDistrict.value = "" ;
+    form.subdistrict_name = '' ;
+    form.subdistrict_id = '' ;
+  }
+})
 
 const submit = () => {
   form.spaceNatureAll.forEach((element) => {
-    console.log(element);
     if (element == "spaceNaturePlain") {
       form.spaceNaturePlain = true;
     }
@@ -249,9 +325,8 @@ const submit = () => {
     }
   });
 
-  if (id) {
-    //console.log(form.soilFertility + " " +form.drainage)
-    ApiMain.put("/geobase/"+id, {
+  if (edit_id) {
+    ApiMain.put("/geobase/" + edit_id, {
       provinceId: form.province_id,
       districtId: form.district_id,
       subdistrictId: form.subdistrict_id,
@@ -282,7 +357,6 @@ const submit = () => {
       nearbyGroundWater: form.nearbyGroundWater,
     })
       .then((data) => {
-        console.log(data.data);
         if (data.data.status == 204) {
           console.log(data.data.status);
           Swal.fire({
@@ -396,24 +470,93 @@ const submit = () => {
 
   //
 };
+
+
+
 </script>
 
 <template>
   <title-bar :title-stack="titleStack" />
-  <!-- <hero-bar>Forms</hero-bar> -->
-
   <main-section>
-    <!-- <title-sub-bar
-      :icon="mdiBallotOutline"
-      title="Forms example"
-    /> -->
-    <card-component
-      title="กรอกข้อมูลภูมิศาสตร์(ข้อมูลกลาง)"
-      :icon="mdiBallot"
-      form
-      @submit.prevent="submit"
-    >
-      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3">
+    <div class="hidden">{{input_province}} {{input_district}}</div>
+    <card-component title="กรอกข้อมูลภูมิศาสตร์(ข้อมูลกลาง)" :icon="mdiBallot" form @submit.prevent="submit">
+      <div class="flex flex-row mb-4">
+        <div @click="show1 = !show1" class="w-full relative">
+          <div>
+            <label for="province"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกจังหวัด</label>
+            <div class="relative">
+              <input type="text" v-model="searchProvince" id="province"
+                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="เลือกจังหวัด">
+              <div class="flex absolute inset-y-0 right-0 items-center pr-3 pointer-events-none">
+                <img src="../../assets/images/arrow-down-sign-to-navigate.png" alt="" :class="show1 ? 'rotate-180' : ''"
+                  class="w-[10px]">
+              </div>
+            </div>
+          </div>
+          <div v-if="show1 == true" class="z-10 absolute w-full">
+            <ul class="bg-gray-50 mt-0.5 rounded-lg shadow h-auto overflow-scroll"
+              :class="filter_province.length >= 1 && filter_province.length >= 5 ? 'h-[200px]' : 'h-auto'">
+              <li v-for="item of filter_province" :key="item.id"
+                class="hover:bg-gray-200 hover:font-medium hover:shadow py-1 px-4 cursor-pointer w-full"
+                @click="select_province(item)">
+                <span>{{ item.name.th }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div @click="show2 = !show2" class="w-full relative mx-2">
+          <div>
+            <label for="province"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกอำเภอ</label>
+            <div class="relative">
+              <input type="text" v-model="searchDistrict" id="district"
+                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="เลือกอำเภอ">
+              <div class="flex absolute inset-y-0 right-0 items-center pr-3 pointer-events-none">
+                <img src="../../assets/images/arrow-down-sign-to-navigate.png" alt="" :class="show2 ? 'rotate-180' : ''"
+                  class="w-[10px]">
+              </div>
+            </div>
+          </div>
+          <div v-if="show2 == true" class="z-10 absolute w-full">
+            <ul class="bg-gray-50 mt-0.5 rounded-lg shadow h-auto overflow-scroll"
+              :class="filter_district.length >= 1 && filter_district.length >= 5 ? 'h-[200px]' : 'h-auto'">
+              <li v-for="item of filter_district" :key="item.id"
+                class="hover:bg-gray-200 hover:font-medium hover:shadow py-1 px-4 cursor-pointer w-full"
+                @click="select_district(item)">
+                <span>{{ item.name.th }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div @click="show3 = !show3" class="w-full relative mx-2">
+          <div>
+            <label for="province" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกตำบล</label>
+            <div class="relative">
+              <input type="text" v-model="searchSubDistrict" id="sub-district"
+                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="เลือกตำบล">
+              <div class="flex absolute inset-y-0 right-0 items-center pr-3 pointer-events-none">
+                <img src="../../assets/images/arrow-down-sign-to-navigate.png" alt="" :class="show3 ? 'rotate-180' : ''"
+                  class="w-[10px]">
+              </div>
+            </div>
+          </div>
+          <div v-if="show3 == true" class="z-10 absolute w-full">
+            <ul class="bg-gray-50 mt-0.5 rounded-lg shadow h-auto overflow-scroll"
+              :class="filter_subdistrict.length >= 1 && filter_subdistrict.length >= 5 ? 'h-[200px]' : 'h-auto'">
+              <li v-for="item of filter_subdistrict" :key="item.id"
+                class="hover:bg-gray-200 hover:font-medium hover:shadow py-1 px-4 cursor-pointer w-full"
+                @click="select_subdistrict(item)">
+                <span>{{ item.name.th }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3">
         <field label="จังหวัด">
           <select
             required
@@ -455,77 +598,56 @@ const submit = () => {
             </option>
           </select>
         </field>
-      </div>
+      </div> -->
 
       <field label="คุณสมบัติของดิน">
-        <control
-          v-model="form.soilProperties"
-          type="textarea"
-          col="10"
-          placeholder="กรอกคุณสมบัติของดิน"
-        />
+        <control v-model="form.soilProperties" type="textarea" col="10" placeholder="กรอกคุณสมบัติของดิน" />
       </field>
 
       <field label="ดินชั้นบน">
-        <control
-          v-model="form.topsoilDetail"
-          type="text"
-          placeholder="กรอกรายละเอียดดินชั้นบน"
-        />
+        <control v-model="form.topsoilDetail" type="text" placeholder="กรอกรายละเอียดดินชั้นบน" />
       </field>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
         <div>
-          <label >ค่าPH ดิดชั้นบน ต่ำสุด</label>
-          <input type="number" step="any"  v-model="form.topsoilValueMin" class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
+          <label>ค่าPH ดิดชั้นบน ต่ำสุด</label>
+          <input type="number" step="any" v-model="form.topsoilValueMin"
+            class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
         </div>
-       <div>
-        <label >ค่าPH ดิดชั้นบน สูงสุด</label>
-        <input type="number" step="any"  v-model="form.topsoilValueMax" class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
-       </div>
+        <div>
+          <label>ค่าPH ดิดชั้นบน สูงสุด</label>
+          <input type="number" step="any" v-model="form.topsoilValueMax"
+            class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
+        </div>
 
       </div>
 
       <field label="ดินชั้นล่าง">
-        <control
-          v-model="form.subsoilDetail"
-          type="text"
-          placeholder="กรอกรายละเอียดดินชั้นล่าง"
-        />
+        <control v-model="form.subsoilDetail" type="text" placeholder="กรอกรายละเอียดดินชั้นล่าง" />
       </field>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
         <div>
-          <label >ค่าPH ดินชั้นล่าง ต่ำสุด</label>
-          <input type="number" step="any"  v-model="form.subsoilValueMin" class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
+          <label>ค่าPH ดินชั้นล่าง ต่ำสุด</label>
+          <input type="number" step="any" v-model="form.subsoilValueMin"
+            class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
         </div>
-       <div>
-        <label >ค่าPH ดินชั้นล่าง สูงสุด</label>
-        <input type="number" step="any"  v-model="form.subsoilValueMax" class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
-       </div>
+        <div>
+          <label>ค่าPH ดินชั้นล่าง สูงสุด</label>
+          <input type="number" step="any" v-model="form.subsoilValueMax"
+            class="rounded-lg border-1 border-gray-500 w-full dark:bg-gray-800">
+        </div>
       </div>
 
       <field label="ความอุดมสมบูรณ์">
-        <check-radio-picker
-          name="soilFertility"
-          v-model="form.soilFertility"
-          type="radio"
-          :options="{ low: 'ต่ำ', medium: 'กลาง', high: 'สูง' }"
-        />
+        <check-radio-picker name="soilFertility" v-model="form.soilFertility" type="radio"
+          :options="{ low: 'ต่ำ', medium: 'กลาง', high: 'สูง' }" />
       </field>
 
       <field label="การระบายน้ำ">
-        <check-radio-picker
-          name="drainage"
-          v-model="form.drainage"
-          type="radio"
-          :options="{ low: 'ต่ำ', medium: 'กลาง', high: 'สูง' }"
-        />
+        <check-radio-picker name="drainage" v-model="form.drainage" type="radio"
+          :options="{ low: 'ต่ำ', medium: 'กลาง', high: 'สูง' }" />
       </field>
       <field label="ข้อจํากัดของดิน">
-        <control
-          v-model="form.soilRestrictions"
-          type="text"
-          placeholder="กรอกข้อจํากัดของดิน"
-        />
+        <control v-model="form.soilRestrictions" type="text" placeholder="กรอกข้อจํากัดของดิน" />
       </field>
       <!--<divider /> -->
       <field label="ความชัน(หน่วยเมตร)">
@@ -533,23 +655,15 @@ const submit = () => {
       </field>
 
       <field label="รายละเอียดลักษณะของพื้นที่">
-        <control
-          v-model="form.spaceNatureDetail"
-          type="text"
-          placeholder="กรอกรายละเอียดลักษณะของพื้นที่"
-        />
+        <control v-model="form.spaceNatureDetail" type="text" placeholder="กรอกรายละเอียดลักษณะของพื้นที่" />
       </field>
       <field label="ลักษณะของพื้นที่">
-        <check-radio-picker
-          v-model="form.spaceNatureAll"
-          name="spaceNature"
-          :options="{
-            spaceNaturePlain: 'ที่ราบเรียบ',
-            spaceNaturePlateau: 'ที่ราบสูง',
-            spaceNatureHill: 'เนินเขา',
-            spaceNatureMountain: 'ภูเขา',
-          }"
-        />
+        <check-radio-picker v-model="form.spaceNatureAll" name="spaceNature" :options="{
+          spaceNaturePlain: 'ที่ราบเรียบ',
+          spaceNaturePlateau: 'ที่ราบสูง',
+          spaceNatureHill: 'เนินเขา',
+          spaceNatureMountain: 'ภูเขา',
+        }" />
       </field>
 
       <divider />
