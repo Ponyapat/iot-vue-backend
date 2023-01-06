@@ -58,7 +58,7 @@ onBeforeMount(() => {
 });
 const fetchData = async () => {
 
-  await ApiMain.get("/geobase?order=ASC&take=999999").then((response) => {
+  await ApiMain.get("/geobase?order=DESC&take=999999").then((response) => {
     states.geo = response.data.data;
     console.log(states.geo);
   }).catch((error) => {

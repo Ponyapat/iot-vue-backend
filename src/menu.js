@@ -31,6 +31,11 @@ export default [
   'Admin',
   [
     {
+      to: '/customers',
+      label: 'ข้อมูลลูกค้าสำหรับฝ่ายขาย',
+      icon: mdiEarth
+    },
+    {
       to: '/geography',
       label: 'ภูมิศาสตร์(ข้อมูลลูกค้า)',
       icon: mdiEarth

@@ -30,11 +30,28 @@ const routes = [
   },
   {
     meta: {
-      title: "Customers"
+      title: "OtherCustomers",
     },
     path: "/customers",
-    name: 'Customer',
-    component: () => import('@/views/Customer/List.vue')
+    name: "OtherCustomers",
+    // component: () => import("@/views/Users.vue"),
+    component: () => import('@/views/Customer/CustomerList.vue')
+  },
+  {
+    meta: {
+      title: "AddOtherCustomers",
+    },
+    path: "/customers/add",
+    name: "AddOtherCustomers",
+    component: () => import("@/views/Customer/FormCustomer.vue"),
+  },
+  {
+    meta: {
+      title: "EditOtherCustomers",
+    },
+    path: "/customers/edit",
+    name: "EditOtherCustomers",
+    component: () => import("@/views/Customer/FormCustomer.vue"),
   },
   {
     meta: {

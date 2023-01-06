@@ -75,9 +75,9 @@ onMounted(() => {
       form.province_id = geobase.provinceId;
       form.province_name = geobase.provinceName;
 
-      searchProvince.value =  geobase.provinceName ;
-      searchDistrict.value = geobase.districtName ;
-      searchSubDistrict.value = geobase.subdistrictName ;
+      searchProvince.value = geobase.provinceName;
+      searchDistrict.value = geobase.districtName;
+      searchSubDistrict.value = geobase.subdistrictName;
 
       form.district_id = geobase.districtId;
       form.district_name = geobase.districtName;
@@ -244,7 +244,7 @@ const select_district = (data) => {
       subdistrict.push(obj_subdistrict[0]);
     });
     form.subdistrict = subdistrict;
-    console.log('sub district in function select district ==',form.subdistrict);
+    console.log('sub district in function select district ==', form.subdistrict);
   });
 
 };
@@ -279,7 +279,7 @@ const filter_province = computed(() => {
 const filter_district = computed(() => {
   let district_list = form.district;
   return district_list.filter(data => {
-    const district_ = data.name.th.toLowerCase()|| data.districtName.toLowerCase();
+    const district_ = data.name.th.toLowerCase() || data.districtName.toLowerCase();
     return district_.includes(searchDistrict.value)
   });
 });
@@ -292,22 +292,26 @@ const filter_subdistrict = computed(() => {
 });
 
 const input_province = computed(() => {
-  if(searchProvince.value == ""){
+  if (searchProvince.value == "") {
     searchDistrict.value = "";
-    searchSubDistrict.value = "" ;
-    form.district_name = '' ;
-    form.district_id = '' ;
-    form.subdistrict_name = '' ;
-    form.subdistrict_id = '' ;
+    searchSubDistrict.value = "";
+    form.district_name = '';
+    form.district_id = '';
+    form.subdistrict_name = '';
+    form.subdistrict_id = '';
   }
 })
 const input_district = computed(() => {
-  if(searchDistrict.value == ""){
-    searchSubDistrict.value = "" ;
-    form.subdistrict_name = '' ;
-    form.subdistrict_id = '' ;
+  if (searchDistrict.value == "") {
+    searchSubDistrict.value = "";
+    form.subdistrict_name = '';
+    form.subdistrict_id = '';
   }
-})
+});
+
+const closeForm = () =>{
+  router.push('/geography_base');
+}
 
 const submit = () => {
   form.spaceNatureAll.forEach((element) => {
@@ -380,37 +384,6 @@ const submit = () => {
         console.log(error);
       });
   } else {
-    console.log({
-      provinceId: form.province_id,
-      districtId: form.district_id,
-      subdistrictId: form.subdistrict_id,
-
-      provinceName: form.province_name,
-      districtName: form.district_name,
-      subdistrictName: form.subdistrict_name,
-
-      soilProperties: form.soilProperties,
-      topsoilDetail: form.topsoilDetail,
-      topsoilValueMin: form.topsoilValueMin,
-      topsoilValueMax: form.topsoilValueMax,
-      subsoilDetail: form.subsoilDetail,
-      subsoilValueMin: form.subsoilValueMin,
-      subsoilValueMax: form.subsoilValueMax,
-
-      soilFertility: form.soilFertility,
-      soilRestrictions: form.soilRestrictions,
-      spaceNatureDetail: form.spaceNatureDetail,
-      spaceNaturePlain: form.spaceNaturePlain,
-      spaceNaturePlateau: form.spaceNaturePlateau,
-      spaceNatureHill: form.spaceNatureHill,
-      spaceNatureMountain: form.spaceNatureMountain,
-      slope: form.slope,
-      drainage: form.drainage,
-      nearbyNaturalWater: form.nearbyNaturalWater,
-      nearbyInfarmWater: form.nearbyInfarmWater,
-      nearbySmallWater: form.nearbySmallWater,
-      nearbyGroundWater: form.nearbyGroundWater,
-    })
     ApiMain.post("/geobase", {
       provinceId: form.province_id,
       districtId: form.district_id,
@@ -470,16 +443,264 @@ const submit = () => {
 
   //
 };
-
-
-
 </script>
 
 <template>
-  <title-bar :title-stack="titleStack" />
-  <main-section>
-    <div class="hidden">{{input_province}} {{input_district}}</div>
-    <card-component title="กรอกข้อมูลภูมิศาสตร์(ข้อมูลกลาง)" :icon="mdiBallot" form @submit.prevent="submit">
+  <title-bar :title-stack="titleStack" class="m-2 ml-0 mb-0 pb-2" />
+  <div class="m-4 mt-0 shadow-custom rounded-2xl">
+    <div class="hidden">{{ input_province }} {{ input_district }}</div>
+    <div class="bg-white rounded-lg w-full">
+      <div class="py-2 ">
+        <h1 class="text-sm font-medium"><i class="fa-solid fa-book mx-2"></i> กรอกข้อมูลภูมิศาสตร์(ข้อมูลกลาง)</h1>
+      </div>
+      <hr class="opacity-50">
+      <div class="grid grid-cols-1">
+        <div class="flex justify-center">
+          <form @submit.prevent="submit" class="w-[900px] my-6">
+            <div class="flex flex-row mb-4 gap-2">
+              <div @click="show1 = !show1" class="w-full relative">
+                <div>
+                  <label for="province"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกจังหวัด <span
+                      class="text-red-500">*</span></label>
+                  <div class="relative">
+                    <input type="text" v-model="searchProvince" id="province"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-4 p-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="เลือกจังหวัด">
+                    <div class="flex absolute inset-y-0 right-0 items-center pr-3 pointer-events-none">
+                      <img src="../../assets/images/arrow-down-sign-to-navigate.png" alt=""
+                        :class="show1 ? 'rotate-180' : ''" class="w-[10px]">
+                    </div>
+                  </div>
+                </div>
+                <div v-if="show1 == true" class="z-10 absolute w-full">
+                  <ul class="bg-gray-50 mt-0.5 rounded-lg shadow h-auto overflow-scroll"
+                    :class="filter_province.length >= 1 && filter_province.length >= 5 ? 'h-[200px]' : 'h-auto'">
+                    <li v-for="item of filter_province" :key="item.id"
+                      class="hover:bg-gray-200 hover:font-medium hover:shadow py-1 px-4 cursor-pointer w-full"
+                      @click="select_province(item)">
+                      <span>{{ item.name.th }}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div @click="show2 = !show2" class="w-full relative">
+                <div>
+                  <label for="province"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกอำเภอ <span
+                      class="text-red-500">*</span></label>
+                  <div class="relative">
+                    <input type="text" v-model="searchDistrict" id="district"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-4 p-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="เลือกอำเภอ">
+                    <div class="flex absolute inset-y-0 right-0 items-center pr-3 pointer-events-none">
+                      <img src="../../assets/images/arrow-down-sign-to-navigate.png" alt=""
+                        :class="show2 ? 'rotate-180' : ''" class="w-[10px]">
+                    </div>
+                  </div>
+                </div>
+                <div v-if="show2 == true" class="z-10 absolute w-full">
+                  <ul class="bg-gray-50 mt-0.5 rounded-lg shadow h-auto overflow-scroll"
+                    :class="filter_district.length >= 1 && filter_district.length >= 5 ? 'h-[200px]' : 'h-auto'">
+                    <li v-for="item of filter_district" :key="item.id"
+                      class="hover:bg-gray-200 hover:font-medium hover:shadow py-1 px-4 cursor-pointer w-full"
+                      @click="select_district(item)">
+                      <span>{{ item.name.th }}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div @click="show3 = !show3" class="w-full relative ">
+                <div>
+                  <label for="province" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกตำบล
+                    <span class="text-red-500">*</span></label>
+                  <div class="relative">
+                    <input type="text" v-model="searchSubDistrict" id="sub-district"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-4 p-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="เลือกตำบล">
+                    <div class="flex absolute inset-y-0 right-0 items-center pr-3 pointer-events-none">
+                      <img src="../../assets/images/arrow-down-sign-to-navigate.png" alt=""
+                        :class="show3 ? 'rotate-180' : ''" class="w-[10px]">
+                    </div>
+                  </div>
+                </div>
+                <div v-if="show3 == true" class="z-10 absolute w-full">
+                  <ul class="bg-gray-50 mt-0.5 rounded-lg shadow h-auto overflow-scroll"
+                    :class="filter_subdistrict.length >= 1 && filter_subdistrict.length >= 5 ? 'h-[200px]' : 'h-auto'">
+                    <li v-for="item of filter_subdistrict" :key="item.id"
+                      class="hover:bg-gray-200 hover:font-medium hover:shadow py-1 px-4 cursor-pointer w-full"
+                      @click="select_subdistrict(item)">
+                      <span>{{ item.name.th }}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label for="message"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">คุณสมบัติของดิน <span
+                  class="text-red-500">*</span></label>
+              <textarea id="message" rows="1" v-model="form.soilProperties"
+                class="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="กรอกคุณสมบัติของดิน"></textarea>
+            </div>
+            <div class="mb-4">
+              <label for="topsoil" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ดินชั้นบน
+                <span class="text-red-500">*</span></label>
+              <input type="text" v-model="form.topsoilDetail" id="topsoil" placeholder="กรอกดินชั้นบน"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            </div>
+            <div class="flex flex-row w-full gap-2">
+              <div class="mb-4 w-full ">
+                <label for="ph_topsoil_min" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ค่า
+                  pH ดิดชั้นบน ต่ำสุด <span class="text-red-500">*</span></label>
+                <input type="number" step="any" v-model="form.topsoilValueMin" id="ph_topsoil_min" placeholder="0"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              </div>
+              <div class="mb-4 w-full">
+                <label for="ph_topsoil_max" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ค่า
+                  pH ดิดชั้นบน สูงสุด <span class="text-red-500">*</span></label>
+                <input type="number" step="any" v-model="form.topsoilValueMax" id="ph_topsoil_max" placeholder="0"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              </div>
+            </div>
+            <div class="mb-4">
+              <label for="bottomsoil" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ดินชั้นล่าง
+                <span class="text-red-500">*</span></label>
+              <input type="text" v-model="form.subsoilDetail" id="bottomsoil"  placeholder="กรอกดินชั้นล่าง"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            </div>
+
+            <div class="flex flex-row mb-6 gap-2">
+              <div class="w-full">
+                <label for="subsoilValueMin" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ค่า
+                  pH ดินชั้นล่าง ต่ำสุด <span class="text-red-500">*</span></label>
+                <input type="number" step="any" v-model="form.subsoilValueMin" id="subsoilValueMin" placeholder="0"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              </div>
+              <div class="w-full">
+                <label for="subsoilValueMax" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ค่า
+                  pH ดินชั้นล่าง สูงสุด <span class="text-red-500">*</span></label>
+                <input type="number" step="any" v-model="form.subsoilValueMax" id="subsoilValueMax" placeholder="0"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <label for="soilRestrictions"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ข้อจํากัดของดิน <span
+                  class="text-red-500">*</span></label>
+              <input type="text" v-model="form.soilRestrictions" id="soilRestrictions"  placeholder="กรอกข้อจํากัดของดิน"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            </div>
+            <div class="mb-6">
+              <label for="spaceNature"
+                class="block mb-2 text-base font-medium text-gray-900 dark:text-white">ลักษณะของพื้นที่ <span
+                  class="text-red-500">*</span></label>
+              <check-radio-picker class="text-sm" v-model="form.spaceNatureAll" name="spaceNature" :options="{
+                  spaceNaturePlain: 'ที่ราบเรียบ',
+                  spaceNaturePlateau: 'ที่ราบสูง',
+                  spaceNatureHill: 'เนินเขา',
+                  spaceNatureMountain: 'ภูเขา',
+                }" />
+            </div>
+            <div class="mb-6">
+              <label for="slope" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">ความชัน (
+                หน่วยเมตร ) <span class="text-red-500">*</span></label>
+              <input v-model="form.slope" type="number" placeholder="0" id="slope"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            </div>
+            <div class="flex flex-row">
+              <div class="mb-6 w-full">
+                <label for="drainage" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">การระบายน้ำ
+                  <span class="text-red-500">*</span></label>
+                <div class="flex">
+                  <div class="flex items-center mr-4">
+                    <input checked id="low_drainage" type="radio" v-model="form.drainage" name="drainage-radio"
+                      class="w-6 h-6 text-sky-600 bg-gray-100 border-gray-300 focus:ring-sky-500 dark:focus:ring-sky-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="low_drainage"
+                      class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">เลว</label>
+                  </div>
+                  <div class="flex items-center mr-4">
+                    <input id="medium_drainage" type="radio" v-model="form.drainage" name="drainage-radio"
+                      class="w-6 h-6 text-sky-600 bg-gray-100 border-gray-300 focus:ring-sky-500 dark:focus:ring-sky-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="medium_drainage"
+                      class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ปานกลาง</label>
+                  </div>
+                  <div class="flex items-center mr-4">
+                    <input id="max_drainage" type="radio" v-model="form.drainage" name="drainage-radio"
+                      class="w-6 h-6 text-sky-600 bg-gray-100 border-gray-300 focus:ring-sky-500 dark:focus:ring-sky-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="max_drainage"
+                      class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ดี</label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-6 w-full">
+                <label for="soilFertility"
+                  class="block mb-2 text-base font-medium text-gray-900 dark:text-white">ความอุดมสมบูรณ์ <span
+                    class="text-red-500">*</span></label>
+                <div class="flex">
+                  <div class="flex items-center mr-4">
+                    <input checked id="low_soilFertility" type="radio" v-model="form.soilFertility"
+                      name="soilFertility-radio"
+                      class="w-6 h-6 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="low_soilFertility"
+                      class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ต่ำ</label>
+                  </div>
+                  <div class="flex items-center mr-4">
+                    <input id="medium_soilFertility" type="radio" v-model="form.soilFertility"
+                      name="soilFertility-radio"
+                      class="w-6 h-6 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="medium_soilFertility"
+                      class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ปานกลาง</label>
+                  </div>
+                  <div class="flex items-center mr-4">
+                    <input id="max_soilFertility" type="radio" v-model="form.soilFertility" name="soilFertility-radio"
+                      class="w-6 h-6 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="max_soilFertility"
+                      class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">สูง</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label for="nearbyNaturalWater" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">แหล่งน้ำใกล้เคียง <span class="text-red-500">*</span></label>
+              <div class="flex flex-row w-full gap-2">
+                <div class="mb-4 w-full">
+                  <label for="topsoil" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">แหล่งน้ำธรรมชาติ</label>
+                  <input type="number" v-model="form.nearbyNaturalWater" placeholder="0"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+                <div class="mb-4 w-full">
+                  <label for="topsoil" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">แหล่งน้ำในไร่นานอกเขตชลประทาน</label>
+                  <input type="number" v-model="form.nearbyInfarmWater" placeholder="0"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+                <div class="mb-4 w-full">
+                  <label for="topsoil" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">แหล่งน้ำขนาดเล็ก</label>
+                  <input type="number" v-model="form.nearbySmallWater" placeholder="0"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+                <div class="mb-4 w-full">
+                  <label for="topsoil" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">บ่อน้ำบาดาล</label>
+                  <input type="number" v-model="form.nearbyGroundWater" placeholder="0"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-row items-center justify-center">
+          <button type="submit"
+            class="text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base w-full sm:w-[256px] px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mr-2"><i
+              class="fa-solid fa-check mr-3"></i>บันทึกข้อมูล</button>
+          <button type="button" @click="closeForm()"
+            class="text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base w-full sm:w-[256px] px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 ml-2"><i
+              class="fa-solid fa-xmark mr-3"></i>ยกเลิก</button>
+        </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- <card-component title="กรอกข้อมูลภูมิศาสตร์(ข้อมูลกลาง)" :icon="mdiBallot" form @submit.prevent="submit">
       <div class="flex flex-row mb-4">
         <div @click="show1 = !show1" class="w-full relative">
           <div>
@@ -487,7 +708,7 @@ const submit = () => {
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกจังหวัด</label>
             <div class="relative">
               <input type="text" v-model="searchProvince" id="province"
-                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-4 p-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="เลือกจังหวัด">
               <div class="flex absolute inset-y-0 right-0 items-center pr-3 pointer-events-none">
                 <img src="../../assets/images/arrow-down-sign-to-navigate.png" alt="" :class="show1 ? 'rotate-180' : ''"
@@ -512,7 +733,7 @@ const submit = () => {
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกอำเภอ</label>
             <div class="relative">
               <input type="text" v-model="searchDistrict" id="district"
-                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-4 p-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="เลือกอำเภอ">
               <div class="flex absolute inset-y-0 right-0 items-center pr-3 pointer-events-none">
                 <img src="../../assets/images/arrow-down-sign-to-navigate.png" alt="" :class="show2 ? 'rotate-180' : ''"
@@ -533,10 +754,11 @@ const submit = () => {
         </div>
         <div @click="show3 = !show3" class="w-full relative mx-2">
           <div>
-            <label for="province" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกตำบล</label>
+            <label for="province"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกตำบล</label>
             <div class="relative">
               <input type="text" v-model="searchSubDistrict" id="sub-district"
-                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-4 p-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="เลือกตำบล">
               <div class="flex absolute inset-y-0 right-0 items-center pr-3 pointer-events-none">
                 <img src="../../assets/images/arrow-down-sign-to-navigate.png" alt="" :class="show3 ? 'rotate-180' : ''"
@@ -556,54 +778,13 @@ const submit = () => {
           </div>
         </div>
       </div>
-      <!-- <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3">
-        <field label="จังหวัด">
-          <select
-            required
-            @change="select_province($event)"
-            id="province"
-            v-model="form.province_id"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
-            <option v-for="i in form.province" :value="i.id" :key="i.id">
-              {{ i.name.th }}
-            </option>
-          </select>
-        </field>
-
-        <field label="อำเภอ">
-          <select
-            required
-            @change="select_district($event)"
-            id="district"
-            v-model="form.district_id"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
-            <option v-for="i in form.district" :value="i.id" :key="i.id">
-              {{ i.name.th }}
-            </option>
-          </select>
-        </field>
-
-        <field label="ตำบล">
-          <select
-            required
-            @change="select_subdistrict($event)"
-            id="subdistrict"
-            v-model="form.subdistrict_id"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
-            <option v-for="i in form.subdistrict" :value="i.id" :key="i.id">
-              {{ i.name.th }}
-            </option>
-          </select>
-        </field>
-      </div> -->
-
-      <field label="คุณสมบัติของดิน">
-        <control v-model="form.soilProperties" type="textarea" col="10" placeholder="กรอกคุณสมบัติของดิน" />
-      </field>
-
+      <div class="mb-4">
+        <label for="message"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">คุณสมบัติของดิน</label>
+        <textarea id="message" rows="1" v-model="form.soilProperties"
+          class="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="กรอกคุณสมบัติของดิน"></textarea>
+      </div>
       <field label="ดินชั้นบน">
         <control v-model="form.topsoilDetail" type="text" placeholder="กรอกรายละเอียดดินชั้นบน" />
       </field>
@@ -649,7 +830,6 @@ const submit = () => {
       <field label="ข้อจํากัดของดิน">
         <control v-model="form.soilRestrictions" type="text" placeholder="กรอกข้อจํากัดของดิน" />
       </field>
-      <!--<divider /> -->
       <field label="ความชัน(หน่วยเมตร)">
         <control v-model="form.slope" type="number" placeholder="กรอกความชัน(หน่วยเมตร)" />
       </field>
@@ -688,7 +868,12 @@ const submit = () => {
         <jb-button type="submit" color="info" :label="type_form" />
         <jb-button type="reset" color="info" outline label="รีเซต" />
       </jb-buttons>
-    </card-component>
-  </main-section>
-  <bottom-other-pages-section />
+    </card-component> -->
+  </div>
+
 </template>
+<style>
+.shadow-custom {
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+</style>
