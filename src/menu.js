@@ -62,7 +62,7 @@ export default [
     // },
     {
       to: '/users',
-      label: 'Admin',
+      label: 'ผู้ใช้งาน',
       icon: mdiAccount
     },
     {

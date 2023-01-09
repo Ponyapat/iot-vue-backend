@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import JbButtons from "@/components/JbButtons.vue";
 import JbButton from "@/components/JbButton.vue";
 import Level from "@/components/Level.vue";
-import { mdiTrashCan, mdiGreasePencil } from "@mdi/js";
+import { mdiTrashCan, mdiGreasePencil , mdiAccountLock } from "@mdi/js";
 
 const mainStore = useMainStore();
 const router = useRouter();
@@ -112,6 +112,10 @@ const edit = (id) => {
   router.push("/role/edit/" + id);
 };
 
+const permission = (id) => {
+  router.push("/role/permission/" + id);
+};
+
 const del = (role) => {
   //console.log("del", role.id);
   Swal.fire({
@@ -166,6 +170,12 @@ onBeforeMount(() => {
           <td class="p-3" data-label="Name">{{ role.name }}</td>
           <td class="actions-cell">
             <jb-buttons type="justify-start lg:justify-end" no-wrap>
+              <jb-button
+                color="warning"
+                :icon="mdiAccountLock"
+                small
+                @click="permission(role.id)"
+              />
               <jb-button
                 color="info"
                 :icon="mdiGreasePencil"

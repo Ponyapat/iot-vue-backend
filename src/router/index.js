@@ -183,6 +183,14 @@ const routes = [
   },
   {
     meta: {
+      title: "Permission"
+    },
+    path: "/role/permission/:id",
+    name: "Permission",
+    component: () => import("@/views/Role/Permission.vue")
+  },
+  {
+    meta: {
       title: "EDITRole"
     },
     path: "/role/edit/:id",
