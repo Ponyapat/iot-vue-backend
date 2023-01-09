@@ -31,6 +31,11 @@ export default [
   'Admin',
   [
     {
+      to: '/my-customers',
+      label: 'ข้อมูลลูกค้าของฉัน',
+      icon: mdiEarth
+    },
+    {
       to: '/customers',
       label: 'ข้อมูลลูกค้าสำหรับฝ่ายขาย',
       icon: mdiEarth

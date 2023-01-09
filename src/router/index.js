@@ -35,7 +35,7 @@ const routes = [
     path: "/customers",
     name: "OtherCustomers",
     // component: () => import("@/views/Users.vue"),
-    component: () => import('@/views/Customer/CustomerList.vue')
+    component: () => import('@/views/CustomerSale/CustomerList.vue')
   },
   {
     meta: {
@@ -43,7 +43,7 @@ const routes = [
     },
     path: "/customers/add",
     name: "AddOtherCustomers",
-    component: () => import("@/views/Customer/FormCustomer.vue"),
+    component: () => import("@/views/CustomerSale/FormCustomer.vue"),
   },
   {
     meta: {
@@ -51,7 +51,32 @@ const routes = [
     },
     path: "/customers/edit",
     name: "EditOtherCustomers",
-    component: () => import("@/views/Customer/FormCustomer.vue"),
+    component: () => import("@/views/CustomerSale/FormCustomer.vue"),
+  },
+  {
+    meta: {
+      title: "MyCustomers",
+    },
+    path: "/my-customers",
+    name: "MyCustomers",
+    // component: () => import("@/views/Users.vue"),
+    component: () => import('@/views/MyCustomer/MyCustomerList.vue')
+  },
+  {
+    meta: {
+      title: "AddMyCustomers",
+    },
+    path: "/my-customers/add",
+    name: "AddMyCustomers",
+    component: () => import("@/views/MyCustomer/FormMyCustomer.vue"),
+  },
+  {
+    meta: {
+      title: "EditMyCustomers",
+    },
+    path: "/my-customers/edit",
+    name: "EditMyCustomers",
+    component: () => import("@/views/MyCustomer/FormMyCustomer.vue"),
   },
   {
     meta: {
