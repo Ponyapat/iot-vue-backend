@@ -107,6 +107,8 @@ const edit = (id) => {
 const fetchData = () => {
   ApiMain.get("/other-customer?order=DESC&page=1&take=99999").then((response) => {
     states.customers = response.data.data;
+
+    console.log(states.customers);
   }).catch((error) => {
     console.log(error);
   });;
@@ -341,16 +343,22 @@ const pages = computed(() => {
           <td class="text-center">{{item.id}}</td>
           <td class="text-center">
             <div class="w-[160px] truncate">
-              {{item.name}}
+              <span v-if="item.name !=''">{{item.name}}</span>
+              <span v-else>-</span>
             </div>
           </td>
           <td class="text-center">
             <div class="w-[160px] truncate">
-              {{item.contactName}}
+              <span v-if="item.contactName !=''">{{item.contactName}}</span>
+              <span v-else>-</span>
             </div>
             </td>
-          <td class="text-center">{{item.phone}}</td>
+          <td class="text-center">
+            <span v-if="item.phone !=''">{{item.phone}}</span>
+              <span v-else>-</span>
+          </td>
           <td class="text-center relative">
+
             <div class="truncate w-[120px]">
               <span v-if="item.address !=''">{{item.address}}</span>
               <span v-else>-</span>
