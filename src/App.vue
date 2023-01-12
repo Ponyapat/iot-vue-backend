@@ -25,6 +25,8 @@ onBeforeMount(()=>{
           avatar: '/images/avataaars.svg'
         });
     }).catch((error) => {
+        localStorage.removeItem('tkfw')
+        localStorage.removeItem("userid")
         router.push("/login");
     });
   }else{

@@ -26,6 +26,7 @@ import axios from "axios";
 const token = localStorage.getItem("tkfw")
 const roleid = localStorage.getItem("roleid")
 let menu = []
+
 await axios.get(import.meta.env.VITE_API_MAIN+"/role/"+roleid+"/role-permission",
 {
   headers: {

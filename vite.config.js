@@ -13,6 +13,9 @@ const VITE_PROXY = [
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   return {
+    build: {
+      target: 'esnext'
+    },
     server: {
       https: false,
       port: VITE_PORT,
