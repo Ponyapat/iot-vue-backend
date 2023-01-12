@@ -49,7 +49,17 @@ const perPage = ref(10);
 
 const currentPage = ref(0);
 
+const per_edit = ref(false);
+const per_del = ref(false);
+
+
 onBeforeMount(() => {
+  if(ck_pms("update","breed-categorise")){
+    per_edit.value = true
+  }
+  if(ck_pms("delete","breed-categorise")){
+    per_del.value = true
+  }
   fetchData();
 });
 
@@ -194,8 +204,8 @@ const pages = computed(() => {
           <td class="text-center">{{item.prefix}}</td>
           <td class="actions-cell">
             <jb-buttons class="justify-center" no-wrap>
-              <jb-button color="info" :icon="mdiGreasePencil" small @click="edit(item.id)" />
-              <jb-button color="danger" :icon="mdiTrashCan" small @click="del(item.id)" />
+              <jb-button v-if="per_edit" color="info" :icon="mdiGreasePencil" small @click="edit(item.id)" />
+              <jb-button v-if="per_del" color="danger" :icon="mdiTrashCan" small @click="del(item.id)" />
             </jb-buttons>
           </td>
         </tr>

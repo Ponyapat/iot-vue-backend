@@ -44,7 +44,13 @@ const submit = () => {
         });
         localStorage.setItem("tkfw", data.data.accessToken);
         localStorage.setItem("userid", data.data.user.id);
-        window.location.replace("/dashboard");
+        
+        //console.log("user.id",data.data.user.id);
+        ApiMain.get("/users/"+data.data.user.id+"/profile")
+        .then((res) => {
+          localStorage.setItem("roleid", res.data.user.roleId);
+          window.location.replace("/dashboard");
+        })
         //router.push("/dashboard");
       }else{
         ck_login.value = 1;

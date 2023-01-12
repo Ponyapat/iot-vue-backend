@@ -4,19 +4,25 @@
       :icon="mdiFruitCherries"
       title="พืชพันธุ์ผลไม้"
       has-table
-      addlink="/fruits/add"
+      :addlink="Addlink"
     >
     <FruitsTable />
     </card-component>
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from "vue";
+import { computed, ref, onMounted , onBeforeMount } from "vue";
 import TitleBar from "@/components/TitleBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import FruitsTable from '@/components/FruitsTable.vue'
 import { mdiFruitCherries } from '@mdi/js'
 const titleStack = ref(["พืชพันธุ์ผลไม้", "ผู้ดูแลระบบ"]);
+const Addlink = ref(null);
+onBeforeMount(() => {
+  if(ck_pms("create","breed")){
+    Addlink.value = "/fruits/add"
+  }
+});
 </script>
 
 <style>

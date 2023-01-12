@@ -12,7 +12,7 @@ import UserAvatar from "@/components/UserAvatar.vue";
 import axios from "axios";
 import Swal from "sweetalert2";
 import moment from "moment";
-import vagetable from "../../public/images/cabbage.png";
+import vagetable from "/images/cabbage.png";
 
 defineProps({
   checkable: Boolean,

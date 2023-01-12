@@ -4,19 +4,27 @@
       :icon="mdiFruitWatermelon"
       title="ประเภทพืชพันธุ์ผลไม้"
       has-table
-      addlink="/fruits-type/add"
+      :addlink="Addlink"
     >
     <FruitsTypeTable />
     </card-component>
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from "vue";
+import { computed, ref , onMounted , onBeforeMount } from "vue";
 import TitleBar from "@/components/TitleBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import FruitsTypeTable from '@/components/FruitsTypeTable.vue'
 import { mdiFruitWatermelon } from '@mdi/js'
 const titleStack = ref(["ประเภทพืชพันธุ์ผลไม้", "ผู้ดูแลระบบ"]);
+const Addlink = ref(null);
+
+onBeforeMount(() => {
+  if(ck_pms("create","breed-categorise")){
+    Addlink.value = "/fruits-type/add"
+  }
+});
+
 </script>
 
 <style>

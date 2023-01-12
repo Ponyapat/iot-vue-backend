@@ -3,7 +3,7 @@
 import { ref, reactive, onMounted ,computed} from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email ,minLength,maxLength ,helpers} from '@vuelidate/validators'
-import vagetable from "../../../public/images/cabbage.png";
+import vagetable from "/images/cabbage.png";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "vue-router";

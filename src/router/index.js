@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Style from "@/views/Style.vue";
 import Home from "@/views/Home.vue";
 
 const routes = [
@@ -224,14 +223,6 @@ const routes = [
   },
   {
     meta: {
-      title: "TEST",
-    },
-    path: "/test",
-    name: "test",
-    component: () => import("@/views/Test.vue"),
-  },
-  {
-    meta: {
       title: "Login",
       fullScreen: true,
     },
@@ -251,45 +242,11 @@ const routes = [
   },
   {
     meta: {
-      title: "Tables",
-    },
-    path: "/tables",
-    name: "tables",
-    component: () =>
-      import(/* webpackChunkName: "tables" */ "@/views/Tables.vue"),
-  },
-  {
-    meta: {
-      title: "Forms",
-    },
-    path: "/forms",
-    name: "forms",
-    component: () => import(/* webpackChunkName: "forms" */ "@/views/Forms.vue"),
-  },
-  {
-    meta: {
       title: "Profile",
     },
     path: "/profile",
     name: "profile",
     component: () => import(/* webpackChunkName: "profile" */ "@/views/Profile.vue"),
-  },
-  {
-    meta: {
-      title: "Ui",
-    },
-    path: "/ui",
-    name: "ui",
-    component: () => import(/* webpackChunkName: "ui" */ "@/views/Ui.vue"),
-  },
-  {
-    meta: {
-      title: "Responsive layout",
-    },
-    path: "/responsive",
-    name: "responsive",
-    component: () =>
-      import(/* webpackChunkName: "responsive" */ "@/views/Responsive.vue"),
   },
   {
     meta: {

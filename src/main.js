@@ -32,12 +32,22 @@ window.ApiCore= axios.create({
   }
 });
 
+window.ck_pms = (action,object) => {
+  let pms = localStorage.getItem("pms");
+  const obj = JSON.parse(pms);
+  for (const [key, data] of Object.entries(obj)) {
+    if(data.action == action && data.object == object){
+      return true
+    }
+  }
+  return false
+};
+
 /* Init Pinia */
 const pinia = createPinia()
 
 /* Create Vue app */
 createApp(App).use(router).use(pinia).use(VueSweetalert2).mount('#app')
-
 /* Init Pinia main store */
 const mainStore = useMainStore(pinia)
 

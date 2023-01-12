@@ -47,38 +47,39 @@ const fillChartData = () => {
 };
 
 const geoData = () => {
-  ApiMain.get("/geobase")
+  if(ck_pms("read","geography-base")){
+    ApiMain.get("/geobase")
     .then((data) => {
-      // console.log(data.data.meta.itemCount);
       states.geoCountItem = data.data.meta.itemCount;
-      console.log(states.geoCountItem);
     })
     .catch((error) => {
       console.log(error);
     });
+  }
 };
 
 const geoBreedData = () => {
-  ApiMain.get("/breed")
+  if(ck_pms("read","breed")){
+    ApiMain.get("/breed")
     .then((data) => {
       states.breedCountItem = data.data.meta.itemCount;
-      console.log(states.breedCountItem);
     })
     .catch((error) => {
       console.log(error);
     });
+  }
 };
 
 const weatherData = () => {
+  if(ck_pms("read","weather")){
     ApiMain.get("/weather")
     .then((data) => {
-      // console.log(data.data.meta.itemCount);
       states.weatherCountItem = data.data.meta.itemCount;
-      console.log(states.weatherCountItem);
     })
     .catch((error) => {
       console.log(error);
     });
+  }
 };
 
 onBeforeMount(() => {
@@ -127,6 +128,7 @@ const darkMode = computed(() => mainStore.darkMode);
         prefix="$" 
       -->
       <card-widget
+        v-if="states.geoCountItem>0"
         trend-type="up"
         color="text-emerald-500"
         :icon="mdiEarth"
@@ -134,6 +136,7 @@ const darkMode = computed(() => mainStore.darkMode);
         label="ภูมิศาสตร์(ข้อมูลกลาง)"
       />
       <card-widget
+        v-if="states.weatherCountItem>0"
         trend-type="down"
         color="text-yellow-500"
         :icon="mdiWeatherPartlyRainy"
@@ -141,6 +144,7 @@ const darkMode = computed(() => mainStore.darkMode);
         label="ภูมิอากาศ"
       />
       <card-widget
+         v-if="states.breedCountItem>0"
         trend-type="alert"
         color="text-blue-500"
         :icon="mdiFruitCherries"
