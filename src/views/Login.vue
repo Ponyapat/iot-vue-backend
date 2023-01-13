@@ -35,7 +35,7 @@ const submit = () => {
       email: form.username,
       password: form.password,
     }).then((data) => {
-      //console.log(data.data);
+      console.log(data.data.status);
       if (data.data.status == 200) {
         mainStore.setUser({
           name: data.data.user.name,
@@ -46,19 +46,22 @@ const submit = () => {
         localStorage.setItem("userid", data.data.user.id);
         
         //console.log("user.id",data.data.user.id);
-        ApiMain.get("/users/"+data.data.user.id+"/profile")
+        ApiMain.get("/users/"+data.data.user.id+"/profile",{
+            headers: {'Authorization' : `Bearer `+data.data.accessToken}})
         .then((res) => {
           localStorage.setItem("roleid", res.data.user.roleId);
           window.location.replace("/dashboard");
-        })
+        }).catch((error) => {
+            router.push("/login");
+        });
         //router.push("/dashboard");
       }else{
         ck_login.value = 1;
       }
     })
     .catch((error) => {
-      //console.log("Fail");
-      //console.log(error.response.data.statusCode);
+      console.log("Fail");
+      console.log(error.response.data.statusCode);
       if (error.response.data.statusCode == 400) {
         ck_login.value = 1;
       }

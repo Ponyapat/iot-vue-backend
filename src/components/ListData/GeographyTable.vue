@@ -43,8 +43,13 @@ const items = ref(0);
 const perPage = ref(10);
 
 const currentPage = ref(0);
+const per_edit = ref(false);
 
 onBeforeMount(() => {
+    if(ck_pms("update","geography")){
+      per_edit.value = true
+    }
+
     ApiMain.get("/geo?order=DESC&page=1&take="+perPage.value)
     .then((data) => {
       console.log(data.data.meta.itemCount);
@@ -245,6 +250,7 @@ const drainage = (data) => {
         </td>
         <td class="actions-cell align-top">
             <jb-button
+              v-if="per_edit" 
               color="info"
               :icon="mdiGreasePencil"
               small

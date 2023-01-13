@@ -68,10 +68,17 @@ let product_filter = reactive([
 
 let contactby_filter = reactive([{id:1,data:'offline'},{id:2,data:'online'}]);
 let status_filter = reactive([{id:1,status:'ปิดการขาย'},{id:2,status:'กำลังดำเนินการ'},{id:3,status:'สอบถามข้อมูล'}]);
+const per_edit = ref(false);
+const per_del = ref(false);
 
 onBeforeMount(() => {
+  if(ck_pms("update","other-customer")){
+    per_edit.value = true
+  }
+  if(ck_pms("delete","other-customer")){
+    per_del.value = true
+  }
   fetchData();
-
 });
 
 const del = (id) => {
@@ -401,14 +408,18 @@ const pages = computed(() => {
           <td class="text-center">
             <div class="flex flex-row justify-center items-center">
               <div>
-                <button @click="edit(item.id)" class="bg-blue-600 mr-3 px-2 py-1.5 rounded-md">
+                <button 
+                  v-if="per_edit"
+                  @click="edit(item.id)" class="bg-blue-600 mr-3 px-2 py-1.5 rounded-md">
                   <i class="fa-solid fa-pen text-white text-base"></i>
                 </button>
               </div>
               <div>
-                  <button @click="del(item.id)" class="bg-red-600 px-2 py-1.5 rounded-md">
-                    <i class="fa-solid fa-trash text-white text-base"></i>
-                  </button>
+                <button 
+                  v-if="per_del"
+                  @click="del(item.id)" class="bg-red-600 px-2 py-1.5 rounded-md">
+                  <i class="fa-solid fa-trash text-white text-base"></i>
+                </button>
               </div>
             </div>
           </td>

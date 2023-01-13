@@ -5,7 +5,7 @@
       :icon="mdiMonitorCellphone"
       title="ภูมิศาสตร์ข้อมูลกลาง"
       has-table
-      addlink="/geography_base/form"
+      :addlink="Addlink"
     >
       <GeographyTableBase />
     </card-component>
@@ -14,7 +14,7 @@
 
 <script setup>
 import { mdiMonitorCellphone, mdiAccountMultiple, mdiTableBorder, mdiTableOff } from '@mdi/js'
-import { computed, ref, onMounted } from "vue";
+import { computed, ref, onMounted , onBeforeMount } from "vue";
 import { useMainStore } from "@/stores/main";
 import TitleBar from "@/components/TitleBar.vue";
 import HeroBar from "@/components/HeroBar.vue";
@@ -22,7 +22,12 @@ import CardComponent from "@/components/CardComponent.vue";
 import GeographyTableBase from '@/components/ListData/GeographyBase.vue'
 
 const titleStack = ref(["Admin", "ภูมิศาสตร์(ข้อมูลกลาง)"]);
+const Addlink = ref(null);
 
-
+onBeforeMount(() => {
+  if(ck_pms("create","geography-base")){
+    Addlink.value = "/geography_base/form"
+  }
+});
 
 </script>

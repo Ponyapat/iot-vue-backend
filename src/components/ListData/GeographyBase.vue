@@ -44,16 +44,16 @@ const perPage = ref(10);
 
 const currentPage = ref(0);
 
+const per_edit = ref(false);
+const per_del = ref(false);
+
 onBeforeMount(() => {
-    // ApiMain.get("/geobase?order=DESC&page=1&take="+perPage.value)
-    // .then((data) => {
-    //   console.log(data.data.meta.itemCount);
-    //   states.geo = data.data.data;
-    //   items.value = data.data.meta.itemCount;
-    // })
-    // .catch((error) => {
-    //   console.log(error);
-    // });
+  if(ck_pms("update","geography-base")){
+    per_edit.value = true
+  }
+  if(ck_pms("delete","geography-base")){
+    per_del.value = true
+  }
     fetchData();
 });
 const fetchData = async () => {
@@ -246,12 +246,16 @@ const drainage = (data) => {
         <td class="text-center">
             <div class="flex flex-row justify-center items-center">
               <div>
-                <button @click="edit(item.id)" class="bg-blue-600 mr-3 px-2 py-1.5 rounded-md">
+                <button 
+                 v-if="per_edit" 
+                 @click="edit(item.id)" class="bg-blue-600 mr-3 px-2 py-1.5 rounded-md">
                   <i class="fa-solid fa-pen text-white text-base"></i>
                 </button>
               </div>
               <div>
-                  <button @click="del(item.id)" class="bg-red-600 px-2 py-1.5 rounded-md">
+                  <button 
+                   v-if="per_del" 
+                   @click="del(item.id)" class="bg-red-600 px-2 py-1.5 rounded-md">
                     <i class="fa-solid fa-trash text-white text-base"></i>
                   </button>
               </div>

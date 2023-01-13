@@ -38,7 +38,17 @@ const items = ref(0);
 const perPage = ref(10);
 const currentPage = ref(0);
 
+const per_edit = ref(false);
+const per_del = ref(false);
+
 onBeforeMount(() => {
+  if(ck_pms("update","weather")){
+    per_edit.value = true
+  }
+  if(ck_pms("delete","weather")){
+    per_del.value = true
+  }
+
     ApiMain.get("/weather?order=DESC&page=1&take="+perPage.value)
     .then((data) => {
       states.weather = data.data.data;
@@ -209,12 +219,14 @@ const pages = computed(() => {
         <td class="actions-cell">
           <jb-buttons type="justify-start lg:justify-end" no-wrap>
             <jb-button
+              v-if="per_edit"
               color="info"
               :icon="mdiGreasePencil"
               small
               @click="edit(client.id)"
             />
             <jb-button
+              v-if="per_del"
               color="danger"
               :icon="mdiTrashCan"
               small
