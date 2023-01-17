@@ -12,7 +12,7 @@ import UserAvatar from "@/components/UserAvatar.vue";
 import axios from "axios";
 import Swal from "sweetalert2";
 import moment from "moment";
-import vagetable from "/images/cabbage.png";
+import vagetable from "../../public/images/cabbage.png";
 
 defineProps({
   checkable: Boolean,
@@ -68,17 +68,10 @@ let product_filter = reactive([
 
 let contactby_filter = reactive([{id:1,data:'offline'},{id:2,data:'online'}]);
 let status_filter = reactive([{id:1,status:'ปิดการขาย'},{id:2,status:'กำลังดำเนินการ'},{id:3,status:'สอบถามข้อมูล'}]);
-const per_edit = ref(false);
-const per_del = ref(false);
 
 onBeforeMount(() => {
-  if(ck_pms("update","other-customer")){
-    per_edit.value = true
-  }
-  if(ck_pms("delete","other-customer")){
-    per_del.value = true
-  }
   fetchData();
+
 });
 
 const del = (id) => {
@@ -109,6 +102,10 @@ const del = (id) => {
 
 const edit = (id) => {
   let path = '/customers/edit?customer_edit=' + id;
+  router.push(path);
+};
+const viewDetail = (id) => {
+  let path = '/customers/view-detail?detail=' + id;
   router.push(path);
 };
 const fetchData = () => {
@@ -249,26 +246,27 @@ const setPage = (idx) =>{
 };
 
 const pagesList = computed(() => {
-  const pagesList = [];
+  const pagesList = []
 
   for (let i = 0; i < totalPage.value; i++) {
-    pagesList.push(i);
+    pagesList.push(i)
   }
-  return pagesList;
-});
 
+  return pagesList
+})
 const pages = computed(() => {
     let numShown = 10;
     let pagelist = pagesList.value ;
     numShown = Math.min(numShown, pagelist.length);
 
-    let first = (currentPage.value) - Math.floor(numShown / 2);
+    let first = (currPage.value) - Math.floor(numShown / 2);
 
     first = Math.max(first, 1);
 
     first = Math.min(first, pagelist.length - numShown + 1);
     return [...Array(numShown)].map((k,i) => i + first);
 });
+
 
 
 </script>
@@ -333,15 +331,14 @@ const pages = computed(() => {
         <tr>
           <th scope="col" class="text-center py-3 w-[100px]">ID</th>
           <th scope="col" class="text-center py-3 w-[200px]">ชื่อลูกค้า</th>
-          <th scope="col" class="text-center py-3 w-[200px]">ชื่อผู้ติดต่อ</th>
-          <th scope="col" class="text-center py-3 w-[100px]">เบอร์โทร</th>
-          <th scope="col" class="text-center py-3 w-[100px]">ที่อยู่</th>
+          <th scope="col" class="text-center py-3 w-[200px]">เบอร์โทร</th>
+          <th scope="col" class="text-center py-3 w-[150px]">จังหวัด</th>
           <th scope="col" class="text-center py-3 w-[150px]">ประเภท</th>
-          <th scope="col" class="text-center py-3 w-[150px]">รายละเอียด</th>
+          <!-- <th scope="col" class="text-center py-3 w-[150px]">รายละเอียด</th> -->
           <th scope="col" class="text-center py-3 w-[150px]">สินค้า</th>
           <th scope="col" class="text-center py-3 w-[150px]">สถานะ</th>
           <th scope="col" class="text-center py-3 w-[150px]">ช่องทาง</th>
-          <th scope="col" class="text-center py-3 w-[150px]">หมายเหตุ</th>
+          <!-- <th scope="col" class="text-center py-3 w-[150px]">หมายเหตุ</th> -->
           <th scope="col" class="text-center py-3 w-[150px]">Action</th>
         </tr>
       </thead>
@@ -355,42 +352,38 @@ const pages = computed(() => {
             </div>
           </td>
           <td class="text-center">
-            <div class="w-[160px] truncate">
-              <span v-if="item.contactName !=''">{{item.contactName}}</span>
-              <span v-else>-</span>
-            </div>
-            </td>
-          <td class="text-center">
             <span v-if="item.phone !=''">{{item.phone}}</span>
               <span v-else>-</span>
           </td>
-          <td class="text-center relative">
-
-            <div class="truncate w-[120px]">
-              <span v-if="item.address !=''">{{item.address}}</span>
-              <span v-else>-</span>
-            </div>
-          </td>
-          <td class="text-center">
-            <div class="bg-[#b1a3eb] rounded-2xl text-black font-medium py-1.5 px-2" v-if="item.type=='B2C'">{{item.type}}</div>
-            <div class="bg-[#9aedee] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.type == 'B2B'">{{item.type}}</div>
-            <div class="bg-[#ea96cc] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.type=='Dealer'">{{item.type}}</div>
-            <div class="bg-[#a4f392] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.type=='Seller'">{{item.type}}</div>
-            <div class="bg-[#f7ab40] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.type=='Dropship'">{{item.type}}</div>
-          </td>
-          <td class="text-center">
-
-            <div class="truncate w-[120px]">
-              <span v-if="item.detail !=''">{{item.detail}}</span>
-              <span v-else>-</span>
-            </div>
+            <td class="text-center relative">
+              <div class="truncate w-[120px]">
+                <span v-if="item.address !=''">{{ item.address.substring(item.address.indexOf(' ') + 1) }}</span>
+                <span v-else>-</span>
+              </div>
+            </td>
+          <td class="text-center ">
+          <div v-if="item.type=='B2C'">
+            <span class="bg-[#b1a3eb] rounded-2xl text-black font-medium py-1.5 px-4">{{item.type}}</span>
+          </div>
+          <div v-if="item.type=='B2B'">
+            <span class="bg-[#9aedee]  rounded-2xl text-black font-medium py-1.5 px-4">{{item.type}}</span>
+          </div>
+          <div v-if="item.type=='Dealer'">
+            <span class="bg-[#ea96cc] rounded-2xl text-black font-medium py-1.5 px-4">{{item.type}}</span>
+          </div>
+          <div v-if="item.type=='Seller'">
+            <span class="bg-[#a4f392] rounded-2xl text-black font-medium py-1.5 px-4">{{item.type}}</span>
+          </div>
+          <div v-if="item.type=='Dropship'">
+            <span class="bg-[#f7ab40] rounded-2xl text-black font-medium py-1.5 px-4">{{item.type}}</span>
+          </div>
           </td>
           <td class="text-center">
             <span v-if="item.product !=''">{{item.product}}</span>
             <span v-else>-</span>
           </td>
           <td class="text-center">
-            <div class="bg-[#f17171] rounded-2xl text-xs text-black font-medium py-2 px-2" v-if="item.status=='ปิดการขาย'">{{item.status}}</div>
+            <div class="bg-[#f17171] rounded-2xl text-xs text-black font-medium py-2 px-2 " v-if="item.status=='ปิดการขาย'">{{item.status}}</div>
             <div class="bg-[#ffc34a] rounded-2xl text-xs text-black font-medium py-2 px-2" v-else-if="item.status == 'กำลังดำเนินการ'">{{item.status}}</div>
             <div class="bg-[#4aa1ff] rounded-2xl text-xs text-black font-medium py-2 px-2" v-else-if="item.status == 'สอบถามข้อมูล'">{{item.status}}</div>
           </td>
@@ -398,28 +391,29 @@ const pages = computed(() => {
             <div class="bg-[#bababa] rounded-2xl text-black font-medium py-1.5 px-2" v-if="item.contactBy=='offline'">{{item.contactBy}}</div>
             <div class="bg-[#65cc3d] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'online'">{{item.contactBy}}</div>
           </td>
-          <td class="text-center">
+          <!-- <td class="text-center">
             <div class="truncate w-[120px]">
               <span v-if="item.note !=''">{{item.note}}</span>
               <span v-else>-</span>
             </div>
-          </td>
+          </td> -->
 
           <td class="text-center">
             <div class="flex flex-row justify-center items-center">
-              <div>
-                <button 
-                  v-if="per_edit"
-                  @click="edit(item.id)" class="bg-blue-600 mr-3 px-2 py-1.5 rounded-md">
+              <div title="ดูรายละเอียด">
+                <button  @click="viewDetail(item.id)" class="bg-gray-300 text-black hover:bg-gray-600 hover:text-white mr-3 px-2 py-1.5 rounded-md">
+                  <i class="fa-solid fa-eye text-base"></i>
+                </button>
+              </div>
+              <div  title="แก้ไขข้อมูล" >
+                <button @click="edit(item.id)" class="bg-blue-600 mr-3 px-2 py-1.5 rounded-md">
                   <i class="fa-solid fa-pen text-white text-base"></i>
                 </button>
               </div>
-              <div>
-                <button 
-                  v-if="per_del"
-                  @click="del(item.id)" class="bg-red-600 px-2 py-1.5 rounded-md">
-                  <i class="fa-solid fa-trash text-white text-base"></i>
-                </button>
+              <div title="ลบข้อมูลลูกค้า">
+                  <button @click="del(item.id)" class="bg-red-600 px-2 py-1.5 rounded-md">
+                    <i class="fa-solid fa-trash text-white text-base"></i>
+                  </button>
               </div>
             </div>
           </td>
@@ -448,7 +442,7 @@ const pages = computed(() => {
           </svg>
         </a>
       </li>
-      <li v-for="item in totalPage" :key="item" :class="{ active: currPage == item}"
+      <li v-for="item in pages" :key="item" :class="{ active: currPage == item}"
         @click="setPage(item)" class=" px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-400 dark:border-white dark:text-white dark:hover:bg-gray-700 dark:hover:text-white">
         <a href="#">{{item}}</a>
       </li>
@@ -472,6 +466,7 @@ const pages = computed(() => {
         </a>
       </li>
     </ul>
+    <!-- <small class="ml-4 text-sm font-medium">Page {{ currentPageHuman }} of {{ numPages }}</small> -->
     <small class="ml-4 text-sm font-medium">Page {{ currPage }} of {{ totalPage }}</small>
   </nav>
 
@@ -483,3 +478,4 @@ li.active,li.active:hover {
   color: white;
 }
 </style>
+

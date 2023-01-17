@@ -1,3 +1,4 @@
+
 <script setup>
 import { ref, reactive, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
@@ -48,7 +49,7 @@ const form = reactive({
   subsoilDetail: "",
   subsoilValueMin: "",
   subsoilValueMax: "",
-  soilFertility: "high",
+  soilFertility: "low",
   soilRestrictions: "",
   spaceNatureDetail: "",
   spaceNatureAll: [],
@@ -57,7 +58,7 @@ const form = reactive({
   spaceNatureHill: false,
   spaceNatureMountain: false,
   slope: "",
-  drainage: "high",
+  drainage: "low",
   nearbyNaturalWater: "",
   nearbyInfarmWater: "",
   nearbySmallWater: "",
@@ -70,7 +71,9 @@ onMounted(() => {
     type_form.value = "แก้ไขข้อมูล";
     titleStack.value = ["Admin", "แก้ไขข้อมูลภูมิศาสตร์(ข้อมูลกลาง)"];
     ApiMain.get("/geobase/" + edit_id).then((response) => {
-      const geobase = response.data.data
+      const geobase = response.data.data;
+
+      console.log(geobase);
       form.spaceNatureAll = [(geobase.spaceNaturePlain == "true" ? "spaceNaturePlain" : ""), (geobase.spaceNaturePlateau == "true" ? "spaceNaturePlateau" : ""), geobase.spaceNatureHill == "true" ? "spaceNatureHill" : "", geobase.spaceNatureMountain == "true" ? "spaceNatureMountain" : ""]
       form.province_id = geobase.provinceId;
       form.province_name = geobase.provinceName;
@@ -616,19 +619,19 @@ const submit = () => {
                   <span class="text-red-500">*</span></label>
                 <div class="flex">
                   <div class="flex items-center mr-4">
-                    <input checked id="low_drainage" type="radio" v-model="form.drainage" name="drainage-radio"
+                    <input checked id="low_drainage" type="radio" v-model="form.drainage" value="low" name="drainage-radio"
                       class="w-6 h-6 text-sky-600 bg-gray-100 border-gray-300 focus:ring-sky-500 dark:focus:ring-sky-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                     <label for="low_drainage"
                       class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">เลว</label>
                   </div>
                   <div class="flex items-center mr-4">
-                    <input id="medium_drainage" type="radio" v-model="form.drainage" name="drainage-radio"
+                    <input id="medium_drainage" type="radio" v-model="form.drainage"  value="medium"  name="drainage-radio"
                       class="w-6 h-6 text-sky-600 bg-gray-100 border-gray-300 focus:ring-sky-500 dark:focus:ring-sky-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                     <label for="medium_drainage"
                       class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ปานกลาง</label>
                   </div>
                   <div class="flex items-center mr-4">
-                    <input id="max_drainage" type="radio" v-model="form.drainage" name="drainage-radio"
+                    <input id="max_drainage" type="radio" v-model="form.drainage"  value="high" name="drainage-radio"
                       class="w-6 h-6 text-sky-600 bg-gray-100 border-gray-300 focus:ring-sky-500 dark:focus:ring-sky-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                     <label for="max_drainage"
                       class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ดี</label>
@@ -641,21 +644,21 @@ const submit = () => {
                     class="text-red-500">*</span></label>
                 <div class="flex">
                   <div class="flex items-center mr-4">
-                    <input checked id="low_soilFertility" type="radio" v-model="form.soilFertility"
+                    <input checked id="low_soilFertility" type="radio" v-model="form.soilFertility" value="low"
                       name="soilFertility-radio"
                       class="w-6 h-6 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                     <label for="low_soilFertility"
                       class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ต่ำ</label>
                   </div>
                   <div class="flex items-center mr-4">
-                    <input id="medium_soilFertility" type="radio" v-model="form.soilFertility"
+                    <input id="medium_soilFertility" type="radio" v-model="form.soilFertility" value="medium"
                       name="soilFertility-radio"
                       class="w-6 h-6 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                     <label for="medium_soilFertility"
                       class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ปานกลาง</label>
                   </div>
                   <div class="flex items-center mr-4">
-                    <input id="max_soilFertility" type="radio" v-model="form.soilFertility" name="soilFertility-radio"
+                    <input id="max_soilFertility" type="radio" v-model="form.soilFertility" name="soilFertility-radio" value="high"
                       class="w-6 h-6 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                     <label for="max_soilFertility"
                       class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">สูง</label>
@@ -877,3 +880,4 @@ const submit = () => {
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 </style>
+

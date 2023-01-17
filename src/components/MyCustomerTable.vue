@@ -12,7 +12,7 @@ import UserAvatar from "@/components/UserAvatar.vue";
 import axios from "axios";
 import Swal from "sweetalert2";
 import moment from "moment";
-import vagetable from "/images/cabbage.png";
+import vagetable from "../../public/images/cabbage.png";
 
 defineProps({
   checkable: Boolean,
@@ -55,44 +55,7 @@ onBeforeMount(() => {
 
 });
 
-// const del = (id) => {
-//   Swal.fire({
-//     title: "ยืนยันการลบ",
-//     text: "คุณต้องการลบใช้หรือไม่",
-//     icon: "warning",
-//     showCancelButton: true,
-//     confirmButtonColor: "#3085d6",
-//     cancelButtonColor: "#d33",
-//     confirmButtonText: "Ok",
-//   }).then((result) => {
-//     console.log(result);
-//     if (result.isConfirmed == true) {
-//       ApiMain.delete("/other-customer/" + id).then((res) => {
-//           setInterval(function () {
-//             location.reload();
-//           }, 1500);
-//           Swal.fire("Deleted!", "Your file has been deleted.", "success");
-//           console.log("del" + id);
-//         })
-//         .catch((error) => {
-//           console.log(error);
-//         });
-//     }
-//   });
-// };
-
-const edit = (id) => {
-  let path = '/my-customers/edit?customer_edit=' + id;
-  router.push(path);
-};
 const fetchData = () => {
-  // ApiMain.get("/other-customer?order=DESC&page=1&take=99999").then((response) => {
-  //   states.customers = response.data.data;
-  // }).catch((error) => {
-  //   console.log(error);
-  // });
-
-
   ApiSso.get("/api/mgr/users",{
         auth: {
           username: 'admin',
@@ -150,20 +113,20 @@ const setPage = (idx) =>{
 };
 
 const pagesList = computed(() => {
-  const pagesList = [];
+  const pagesList = []
 
   for (let i = 0; i < totalPage.value; i++) {
-    pagesList.push(i);
+    pagesList.push(i)
   }
-  return pagesList;
-});
 
+  return pagesList
+})
 const pages = computed(() => {
     let numShown = 10;
     let pagelist = pagesList.value ;
     numShown = Math.min(numShown, pagelist.length);
 
-    let first = (currentPage.value) - Math.floor(numShown / 2);
+    let first = (currPage.value) - Math.floor(numShown / 2);
 
     first = Math.max(first, 1);
 
@@ -299,3 +262,4 @@ li.active,li.active:hover {
   color: white;
 }
 </style>
+

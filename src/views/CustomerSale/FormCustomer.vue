@@ -6,6 +6,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "vue-router";
 
+
 let url = new URL(window.location.href);
 const id = url.searchParams.get("customer_edit");
 let type_form = ref('');
@@ -36,7 +37,7 @@ const dataform = reactive({
   product: "",
   contactBy: "",
   status: "",
-  note: ""
+  note: "",
 });
 
 
@@ -80,8 +81,7 @@ onMounted(() => {
     type_form.value = 'เพิ่ม';
 
   }
-})
-
+});
 
 const submit = async () => {
   const result = await v$.value.$validate();
@@ -175,6 +175,7 @@ const submit = async () => {
 const closeForm = () => {
   router.push('/customers');
 };
+
 </script>
 <template>
   <div class="flex justify-center bg-white dark:bg-slate-700 m-4 p-10 rounded-2xl shadow-custom">
@@ -228,19 +229,17 @@ const closeForm = () => {
           <textarea id="address" rows="1" v-model="dataform.detail" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
           <!-- <small v-if="v$.detail.$error" class="text-red-500 float-right">{{ v$.detail.$errors[0].$message }}</small> -->
         </div>
-        <div class="flex flex-row w-full">
-          <div class="mb-4 w-full ">
+        <div class="mb-4 w-full ">
             <label for="product" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">สินค้า <span class="text-black opacity-50">(ไม่บังคับ)</span></label>
             <select id="type" v-model="dataform.product"
               class="bg-gray-50 border text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:focus:ring-blue-500 dark:placeholder-gray-400 dark:focus:border-blue-500">
               <option value="" disabled selected>เลือกสินค้า</option>
               <option v-for="val of product_list" :key="val" :value="val.product">{{ val.product }}</option>
             </select>
-            <!-- <small v-if="v$.product.$error" class="text-red-500 float-right">{{
-              v$.product.$errors[0].$message
-            }}</small> -->
+
           </div>
-          <div class="mb-4 w-full mx-2">
+        <div class="flex flex-row w-full gap-2">
+          <div class="mb-4 w-full">
             <label for="status" class="block mb-2 text-base font-medium text-black dark:text-white ">ช่องทาง <span
                 class="text-red-500">*</span></label>
             <select id="type" v-model="dataform.contactBy"
@@ -289,3 +288,4 @@ const closeForm = () => {
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 </style>
+

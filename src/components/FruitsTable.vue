@@ -12,7 +12,7 @@ import UserAvatar from "@/components/UserAvatar.vue";
 import axios from "axios";
 import Swal from "sweetalert2";
 import moment from "moment";
-import vagetable from "/images/cabbage.png";
+import vagetable from "../../public/images/cabbage.png";
 
 defineProps({
   checkable: Boolean,
@@ -32,8 +32,6 @@ const tableTrStyle = computed(() => mainStore.tableTrStyle);
 const tableTrOddStyle = computed(() => mainStore.tableTrOddStyle);
 
 const darkMode = computed(() => mainStore.darkMode);
-const per_edit = ref(false);
-const per_del = ref(false);
 
 const states = reactive({
   fruits: [],
@@ -59,13 +57,8 @@ let data_all = ref([]);
 let searchName = ref('');
 
 onBeforeMount(() => {
-  if(ck_pms("update","breed")){
-    per_edit.value = true
-  }
-  if(ck_pms("delete","breed")){
-    per_del.value = true
-  }
   fetchData();
+
 });
 
 const del = (id) => {
@@ -161,26 +154,27 @@ const setPage = (idx) =>{
 };
 
 const pagesList = computed(() => {
-  const pagesList = [];
+  const pagesList = []
 
   for (let i = 0; i < totalPage.value; i++) {
-    pagesList.push(i);
+    pagesList.push(i)
   }
-  return pagesList;
-});
 
+  return pagesList
+})
 const pages = computed(() => {
     let numShown = 10;
     let pagelist = pagesList.value ;
     numShown = Math.min(numShown, pagelist.length);
 
-    let first = (currentPage.value) - Math.floor(numShown / 2);
+    let first = (currPage.value) - Math.floor(numShown / 2);
 
     first = Math.max(first, 1);
 
     first = Math.min(first, pagelist.length - numShown + 1);
     return [...Array(numShown)].map((k,i) => i + first);
 });
+
 
 // custom solution
 // const numPages = computed(() => {
@@ -356,12 +350,12 @@ const pages = computed(() => {
           <td class="text-center">
             <div class="flex flex-row justify-center items-center">
               <div>
-                <button v-if="per_edit" @click="edit(item.id)" class="bg-blue-600 mr-3 px-2 py-1.5 rounded-md">
+                <button @click="edit(item.id)" class="bg-blue-600 mr-3 px-2 py-1.5 rounded-md">
                   <i class="fa-solid fa-pen text-white text-base"></i>
                 </button>
               </div>
               <div>
-                  <button v-if="per_del" @click="del(item.id)" class="bg-red-600 px-2 py-1.5 rounded-md">
+                  <button @click="del(item.id)" class="bg-red-600 px-2 py-1.5 rounded-md">
                     <i class="fa-solid fa-trash text-white text-base"></i>
                   </button>
               </div>
@@ -392,7 +386,7 @@ const pages = computed(() => {
           </svg>
         </a>
       </li>
-      <li v-for="item in totalPage" :key="item" :class="{ active: currPage == item}"
+      <li v-for="item in pages" :key="item" :class="{ active: currPage == item}"
         @click="setPage(item)" class=" px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-400 dark:border-white dark:text-white dark:hover:bg-gray-700 dark:hover:text-white">
         <a href="#">{{item}}</a>
       </li>
@@ -475,3 +469,4 @@ li.active,li.active:hover {
   color: white;
 }
 </style>
+
