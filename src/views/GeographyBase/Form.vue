@@ -467,7 +467,7 @@ const submit = () => {
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกจังหวัด <span
                       class="text-red-500">*</span></label>
                   <div class="relative">
-                    <input type="text" v-model="searchProvince" id="province"
+                    <input type="text" v-model="searchProvince" id="province" autocomplete="off"
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-4 p-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="เลือกจังหวัด">
                     <div class="flex absolute inset-y-0 right-0 items-center pr-3 pointer-events-none">
@@ -493,7 +493,7 @@ const submit = () => {
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกอำเภอ <span
                       class="text-red-500">*</span></label>
                   <div class="relative">
-                    <input type="text" v-model="searchDistrict" id="district"
+                    <input type="text" v-model="searchDistrict" id="district" autocomplete="off"
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-4 p-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="เลือกอำเภอ">
                     <div class="flex absolute inset-y-0 right-0 items-center pr-3 pointer-events-none">
@@ -518,7 +518,7 @@ const submit = () => {
                   <label for="province" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เลือกตำบล
                     <span class="text-red-500">*</span></label>
                   <div class="relative">
-                    <input type="text" v-model="searchSubDistrict" id="sub-district"
+                    <input type="text" v-model="searchSubDistrict" id="sub-district" autocomplete="off"
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-4 p-2  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="เลือกตำบล">
                     <div class="flex absolute inset-y-0 right-0 items-center pr-3 pointer-events-none">
@@ -543,34 +543,34 @@ const submit = () => {
               <label for="message"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">คุณสมบัติของดิน <span
                   class="text-red-500">*</span></label>
-              <textarea id="message" rows="1" v-model="form.soilProperties"
+              <textarea id="message" rows="1" v-model="form.soilProperties" autocomplete="off"
                 class="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="กรอกคุณสมบัติของดิน"></textarea>
             </div>
             <div class="mb-4">
               <label for="topsoil" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ดินชั้นบน
                 <span class="text-red-500">*</span></label>
-              <input type="text" v-model="form.topsoilDetail" id="topsoil" placeholder="กรอกดินชั้นบน"
+              <input type="text" v-model="form.topsoilDetail" id="topsoil" placeholder="กรอกดินชั้นบน" autocomplete="off"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
             <div class="flex flex-row w-full gap-2">
               <div class="mb-4 w-full ">
                 <label for="ph_topsoil_min" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ค่า
                   pH ดิดชั้นบน ต่ำสุด <span class="text-red-500">*</span></label>
-                <input type="number" step="any" v-model="form.topsoilValueMin" id="ph_topsoil_min" placeholder="0"
+                <input type="number" step="any" v-model="form.topsoilValueMin" id="ph_topsoil_min" placeholder="0" autocomplete="off"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               </div>
               <div class="mb-4 w-full">
                 <label for="ph_topsoil_max" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ค่า
                   pH ดิดชั้นบน สูงสุด <span class="text-red-500">*</span></label>
-                <input type="number" step="any" v-model="form.topsoilValueMax" id="ph_topsoil_max" placeholder="0"
+                <input type="number" step="any" v-model="form.topsoilValueMax" id="ph_topsoil_max" placeholder="0" autocomplete="off"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               </div>
             </div>
             <div class="mb-4">
               <label for="bottomsoil" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ดินชั้นล่าง
                 <span class="text-red-500">*</span></label>
-              <input type="text" v-model="form.subsoilDetail" id="bottomsoil"  placeholder="กรอกดินชั้นล่าง"
+              <input type="text" v-model="form.subsoilDetail" id="bottomsoil"  placeholder="กรอกดินชั้นล่าง" autocomplete="off"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
 
@@ -578,13 +578,13 @@ const submit = () => {
               <div class="w-full">
                 <label for="subsoilValueMin" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ค่า
                   pH ดินชั้นล่าง ต่ำสุด <span class="text-red-500">*</span></label>
-                <input type="number" step="any" v-model="form.subsoilValueMin" id="subsoilValueMin" placeholder="0"
+                <input type="number" step="any" v-model="form.subsoilValueMin" id="subsoilValueMin" placeholder="0" autocomplete="off"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               </div>
               <div class="w-full">
                 <label for="subsoilValueMax" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ค่า
                   pH ดินชั้นล่าง สูงสุด <span class="text-red-500">*</span></label>
-                <input type="number" step="any" v-model="form.subsoilValueMax" id="subsoilValueMax" placeholder="0"
+                <input type="number" step="any" v-model="form.subsoilValueMax" id="subsoilValueMax" placeholder="0" autocomplete="off"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               </div>
             </div>
@@ -593,7 +593,7 @@ const submit = () => {
               <label for="soilRestrictions"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ข้อจํากัดของดิน <span
                   class="text-red-500">*</span></label>
-              <input type="text" v-model="form.soilRestrictions" id="soilRestrictions"  placeholder="กรอกข้อจํากัดของดิน"
+              <input type="text" v-model="form.soilRestrictions" id="soilRestrictions"  placeholder="กรอกข้อจํากัดของดิน" autocomplete="off"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
             <div class="mb-6">
@@ -610,7 +610,7 @@ const submit = () => {
             <div class="mb-6">
               <label for="slope" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">ความชัน (
                 หน่วยเมตร ) <span class="text-red-500">*</span></label>
-              <input v-model="form.slope" type="number" placeholder="0" id="slope"
+              <input v-model="form.slope" type="number" placeholder="0" id="slope" autocomplete="off"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
             <div class="flex flex-row">
