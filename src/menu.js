@@ -26,6 +26,8 @@ import axios from "axios";
 const token = localStorage.getItem("tkfw");
 const roleid = localStorage.getItem("roleid");
 let menu = [];
+let sub_menu_breed = []
+let sub_geo = []
 
 if (roleid) {
   await axios
@@ -39,13 +41,32 @@ if (roleid) {
     )
     .then((data) => {
       if (roleid == 1) {
-        menu.push({ to: "/users", label: "ผู้ใช้งาน", icon: mdiAccount });
         menu.push({
-          to: "/roles",
-          label: "Role",
-          icon: mdiShieldAccountVariant,
+          label: "ตั้งค่า/จัดการผู้ดูแล",
+          icon: mdiViewList,
+          menu: [
+            { to: "/users", label: "ผู้ดูแล", icon: mdiAccount },
+            {
+              to: "/roles",
+              label: "สถานะผู้ดูแล",
+              icon: mdiShieldAccountVariant,
+            },
+          ],
         });
       }
+
+      menu.push({
+        label: "ข้อมูลด้านพืชพรรณ",
+        icon: mdiViewList,
+        menu: sub_menu_breed,
+      })
+
+      menu.push({
+        label: "ข้อมูลด้านภูมิศาสตร์",
+        icon: mdiViewList,
+        menu: sub_geo,
+      })
+      
       const rolePermission = data.data.data.rolePermission;
       let pms = [];
       for (const [key, value] of Object.entries(rolePermission)) {
@@ -60,33 +81,20 @@ if (roleid) {
           object: value.permission[0].object[0].name,
         });
 
-        if (
-          value.permission[0].action == "read" &&
-          value.permission[0].object[0].name == "breed-categorise"
-        ) {
-          menu.push({
-            to: "/fruits-type",
-            label: "ประเภทพืชพันธุ์ผลไม้",
-            icon: mdiFruitWatermelon,
-          });
+        if ( value.permission[0].action == "read" && value.permission[0].object[0].name == "breed-categorise") {
+          sub_menu_breed.push({ to: "/fruits-type", label: "ประเภทพืชพรรณ",icon: mdiFruitWatermelon,})
         }
-        if (
-          value.permission[0].action == "read" &&
-          value.permission[0].object[0].name == "breed"
-        ) {
-          menu.push({
-            to: "/fruits",
-            label: "พืชพันธุ์ผลไม้",
-            icon: mdiFruitCherries,
-          });
+        if ( value.permission[0].action == "read" && value.permission[0].object[0].name == "breed") {
+          sub_menu_breed.push({ to: "/fruits", label: "ฐานข้อมูลพืชพรรณ", icon: mdiFruitCherries,})
         }
+
         if (
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "geography"
         ) {
-          menu.push({
+          sub_geo.push({
             to: "/geography",
-            label: "ภูมิศาสตร์(ข้อมูลลูกค้า)",
+            label: "ฐานข้อมูลลูกค้า",
             icon: mdiEarth,
           });
         }
@@ -94,9 +102,9 @@ if (roleid) {
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "geography-base"
         ) {
-          menu.push({
+          sub_geo.push({
             to: "/geography_base",
-            label: "ภูมิศาสตร์(ข้อมูลกลาง)",
+            label: "ฐานข้อมูลกลาง",
             icon: mdiEarth,
           });
         }
@@ -105,9 +113,15 @@ if (roleid) {
           value.permission[0].object[0].name == "weather"
         ) {
           menu.push({
-            to: "/weather",
-            label: "ภูมิอากาศ",
-            icon: mdiWeatherPartlyRainy,
+            label: "ข้อมูลด้านภูมิอากาศ",
+            icon: mdiViewList,
+            menu: [
+              {
+                to: "/weather",
+                label: "ฐานข้อมูลภูมิอากาศ",
+                icon: mdiWeatherPartlyRainy,
+              },
+            ],
           });
         }
         if (
@@ -115,22 +129,37 @@ if (roleid) {
           value.permission[0].object[0].name == "customer"
         ) {
           menu.push({
-            to: "/my-customers",
-            label: "ข้อมูลลูกค้าของฉัน",
-            icon: mdiAccountSupervisorOutline,
-          });
+            label: "ผู้ใช้งานแพลตฟอร์มและแอปพลิเคชั่น",
+            icon: mdiViewList,
+            menu: [
+              {
+                to: "/my-customers",
+                label: "ข้อมูลลูกค้าของฉัน",
+                icon: mdiAccountSupervisorOutline,
+              },
+            ],
+          })         
         }
         if (
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "other-customer"
         ) {
-          menu.push({
-            to: "/customers",
-            label: "ข้อมูลลูกค้าสำหรับฝ่ายขาย",
-            icon: mdiFaceAgent,
-          });
+          menu.push(
+            {
+              label: "ข้อมูลลูกค้าสำหรับฝ่ายขาย",
+              icon: mdiViewList,
+              menu: [
+                {
+                  to: "/customers",
+                  label: "ฐานข้อมูลลูกค้า",
+                  icon: mdiFaceAgent,
+                },
+              ],
+            }          
+          );
         }
       }
+      console.log(menu)
       localStorage.setItem("pms", JSON.stringify(pms));
     })
     .catch((error) => {

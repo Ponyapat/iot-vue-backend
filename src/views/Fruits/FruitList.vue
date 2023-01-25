@@ -2,7 +2,7 @@
   <title-bar :title-stack="titleStack" />
   <card-component
       :icon="mdiFruitCherries"
-      title="พืชพันธุ์ผลไม้"
+      title="พืชพรรณผลไม้"
       has-table
       :addlink="Addlink"
     >
@@ -16,7 +16,7 @@ import TitleBar from "@/components/TitleBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import FruitsTable from '@/components/FruitsTable.vue'
 import { mdiFruitCherries } from '@mdi/js'
-const titleStack = ref(["พืชพันธุ์ผลไม้", "ผู้ดูแลระบบ"]);
+const titleStack = ref(["พืชพรรณผลไม้", "ผู้ดูแลระบบ"]);
 const Addlink = ref(null);
 onBeforeMount(() => {
   if(ck_pms("create","breed")){

@@ -22,7 +22,7 @@ const v$ = useVuelidate(rules, dataform) ;
 
 onMounted(() => {
   if(id){
-    type_form.value = 'แก้ไขประเภทพืชพันธุ์ผลไม้'
+    type_form.value = 'แก้ไขประเภทพืชพรรณผลไม้'
     ApiMain.get("/breed-categorise/"+id).then((res) => {
       dataform.name = res.data.data.name ;
       dataform.prefix = res.data.data.prefix ;
@@ -31,7 +31,7 @@ onMounted(() => {
     });
   }
   else {
-    type_form.value = 'เพิ่มประเภทพืชพันธุ์ผลไม้'
+    type_form.value = 'เพิ่มประเภทพืชพรรณผลไม้'
   }
 })
 

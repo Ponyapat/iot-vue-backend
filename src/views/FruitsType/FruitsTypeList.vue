@@ -2,7 +2,7 @@
   <title-bar :title-stack="titleStack" />
   <card-component
       :icon="mdiFruitWatermelon"
-      title="ประเภทพืชพันธุ์ผลไม้"
+      title="ประเภทพืชพรรณผลไม้"
       has-table
       :addlink="Addlink"
     >
@@ -16,7 +16,7 @@ import TitleBar from "@/components/TitleBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import FruitsTypeTable from '@/components/FruitsTypeTable.vue'
 import { mdiFruitWatermelon } from '@mdi/js'
-const titleStack = ref(["ประเภทพืชพันธุ์ผลไม้", "ผู้ดูแลระบบ"]);
+const titleStack = ref(["ประเภทพืชพรรณผลไม้", "ผู้ดูแลระบบ"]);
 const Addlink = ref(null);
 
 onBeforeMount(() => {

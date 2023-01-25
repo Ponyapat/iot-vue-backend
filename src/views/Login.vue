@@ -23,8 +23,8 @@ const mainStore = useMainStore();
 let ck_login = ref(0);
 
 const form = reactive({
-  username: "sonicnong@hotmail.com",
-  password: "123456",
+  username: "", //sonicnong@hotmail.com
+  password: "", //123456
   remember: ["remember"],
 });
 

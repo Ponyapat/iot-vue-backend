@@ -93,13 +93,14 @@ const submit = () => {
     <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
         <div class="flex items-center pl-3">
             <label v-if="objects.name=='geography'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ภูมิศาสตร์(ข้อมูลลูกค้า)</label>
-            <label v-else-if="objects.name=='weather'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ภูมิอากาศ</label>
-            <label v-else-if="objects.name=='breed'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">พืชพันธุ์ผลไม้</label>
-            <label v-else-if="objects.name=='breed-categorise'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ประเภทพืชพันธุ์ผลไม้</label>
             <label v-else-if="objects.name=='geography-base'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ภูมิศาสตร์(ข้อมูลกลาง)</label>
+            <label v-else-if="objects.name=='weather'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ภูมิอากาศ</label>
+            <label v-else-if="objects.name=='breed'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ฐานข้อมูลพืชพรรณ</label>
+            <label v-else-if="objects.name=='breed-categorise'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ประเภทพืชพรรณ</label>
             <label v-else-if="objects.name=='customer'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ข้อมูลลูกค้าของฉัน</label>
             <label v-else-if="objects.name=='other-customer'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ข้อมูลลูกค้าสำหรับฝ่ายขาย</label>
-            <label v-else-if="objects.name=='user'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ผู้ใช้งาน</label>
+            <label v-else-if="objects.name=='user'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ผู้ดูแล</label>
+            <label v-else-if="objects.name=='role'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">สถานะผู้ดูแล</label>
             <label v-else for="vue-checkbox-list" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ objects.name }}</label>
         </div>
     </li>
