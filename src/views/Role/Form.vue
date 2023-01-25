@@ -35,53 +35,76 @@ const fetchRoleDataId = () => {
   }
 }
 const submit = () => {
-  if (id) {
-    ApiMain.put("/role/" + id, {
-        name: form.name
-      }).then((data) => {
-        if (data.data.status == 204 || data.data.status == 200) {
-          console.log(data.data.status);
-          Swal.fire({
-            icon: "success",
-            title: "แก้ไขข้อมูลสถานะ สำเร็จ",
-            timer: 2500,
-            showConfirmButton: 1,
-          });
-          router.push("/roles");
+  ApiMain.get("/role?order=ASC&page=1&take=999").then((data) => {
+    console.log(data.data.data)
+    const obj_user = data.data.data
+    let ck_namerole = true
+    Object.values(obj_user).forEach(val => {
+      if (val.name == form.name){
+        console.log(val.name);
+        ck_namerole = false
+      }
+    })
+
+    if(ck_namerole){
+      if (id) {
+          ApiMain.put("/role/" + id, {
+              name: form.name
+            }).then((data) => {
+              if (data.data.status == 204 || data.data.status == 200) {
+                console.log(data.data.status);
+                Swal.fire({
+                  icon: "success",
+                  title: "แก้ไขข้อมูลสถานะ สำเร็จ",
+                  timer: 2500,
+                  showConfirmButton: 1,
+                });
+                router.push("/roles");
+              } else {
+                Swal.fire({
+                  icon: "warning",
+                  title: "ไม่สามารถแก้ไขข้อมูลสถานะได้",
+                  timer: 3000,
+                  showConfirmButton: 1,
+                });
+                return false;
+              }
+            })
         } else {
-          Swal.fire({
-            icon: "warning",
-            title: "ไม่สามารถแก้ไขข้อมูลสถานะได้",
-            timer: 3000,
-            showConfirmButton: 1,
-          });
-          return false;
+          ApiMain.post("/role", {
+              name: form.name
+            }).then((data) => {
+              if (data.data.status == 204 || data.data.status == 200 || data.data.status == 201) {
+                console.log(data.data.status);
+                Swal.fire({
+                  icon: "success",
+                  title: "เพิ่มข้อมูลสถานะ สำเร็จ",
+                  timer: 2500,
+                  showConfirmButton: 1,
+                });
+                router.push("/roles");
+              } else {
+                Swal.fire({
+                  icon: "warning",
+                  title: "ไม่สามารถเพิ่มข้อมูลสถานะได้",
+                  timer: 3000,
+                  showConfirmButton: 1,
+                });
+                return false;
+              }
+            })
         }
-      })
-  } else {
-    ApiMain.post("/role", {
-        name: form.name
-      }).then((data) => {
-        if (data.data.status == 204 || data.data.status == 200 || data.data.status == 201) {
-          console.log(data.data.status);
-          Swal.fire({
-            icon: "success",
-            title: "เพิ่มข้อมูลสถานะ สำเร็จ",
-            timer: 2500,
-            showConfirmButton: 1,
-          });
-          router.push("/roles");
-        } else {
-          Swal.fire({
-            icon: "warning",
-            title: "ไม่สามารถเพิ่มข้อมูลสถานะได้",
-            timer: 3000,
-            showConfirmButton: 1,
-          });
-          return false;
-        }
-      })
-  }
+    }else{
+      Swal.fire({
+        icon: "warning",
+        title: "ชื่อสถานะซ้ำในระบบ",
+        timer: 2000,
+        showConfirmButton: 1,
+      });
+      return false;
+    }
+  })
+
 }
 
 const clearData = () => {
