@@ -270,6 +270,30 @@ const routes = [
   },
   {
     meta: {
+      title: "Keyword",
+    },
+    path: "/keyword",
+    name: "keyword",
+    component: () => import("@/views/Keyword/List.vue"),
+  },
+  {
+    meta: {
+      title: "ADDKeyword"
+    },
+    path: "/keyword/add",
+    name: "ADDKeyword",
+    component: () => import("@/views/Keyword/Form.vue")
+  },
+  {
+    meta: {
+      title: "EDITKeyword"
+    },
+    path: "/keyword/edit/:id",
+    name: "EDITKeyword",
+    component: () => import("@/views/Keyword/Form.vue")
+  },
+  {
+    meta: {
       title: "Error",
       fullScreen: true,
     },

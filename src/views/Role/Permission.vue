@@ -101,6 +101,7 @@ const submit = () => {
             <label v-else-if="objects.name=='other-customer'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ข้อมูลลูกค้าสำหรับฝ่ายขาย</label>
             <label v-else-if="objects.name=='user'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ผู้ดูแล</label>
             <label v-else-if="objects.name=='role'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">สถานะผู้ดูแล</label>
+            <label v-else-if="objects.name=='keyword'" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">คำค้นหาสถานที่</label>
             <label v-else for="vue-checkbox-list" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ objects.name }}</label>
         </div>
     </li>
