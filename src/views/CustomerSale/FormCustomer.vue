@@ -488,7 +488,6 @@ const submitForm = async () => {
         let product = dataform.otherCustomerProduct;
       for (let index = 0; index < product.length; index++) {
         const element = product[index];
-        console.log(element.additionalServices);
         //  เพิ่มข้อมูลสินค้าของลูกค้าคนนี้
         await ApiMain.post(`/other-customer/${customer_id}/add-product`, {
           estimate: element.estimate,
@@ -499,18 +498,33 @@ const submitForm = async () => {
           warrantyExpired: element.warrantyExpired,
           additionalServices: element.additionalServices,
           etc: element.etc
-        }).then(response => {
+        }).then((response) => {
+
           console.log(response.data);
-        }).catch(error => console.log(error));
+          if(response.data.status == 201 || response.data.status == 200){
+            Swal.fire({
+              icon: "success",
+              title: "เพิ่มข้อมูลลูกค้าสำเร็จ",
+              confirmButtonText: 'ตกลง',
+              showConfirmButton: 1,
+            });
+            router.push("/customers");
+          }
+          else  {
+            Swal.fire({
+              icon: "success",
+              title: "เพิ่มข้อมูลลูกค้าสไม่สำเร็จ",
+              confirmButtonText: 'ตกลง',
+              showConfirmButton: 1,
+            });
+          }
+
+        }).catch((error) => {
+          console.log(error)
+        });
       }
 
-        Swal.fire({
-          icon: "success",
-          title: "เพิ่มข้อมูลลูกค้าสำเร็จ",
-          confirmButtonText: 'ตกลง',
-          showConfirmButton: 1,
-        });
-        router.push("/customers");
+
       } else {
         Swal.fire({
           icon: "warning",
