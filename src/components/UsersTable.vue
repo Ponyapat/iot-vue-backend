@@ -201,8 +201,6 @@ const statusText = (value) => {
       <thead>
         <tr>
           <th>#</th>
-          <!-- <th>Admin ID</th> -->
-          <th>Username</th>
           <th>Name</th>
           <th>Email</th>
           <th>Role</th>
@@ -218,12 +216,6 @@ const statusText = (value) => {
         >
           <td data-label="#">
             {{ index + 1 }}
-          </td>
-          <!-- <td data-label="ID" class="p-3">
-            {{ user.id }}
-          </td> -->
-          <td class="p-3" data-label="Username">
-            {{ user.username }}
           </td>
           <td class="p-3" data-label="Name">
             {{ user.name }}

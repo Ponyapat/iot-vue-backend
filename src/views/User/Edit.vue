@@ -30,7 +30,7 @@ onMounted(async () => {
   await ApiMain.get("/users/"+id+"/profile").then(response => {
       console.log('DEBUG users: ', response)
       form.name = response.data.user.name
-      form.username = response.data.user.username
+      form.username = "username"
       form.email = response.data.user.email
       if (!response.data.user.role) {
         form.role = states.roles[1]
@@ -42,7 +42,7 @@ onMounted(async () => {
 
 const fetchRole = () => {
   ApiMain
-    .get("/role")
+    .get("/role?order=ASC&page=1&take=999")
     .then((data) => {
       console.log('DEBUG ROLE: ', data)
       states.roles = data.data.data
@@ -109,13 +109,13 @@ const submit = () => {
           placeholder="Name"
         />
       </field>
-      <field label="Username" placeholder="กรอก Username ผู้ใช้" :require="true">
+      <!-- <field label="Username" placeholder="กรอก Username ผู้ใช้" :require="true">
         <control
           v-model="form.username"
           type="text"
           placeholder="Username"
         />
-      </field>
+      </field> -->
       <field label="E-mail" placeholder="กรอก E-mail ผู้ใช้" :require="true">
         <control
           v-model="form.email"

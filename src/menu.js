@@ -179,6 +179,12 @@ if (roleid) {
         }
       }
       console.log(menu)
+      if(sub_menu_breed.length==0){
+        menu = menu.filter(x => x.label != "ข้อมูลด้านพืชพรรณ");
+      }
+      if(sub_geo.length==0){
+        menu = menu.filter(x => x.label != "ข้อมูลด้านภูมิศาสตร์");
+      }
       localStorage.setItem("pms", JSON.stringify(pms));
     })
     .catch((error) => {

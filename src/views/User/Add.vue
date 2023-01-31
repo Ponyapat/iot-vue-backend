@@ -46,7 +46,7 @@ const clearData = () => {
 
 const fetchRole = () => {
   console.log("fetch role");
-  ApiMain.get("/role").then((data) => {
+  ApiMain.get("/role?order=ASC&page=1&take=999").then((data) => {
     console.log("DEBUG ROLE: ", data.data.data);
     states.roles = data.data.data;
     // set role default เป็น admin id 2
@@ -59,7 +59,7 @@ const submit = () => {
   //console.log(form)
   ApiMain.post("/auth/register", {
     name: form.name,
-    username: form.username,
+    username: "username",
     email: form.email,
     password: form.password,
     roleId: form.role_id,
@@ -99,13 +99,13 @@ const submit = () => {
       <field label="Name" placeholder="กรอก Name ผู้ใช้" :require="true">
         <control v-model="form.name" type="text" placeholder="Name" />
       </field>
-      <field
+      <!-- <field
         label="Username"
         placeholder="กรอก Username ผู้ใช้"
         :require="true"
       >
         <control v-model="form.username" type="text" placeholder="Username" />
-      </field>
+      </field> -->
       <field label="E-mail" placeholder="กรอก E-mail ผู้ใช้" :require="true">
         <control v-model="form.email" type="email" placeholder="E-mail" />
       </field>
