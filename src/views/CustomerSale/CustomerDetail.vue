@@ -161,7 +161,7 @@ const reversedArray = computed(() => {
                   {{ moment(new Date( product.warrantyExpired)).format('DD/MM/YYYY') }}
                 </td>
                 <td class="px-6 py-4 bg-gray-50 text-center">
-                  <div v-if="product.estimate == 'string'">
+                  <div v-if="product.estimate == 'string' || product.estimate ==''">
                     -
                   </div>
                   <div v-else>
@@ -169,7 +169,7 @@ const reversedArray = computed(() => {
                   </div>
                 </td>
                 <td class="px-6 py-4 text-center">
-                  <div v-if="product.estimate == 'string'">
+                  <div v-if="product.estimate == 'string' || product.estimate == ''">
                     -
                   </div>
                   <div v-else>
@@ -177,7 +177,7 @@ const reversedArray = computed(() => {
                   </div>
                 </td>
                 <td class="px-6 py-4 bg-gray-50">
-                  <div v-if="product.additionalServices == 'string'">
+                  <div v-if="product.additionalServices == 'string' || product.additionalServices == ''">
                     -
                   </div>
                   <div v-else>
@@ -185,7 +185,7 @@ const reversedArray = computed(() => {
                   </div>
                 </td>
                 <td class="px-6 py-4">
-                  <div v-if="product.etc == 'string'">
+                  <div v-if="product.etc == 'string' || product.etc == ''">
                     -
                   </div>
                   <div v-else>
@@ -209,24 +209,24 @@ const reversedArray = computed(() => {
         <div class="relative overflow-x-auto">
           <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-800 uppercase  dark:text-gray-400 ">
-              <tr>
-                <th scope="col" class="px-6 py-3 text-base font-bold text-start ml-2">
+              <tr class="bg-gray-100">
+                <th scope="col" class="px-6 py-3 text-base font-bold text-start ml-2 ">
                   สถานะ
                 </th>
-                <th scope="col" class="px-6 py-3 text-base font-bold text-center">
+                <th scope="col" class="px-6 py-3 text-base font-bold text-center truncate">
                   รายละเอียด
                 </th>
-                <th scope="col" class="px-6 py-3 text-base font-bold text-center">
+                <th scope="col" class="px-6 py-3 text-base font-bold text-center truncate">
                   วันที่ / เวลา
                 </th>
-                <th scope="col" class="px-6 py-3 text-base font-bold text-center">
+                <th scope="col" class="px-6 py-3 text-base font-bold text-center truncate">
                   ผู้บันทึก
                 </th>
               </tr>
             </thead>
             <tbody>
-              <tr class="bg-white dark:bg-gray-800 " v-for="(log, index) in reversedArray" :key="index">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              <tr class="bg-white border-b dark:bg-gray-800 " v-for="(log, index) in reversedArray" :key="index">
+                <td  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   <div v-if="log.status == 'สอบถามข้อมูล'">
                     <span class="bg-gray-200 py-1.5 px-4 rounded-lg">{{ log.status }}</span>
                   </div>
@@ -246,15 +246,16 @@ const reversedArray = computed(() => {
                     <span class="bg-blue-200 py-1.5 px-4 rounded-lg">{{ log.status }}</span>
                   </div>
 
-                </th>
-                <td class="px-6 py-4 text-center text-gray-900">
-                  {{ log.detailLog }}
                 </td>
-                <td class="px-6 py-4 text-center text-gray-900">
+                <td class="px-2 py-4 text-center text-gray-900 ">
+                  <p class="">{{ log.detailLog }}</p>
+                </td>
+                <td class="px-2 py-4 text-center text-gray-900">
                   {{ moment(new Date(log.createdAt)).format('DD/MM/YYYY') }}
+                  {{ (new Date(log.createdAt)).toLocaleTimeString('th-TH', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}} น.
 
                 </td>
-                <td class="px-6 py-4 text-center text-gray-900">
+                <td class="px-2 py-4 text-center text-gray-900">
                   {{ log.createdBy }}
                 </td>
               </tr>

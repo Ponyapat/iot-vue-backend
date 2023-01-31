@@ -364,7 +364,8 @@ const dynamicSelect = computed(()=>{
               </div>
             </td>
           <td class="text-center ">
-          <div v-if="item.type=='B2C'">
+          <div v-if="item.type">
+            <div v-if="item.type=='B2C'">
             <span class="bg-[#b1a3eb] rounded-2xl text-black font-medium py-1.5 px-4">{{item.type}}</span>
           </div>
           <div v-if="item.type=='B2B'">
@@ -379,14 +380,19 @@ const dynamicSelect = computed(()=>{
           <div v-if="item.type=='Dropship'">
             <span class="bg-[#f7ab40] rounded-2xl text-black font-medium py-1.5 px-4">{{item.type}}</span>
           </div>
+          </div>
+          <div v-else>-</div>
           </td>
           <td class="text-center">
-            <div class="bg-[#3e64ec] rounded-2xl text-black font-medium py-1.5 px-2" v-if="item.contactBy=='Facebook'">{{item.contactBy}}</div>
+            <div v-if="item.contactBy">
+              <div class="bg-[#3e64ec] rounded-2xl text-black font-medium py-1.5 px-2" v-if="item.contactBy=='Facebook'">{{item.contactBy}}</div>
             <div class="bg-[#a1f67f] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'Line'">{{item.contactBy}}</div>
             <div class="bg-[#3dcca6] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'Walk in'">{{item.contactBy}}</div>
             <div class="bg-[#4ecc3d] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'By phone'">{{item.contactBy}}</div>
             <div class="bg-[#cc4b3d] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'M2M'">{{item.contactBy}}</div>
-            <div class="bg-[#cc873d] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'ตัวแทนจำหน่าย'">{{item.contactBy}}</div>
+            <div class="bg-[#cc873d] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'ตัวแทน'">ตัวแทนจำหน่าย</div>
+            </div>
+            <div v-else>-</div>
           </td>
           <td class="text-center">
             <div class="bg-[#f17171] rounded-2xl text-xs text-black font-medium py-2 px-2 " v-if="item.status=='ปิดการขาย'">{{item.status}}</div>
