@@ -1,6 +1,6 @@
 <template>
   <div>
-    <title-bar :title-stack="titleStack" />
+    <title-bar class="p-4" :title-stack="titleStack" />
     <card-component
       :icon="mdiMonitorCellphone"
       title="ลูกค้าสำหรับฝ่ายขาย"

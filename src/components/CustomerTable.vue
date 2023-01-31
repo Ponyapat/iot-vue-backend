@@ -66,8 +66,8 @@ let product_filter = reactive([
   {id:15,product:'2061 (Weather station)'},{id:16,product:'2053 (MA+AP)'},{id:17,product:'2053 (MA)'},{id:18,product:'2053 (AP)'},{id:19,product:'Smart garden A'},{id:20,product:'Smart garden B'},{id:21,product:'Smart Bag'}
 ]);
 
-let contactby_filter = reactive([{id:1,data:'offline'},{id:2,data:'online'}]);
-let status_filter = reactive([{id:1,status:'ปิดการขาย'},{id:2,status:'กำลังดำเนินการ'},{id:3,status:'สอบถามข้อมูล'}]);
+let contactby_filter = reactive([{id:1,data:'Facebook'},{id:2,data:'Line'},{id:3,data:'Walk in'},{id:4,data:'By phone'},{id:5,data:'M2M'},{id:6,data:'M2ตัวแทนจำหน่ายM'}]);
+let status_filter = reactive([{id:1,status:'ปิดการขาย'},{id:2,status:'กำลังดำเนินการ'},{id:3,status:'จัดเตรียมสินค้า'},{id:4,status:'ติดตามผล'},{id:5,status:'สอบถามข้อมูล'}]);
 
 onBeforeMount(() => {
   fetchData();
@@ -223,8 +223,8 @@ const customers_list = computed(()=>{
     return  response.filter(data => {
       const name = data.name.toLowerCase();
       const phone = data.phone.toLowerCase();
-      const contactName = data.contactName.toLowerCase();
-      return name.includes(searchName.value) || contactName.includes(searchName.value) || phone.includes(searchName.value);
+
+      return name.includes(searchName.value) || phone.includes(searchName.value);
     });
 });
 
@@ -267,6 +267,10 @@ const pages = computed(() => {
     return [...Array(numShown)].map((k,i) => i + first);
 });
 
+const dynamicSelect = computed(()=>{
+
+});
+
 
 
 </script>
@@ -299,14 +303,14 @@ const pages = computed(() => {
         <option v-for="(item,index) of type_filter" :key="index" :value="item.type">{{item.type}}</option>
       </select>
     </div>
-    <div class="mt-5">
+    <!-- <div class="mt-5">
       <label for="categories" class="block text-sm font-medium text-gray-900 dark:text-white opacity-70">สินค้า</label>
       <select id="categories" @change="filter_product($event)"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         <option value="all" >ทั้งหมด</option>
         <option v-for="(item,index) of product_filter" :key="index" :value="item.product">{{item.product}}</option>
       </select>
-    </div>
+    </div> -->
     <div class="mt-5">
       <label for="categories" class="block text-sm font-medium text-gray-900 dark:text-white opacity-70">ช่องทาง</label>
       <select id="categories" @change="filter_contactby($event)"
@@ -325,6 +329,7 @@ const pages = computed(() => {
     </div>
   </div>
   </div>
+  <div class="m-4">จำนวนทั้งหมด  : {{customers_list.length}}</div>
   <div class="relative mt-4">
     <table class="w-full text-sm text-left text-black dark:text-white">
       <thead class="text-base text-white uppercase bg-gray-600 dark:bg-gray-700 dark:text-white">
@@ -334,19 +339,16 @@ const pages = computed(() => {
           <th scope="col" class="text-center py-3 w-[200px]">เบอร์โทร</th>
           <th scope="col" class="text-center py-3 w-[150px]">จังหวัด</th>
           <th scope="col" class="text-center py-3 w-[150px]">ประเภท</th>
-          <!-- <th scope="col" class="text-center py-3 w-[150px]">รายละเอียด</th> -->
-          <th scope="col" class="text-center py-3 w-[150px]">สินค้า</th>
-          <th scope="col" class="text-center py-3 w-[150px]">สถานะ</th>
           <th scope="col" class="text-center py-3 w-[150px]">ช่องทาง</th>
-          <!-- <th scope="col" class="text-center py-3 w-[150px]">หมายเหตุ</th> -->
+          <th scope="col" class="text-center py-3 w-[150px]">สถานะ</th>
           <th scope="col" class="text-center py-3 w-[150px]">Action</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in customers_list.slice(pageStart, pageStart + perPage)" :key="item.id" :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']">
           <td class="text-center">{{item.id}}</td>
-          <td class="text-center">
-            <div class="w-[160px] truncate">
+          <td >
+            <div >
               <span v-if="item.name !=''">{{item.name}}</span>
               <span v-else>-</span>
             </div>
@@ -356,8 +358,8 @@ const pages = computed(() => {
               <span v-else>-</span>
           </td>
             <td class="text-center relative">
-              <div class="truncate w-[120px]">
-                <span v-if="item.address !=''">{{ item.address.substring(item.address.indexOf(' ') + 1) }}</span>
+              <div >
+                <span v-if="item.province !=''">{{ item.province }}</span>
                 <span v-else>-</span>
               </div>
             </td>
@@ -379,18 +381,21 @@ const pages = computed(() => {
           </div>
           </td>
           <td class="text-center">
-            <span v-if="item.product !=''">{{item.product}}</span>
-            <span v-else>-</span>
+            <div class="bg-[#3e64ec] rounded-2xl text-black font-medium py-1.5 px-2" v-if="item.contactBy=='Facebook'">{{item.contactBy}}</div>
+            <div class="bg-[#a1f67f] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'Line'">{{item.contactBy}}</div>
+            <div class="bg-[#3dcca6] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'Walk in'">{{item.contactBy}}</div>
+            <div class="bg-[#4ecc3d] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'By phone'">{{item.contactBy}}</div>
+            <div class="bg-[#cc4b3d] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'M2M'">{{item.contactBy}}</div>
+            <div class="bg-[#cc873d] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'ตัวแทนจำหน่าย'">{{item.contactBy}}</div>
           </td>
           <td class="text-center">
             <div class="bg-[#f17171] rounded-2xl text-xs text-black font-medium py-2 px-2 " v-if="item.status=='ปิดการขาย'">{{item.status}}</div>
             <div class="bg-[#ffc34a] rounded-2xl text-xs text-black font-medium py-2 px-2" v-else-if="item.status == 'กำลังดำเนินการ'">{{item.status}}</div>
             <div class="bg-[#4aa1ff] rounded-2xl text-xs text-black font-medium py-2 px-2" v-else-if="item.status == 'สอบถามข้อมูล'">{{item.status}}</div>
+            <div class="bg-[#4affa4] rounded-2xl text-xs text-black font-medium py-2 px-2" v-else-if="item.status == 'จัดเตรียมสินค้า'">{{item.status}}</div>
+            <div class="bg-[#ff4ab4] rounded-2xl text-xs text-black font-medium py-2 px-2" v-else-if="item.status == 'ติดตามผล'">{{item.status}}</div>
           </td>
-          <td class="text-center">
-            <div class="bg-[#bababa] rounded-2xl text-black font-medium py-1.5 px-2" v-if="item.contactBy=='offline'">{{item.contactBy}}</div>
-            <div class="bg-[#65cc3d] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'online'">{{item.contactBy}}</div>
-          </td>
+
           <!-- <td class="text-center">
             <div class="truncate w-[120px]">
               <span v-if="item.note !=''">{{item.note}}</span>
