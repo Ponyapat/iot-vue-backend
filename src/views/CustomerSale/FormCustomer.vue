@@ -243,14 +243,13 @@ const sortThaiDictionary = (list) => {
 
 const getProvinceAll = () => {
   ApiCore.get("/v2/get-province").then((response) => {
+
     let obj = response.data.data;
+    console.log('obj == ',obj);
 
     let arr_th = [];
-
     obj.forEach((element, index) => {
-
       arr_th.push(element.name_th);
-
     });
 
     let province_arr = [];
