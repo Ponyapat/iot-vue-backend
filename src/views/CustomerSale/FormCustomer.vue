@@ -7,7 +7,6 @@ import Swal from "sweetalert2";
 import { useRouter } from "vue-router";
 import TitleBar from "@/components/TitleBar.vue";
 import { useMainStore } from "@/stores/main";
-import Multiselect from '@vueform/multiselect'
 import moment from "moment";
 const mainStore = useMainStore();
 
