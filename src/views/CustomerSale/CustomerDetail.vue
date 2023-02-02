@@ -65,6 +65,17 @@ const reversedArray = computed(() => {
 });
 
 
+const formatdate =(date)=>{
+  let str = date.toString();
+  // console.log(d);
+  let x = str.substring(str.indexOf('T')+1);
+  let time = x.substring(0,x.indexOf('.000Z'))
+
+  return time ;
+};
+
+
+
 </script>
 <template>
   <title-bar class="p-4 pb-0" :title-stack="titleStack" />
@@ -252,8 +263,7 @@ const reversedArray = computed(() => {
                 </td>
                 <td class="px-2 py-4 text-center text-gray-900">
                   {{ moment(new Date(log.createdAt)).format('DD/MM/YYYY') }}
-                  {{ (new Date(log.createdAt)).toLocaleTimeString('th-TH', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}} น.
-
+                  {{ formatdate(log.createdAt) }} น.
                 </td>
                 <td class="px-2 py-4 text-center text-gray-900">
                   {{ log.createdBy }}
