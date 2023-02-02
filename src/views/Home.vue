@@ -31,6 +31,7 @@ import CardTransactionBar from "@/components/CardTransactionBar.vue";
 import CardClientBar from "@/components/CardClientBar.vue";
 import TitleSubBar from "@/components/TitleSubBar.vue";
 import { reactive } from "vue";
+import axios from "axios";
 
 const titleStack = ref(["Admin", "Dashboard"]);
 
@@ -87,6 +88,15 @@ onBeforeMount(() => {
   geoData();
   weatherData();
   geoBreedData();
+
+  ApiCore.get("/v2/get-province").then((response) => {
+    console.log("ApiCore",response.data.data)
+  })
+
+
+  axios.get("https://staging.farmthailand.app/api/core/v2/get-province").then((response) => {
+    console.log("axios api",response.data.data)
+  })
 });
 
 const mainStore = useMainStore();

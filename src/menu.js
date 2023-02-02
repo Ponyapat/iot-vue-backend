@@ -178,7 +178,7 @@ if (roleid) {
           );
         }
       }
-      console.log(menu)
+      //console.log(menu)
       if(sub_menu_breed.length==0){
         menu = menu.filter(x => x.label != "ข้อมูลด้านพืชพรรณ");
       }
