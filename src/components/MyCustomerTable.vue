@@ -164,6 +164,7 @@ const pages = computed(() => {
           <th scope="col" class="text-center py-3 w-[200px]">อีเมล</th>
           <th scope="col" class="text-center py-3 w-[100px]">เบอร์โทร</th>
           <th scope="col" class="text-center py-3 w-[100px]">ที่อยู่</th>
+          <th scope="col" class="text-center py-3 w-[100px]">วันที่สมัคร</th>
           <th scope="col" class="text-center py-3 w-[100px]">สถานะ</th>
           <!-- <th scope="col" class="text-center py-3 w-[150px]">Action</th> -->
         </tr>
@@ -183,6 +184,10 @@ const pages = computed(() => {
           <td class="text-center">
             <div v-if="item.user_details.address == null">-</div>
             <div v-else>{{item.user_details.address }}</div>
+          </td>
+          <td class="text-center">
+            <div v-if="item.createdAt == null">-</div>
+            <div v-else>{{ moment(new Date(item.createdAt)).format('DD/MM/YYYY') }}</div>
           </td>
           <td class="text-center">
             <div v-if="item.activated==0" class="bg-orange-300 rounded-2xl py-1">ยังไม่ได้ยืนยันตัวตน</div>
