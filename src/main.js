@@ -26,7 +26,7 @@ window.ApiSso= axios.create({
   }
 });
 window.ApiCore= axios.create({
-  baseURL: import.meta.env.VITE_API_CORE ,
+  baseURL: import.meta.env.VITE_URL_CORE ,
   headers: {
     'Authorization' : `Bearer `+token
   }
