@@ -13,9 +13,9 @@ const states = reactive({
   phone: "",
   email: "",
   address: "",
-  subdistrict: "",
-  district: "",
-  province: "",
+  subdistrict_name: "",
+  district_name: "",
+  province_name: "",
   postcode: "",
   detail: "",
   otherCustomerProduct: [],
@@ -101,6 +101,18 @@ const formatdate =(date)=>{
           <div class="font-medium mb-2">ที่อยู่ :
             <span v-if="states.address == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
             <span v-else class="font-normal text-gray-800">{{ states.address }}</span>
+          </div>
+          <div class="font-medium mb-2">จังหวัด :
+            <span v-if="states.province_name == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
+            <span v-else class="font-normal text-gray-800">{{ states.province_name }}</span>
+          </div>
+          <div class="font-medium mb-2">อำเภอ :
+            <span v-if="states.district_name == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
+            <span v-else class="font-normal text-gray-800">{{ states.district_name }}</span>
+          </div>
+          <div class="font-medium mb-2">ตำบล :
+            <span v-if="states.subdistrict_name == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
+            <span v-else class="font-normal text-gray-800">{{ states.subdistrict_name }}</span>
           </div>
           <div class="font-medium mb-2">ประเภท :
             <span v-if="states.type == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
@@ -221,6 +233,7 @@ const formatdate =(date)=>{
           <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-800 uppercase  dark:text-gray-400 ">
               <tr class="bg-gray-100">
+                <th scope="col" class="w-[10px] p-0"></th>
                 <th scope="col" class="px-6 py-3 text-base font-bold text-start ml-2 ">
                   สถานะ
                 </th>
@@ -236,8 +249,9 @@ const formatdate =(date)=>{
               </tr>
             </thead>
             <tbody>
-              <tr class="bg-white border-b dark:bg-gray-800 " v-for="(log, index) in reversedArray" :key="index">
-                <td  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              <tr class="bg-white border-b dark:bg-gray-800 " :class="index==0?'bg-green-50':''" v-for="(log, index) in reversedArray" :key="index">
+                <td class="w-[10px] px-2"><i v-if="index==0" class="text-green-500 fa-solid fa-circle-dot"></i></td>
+                <td  class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   <div v-if="log.status == 'สอบถามข้อมูล'">
                     <span class="bg-gray-200 py-1.5 px-4 rounded-lg">{{ log.status }}</span>
                   </div>
