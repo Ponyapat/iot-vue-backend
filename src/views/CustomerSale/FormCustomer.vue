@@ -381,12 +381,12 @@ const submitForm = async () => {
 
           if (res.data.status == 204 || res.data.status == 200 || res.data.status == 201) {
 
-
-            console.log(dataform.otherCustomerProduct);
             let product = dataform.otherCustomerProduct;
             for (let index = 0; index < product.length; index++) {
               const element = product[index];
+
               if (element.id) {
+
                 await ApiMain.put(`/other-customer/${id}/edit-product/${element.id}`, {
                   estimate: element.estimate,
                   quotation: element.quotation,
@@ -404,8 +404,45 @@ const submitForm = async () => {
               }
               else {
 
-                if (element.name !='') {
-                  await ApiMain.post(`/other-customer/${id}/add-product`, {
+                if (element.name != '') {
+
+                  let fix_data = {};
+
+                  // ดักไว้กรณีที่ไม่มีการใส่ วันซื้อและวันประกันหมดอายุ
+                  if (element.purchaseDate != '' && element.warrantyExpired == '') {
+                    fix_data = {
+                      estimate: element.estimate,
+                      quotation: element.quotation,
+                      name: element.name,
+                      purchaseDate: element.purchaseDate,
+                      serialNumber: element.serialNumber,
+                      additionalServices: element.additionalServices,
+                      etc: element.etc
+                    };
+                  }
+                  if (element.purchaseDate == '' && element.warrantyExpired != '') {
+                    fix_data = {
+                      estimate: element.estimate,
+                      quotation: element.quotation,
+                      name: element.name,
+                      serialNumber: element.serialNumber,
+                      warrantyExpired: element.warrantyExpired,
+                      additionalServices: element.additionalServices,
+                      etc: element.etc
+                    };
+                  }
+                  else if (element.purchaseDate == '' && element.warrantyExpired == '') {
+                  fix_data = {
+                    estimate: element.estimate,
+                    quotation: element.quotation,
+                    name: element.name,
+                    serialNumber: element.serialNumber,
+                    additionalServices: element.additionalServices,
+                    etc: element.etc
+                  };
+                }
+                else if (element.purchaseDate != '' && element.warrantyExpired != '') {
+                  fix_data = {
                     estimate: element.estimate,
                     quotation: element.quotation,
                     name: element.name,
@@ -414,7 +451,9 @@ const submitForm = async () => {
                     warrantyExpired: element.warrantyExpired,
                     additionalServices: element.additionalServices,
                     etc: element.etc
-                  }).then(response => {
+                  };
+                }
+                  await ApiMain.post(`/other-customer/${id}/add-product`, fix_data).then(response => {
                     console.log(response.data);
                   }).catch(error => console.log(error));
                 }
@@ -513,66 +552,102 @@ const submitForm = async () => {
       console.log(result);
       if (result.isConfirmed == true) {
         ApiMain.post("/other-customer", data).then(async (response) => {
-      const customer_id = response.data.data.id;
-      if (response.data.status == 204 || response.data.status == 200 || response.data.status == 201) {
+          const customer_id = response.data.data.id;
+          if (response.data.status == 204 || response.data.status == 200 || response.data.status == 201) {
 
-        let product = dataform.otherCustomerProduct;
+            let product = dataform.otherCustomerProduct;
 
-        for (let index = 0; index < product.length; index++) {
-          const element = product[index];
+            for (let index = 0; index < product.length; index++) {
+              const element = product[index];
 
-          if (element.name) {
-            // if ((element.name && element.serialNumber) && (element.purchaseDate && element.warrantyExpired)) {
-            //  เพิ่มข้อมูลสินค้าของลูกค้าคนนี้
-            await ApiMain.post(`/other-customer/${customer_id}/add-product`, {
-              estimate: element.estimate,
-              quotation: element.quotation,
-              name: element.name,
-              serialNumber: element.serialNumber,
-              purchaseDate: element.purchaseDate,
-              warrantyExpired: element.warrantyExpired,
-              additionalServices: element.additionalServices,
-              etc: element.etc
-            }).then((response) => {
-              if (response.data.status == 201 || response.data.status == 200) {
-                console.log('add successfully !!!');
-              }
-              else {
-                Swal.fire({
-                  icon: "success",
-                  title: "เพิ่มข้อมูลลูกค้าสไม่สำเร็จ",
-                  confirmButtonText: 'ตกลง',
-                  showConfirmButton: 1,
+              if (element.name) {
+                let fix_data = {};
+
+                // ดักไว้กรณีที่ไม่มีการใส่ วันซื้อและวันประกันหมดอายุ
+                if (element.purchaseDate != '' && element.warrantyExpired == '') {
+                  fix_data = {
+                    estimate: element.estimate,
+                    quotation: element.quotation,
+                    name: element.name,
+                    purchaseDate: element.purchaseDate,
+                    serialNumber: element.serialNumber,
+                    additionalServices: element.additionalServices,
+                    etc: element.etc
+                  };
+                }
+                else if (element.purchaseDate == '' && element.warrantyExpired != '') {
+                  fix_data = {
+                    estimate: element.estimate,
+                    quotation: element.quotation,
+                    name: element.name,
+                    serialNumber: element.serialNumber,
+                    warrantyExpired: element.warrantyExpired,
+                    additionalServices: element.additionalServices,
+                    etc: element.etc
+                  };
+                }
+                else if (element.purchaseDate == '' && element.warrantyExpired == '') {
+                  fix_data = {
+                    estimate: element.estimate,
+                    quotation: element.quotation,
+                    name: element.name,
+                    serialNumber: element.serialNumber,
+                    additionalServices: element.additionalServices,
+                    etc: element.etc
+                  };
+                }
+                else if (element.purchaseDate != '' && element.warrantyExpired != '') {
+                  fix_data = {
+                    estimate: element.estimate,
+                    quotation: element.quotation,
+                    name: element.name,
+                    serialNumber: element.serialNumber,
+                    purchaseDate: element.purchaseDate,
+                    warrantyExpired: element.warrantyExpired,
+                    additionalServices: element.additionalServices,
+                    etc: element.etc
+                  };
+                }
+                await ApiMain.post(`/other-customer/${customer_id}/add-product`, fix_data).then((response) => {
+                  if (response.data.status == 201 || response.data.status == 200) {
+                    console.log('add successfully !!!');
+                  }
+                  else {
+                    Swal.fire({
+                      icon: "success",
+                      title: "เพิ่มข้อมูลลูกค้าสไม่สำเร็จ",
+                      confirmButtonText: 'ตกลง',
+                      showConfirmButton: 1,
+                    });
+                  }
+
+                }).catch((error) => {
+                  console.log(error.message);
                 });
               }
 
-            }).catch((error) => {
-              console.log(error.message);
+            }
+            Swal.fire({
+              icon: "success",
+              title: "เพิ่มข้อมูลลูกค้าสำเร็จ",
+              confirmButtonText: 'ตกลง',
+              showConfirmButton: 1,
+            });
+            router.push("/customers");
+
+
+          } else {
+            Swal.fire({
+              icon: "warning",
+              title: "ไม่สามารถเพิ่มข้อมูลได้",
+              confirmButtonText: 'ตกลง',
+              showConfirmButton: 1,
             });
           }
 
-        }
-        Swal.fire({
-          icon: "success",
-          title: "เพิ่มข้อมูลลูกค้าสำเร็จ",
-          confirmButtonText: 'ตกลง',
-          showConfirmButton: 1,
-        });
-        router.push("/customers");
-
-
-      } else {
-        Swal.fire({
-          icon: "warning",
-          title: "ไม่สามารถเพิ่มข้อมูลได้",
-          confirmButtonText: 'ตกลง',
-          showConfirmButton: 1,
         });
       }
-
-    });
-      }
-      else{
+      else {
         router.push('/customers')
       }
     })

@@ -183,10 +183,14 @@ const formatdate =(date)=>{
                   {{ product.serialNumber }}
                 </td>
                 <td class="px-6 py-4 bg-gray-50">
-                  {{ moment(new Date( product.purchaseDate)).format('DD/MM/YYYY') }}
+                  <span v-if=" product.purchaseDate == null">-</span>
+                  <span v-else>{{ moment(new Date( product.purchaseDate)).format('DD/MM/YYYY') }}</span>
+
                 </td>
                 <td class="px-6 py-4">
-                  {{ moment(new Date( product.warrantyExpired)).format('DD/MM/YYYY') }}
+                  <span v-if=" product.warrantyExpired == null">-</span>
+                  <span v-else>{{ moment(new Date( product.warrantyExpired)).format('DD/MM/YYYY') }}</span>
+
                 </td>
                 <td class="px-6 py-4 bg-gray-50 text-center">
                   <div v-if="product.estimate == 'string' || product.estimate ==''">
