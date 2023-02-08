@@ -69,9 +69,9 @@ const formatdate =(date)=>{
   let str = date.toString();
   // console.log(d);
   let x = str.substring(str.indexOf('T')+1);
-  let time = x.substring(0,x.indexOf('.000Z'))
+  let time = x.substring(0,x.indexOf('.000Z'));
 
-  return time ;
+  return  time.slice(0, 5);
 };
 
 

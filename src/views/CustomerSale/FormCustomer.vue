@@ -138,32 +138,32 @@ onMounted(() => {
       dataform.contactBy = res.data.data.contactBy;
       dataform.status = res.data.data.status;
 
-      if((res.data.data.otherCustomerProduct).length == 0){
-        dataform.otherCustomerProduct = [ { estimate: '', quotation: '', name: '', serialNumber: '', purchaseDate: '', warrantyExpired: '', additionalServices: '', etc: '' }]
+      if ((res.data.data.otherCustomerProduct).length == 0) {
+        dataform.otherCustomerProduct = [{ estimate: '', quotation: '', name: '', serialNumber: '', purchaseDate: '', warrantyExpired: '', additionalServices: '', etc: '' }]
       }
       else {
 
         let obj_data = res.data.data.otherCustomerProduct;
-        let arr =[];
-        obj_data.forEach((item,index)=>{
+        let arr = [];
+        obj_data.forEach((item, index) => {
           arr.push({
-            id:item.id,
-            additionalServices:item.additionalServices,
-            createdAt:item.createdAt,
-            createdBy:item.createdBy,
-            estimate:item.estimate,
-            name:item.name,
-            etc:item.etc,
-            purchaseDate:moment(new Date(item.purchaseDate)).format('YYYY-MM-DD'),
-            quotation:item.quotation,
-            serialNumber:item.serialNumber,
-            warrantyExpired:moment(new Date(item.warrantyExpired)).format('YYYY-MM-DD'),
-            otherCustomerId:item.otherCustomerId,
+            id: item.id,
+            additionalServices: item.additionalServices,
+            createdAt: item.createdAt,
+            createdBy: item.createdBy,
+            estimate: item.estimate,
+            name: item.name,
+            etc: item.etc,
+            purchaseDate: moment(new Date(item.purchaseDate)).format('YYYY-MM-DD'),
+            quotation: item.quotation,
+            serialNumber: item.serialNumber,
+            warrantyExpired: moment(new Date(item.warrantyExpired)).format('YYYY-MM-DD'),
+            otherCustomerId: item.otherCustomerId,
           })
         })
         dataform.otherCustomerProduct = arr;
 
-        console.log(arr,dataform.otherCustomerProduct);
+        console.log(arr, dataform.otherCustomerProduct);
 
       }
 
@@ -328,43 +328,45 @@ const select_subdistrict = (data) => {
 
 // step 1
 const submitForm = async () => {
+
+  // แก้ไขข้อมูล
   if (id) {
     let data = {};
-    if(dataform.email == ''){
+    if (dataform.email == '') {
       data = {
-      contactBy: dataform.contactBy,
-      type: dataform.type,
-      name: dataform.name,
-      phone: dataform.phone,
-      address: dataform.address,
-      subdistrict: dataform.subdistrict_name,
-      district: dataform.district_name,
-      province: dataform.province_name,
-      postcode: dataform.postcode,
-      detail: dataform.detail,
-      status: dataform2.status,
-      note: dataform.note,
-      statusLog: dataform2.status,
-    }
+        contactBy: dataform.contactBy,
+        type: dataform.type,
+        name: dataform.name,
+        phone: dataform.phone,
+        address: dataform.address,
+        subdistrict: dataform.subdistrict_name,
+        district: dataform.district_name,
+        province: dataform.province_name,
+        postcode: dataform.postcode,
+        detail: dataform.detail,
+        status: dataform2.status,
+        note: dataform.note,
+        statusLog: dataform2.status,
+      }
     }
     else {
-      data =  {
-      contactBy: dataform.contactBy,
-      type: dataform.type,
-      name: dataform.name,
-      phone: dataform.phone,
-      email: dataform.email,
-      address: dataform.address,
-      subdistrict: dataform.subdistrict_name,
-      district: dataform.district_name,
-      province: dataform.province_name,
-      postcode: dataform.postcode,
-      detail: dataform.detail,
-      status: dataform2.status,
-      note: dataform.note,
-      statusLog: dataform2.status
+      data = {
+        contactBy: dataform.contactBy,
+        type: dataform.type,
+        name: dataform.name,
+        phone: dataform.phone,
+        email: dataform.email,
+        address: dataform.address,
+        subdistrict: dataform.subdistrict_name,
+        district: dataform.district_name,
+        province: dataform.province_name,
+        postcode: dataform.postcode,
+        detail: dataform.detail,
+        status: dataform2.status,
+        note: dataform.note,
+        statusLog: dataform2.status
+      }
     }
-  }
     ApiMain.put(`/other-customer/${id}`, data).then(async (res) => {
 
       if (res.data.status == 204 || res.data.status == 200 || res.data.status == 201) {
@@ -374,26 +376,8 @@ const submitForm = async () => {
         let product = dataform.otherCustomerProduct;
         for (let index = 0; index < product.length; index++) {
           const element = product[index];
-          if(element.id){
+          if (element.id) {
             await ApiMain.put(`/other-customer/${id}/edit-product/${element.id}`, {
-            estimate: element.estimate,
-            quotation: element.quotation,
-            name: element.name,
-            serialNumber: element.serialNumber,
-            purchaseDate: element.purchaseDate,
-            warrantyExpired: element.warrantyExpired,
-            additionalServices: element.additionalServices,
-            etc: element.etc
-          }).then(response => {
-            console.log(response.data);
-          }).catch(error => {
-            console.log(error.message);
-          });
-          }
-          else {
-
-            console.log(element.additionalServices);
-            await ApiMain.post(`/other-customer/${id}/add-product`, {
               estimate: element.estimate,
               quotation: element.quotation,
               name: element.name,
@@ -402,9 +386,28 @@ const submitForm = async () => {
               warrantyExpired: element.warrantyExpired,
               additionalServices: element.additionalServices,
               etc: element.etc
-          }).then(response => {
-            console.log(response.data);
-          }).catch(error => console.log(error));
+            }).then(response => {
+              console.log(response.data);
+            }).catch(error => {
+              console.log(error.message);
+            });
+          }
+          else {
+
+            if ((element.name && element.serialNumber) && (element.purchaseDate && element.warrantyExpired)) {
+              await ApiMain.post(`/other-customer/${id}/add-product`, {
+                estimate: element.estimate,
+                quotation: element.quotation,
+                name: element.name,
+                serialNumber: element.serialNumber,
+                purchaseDate: element.purchaseDate,
+                warrantyExpired: element.warrantyExpired,
+                additionalServices: element.additionalServices,
+                etc: element.etc
+              }).then(response => {
+                console.log(response.data);
+              }).catch(error => console.log(error));
+            }
           }
         }
 
@@ -440,97 +443,95 @@ const submitForm = async () => {
       console.log(error);
     });
 
-  } else {
+  }
+  // เพิ่มข้อมูล
+  else {
 
     let data = {};
 
-    if(dataform.email ==''){
+    if (dataform.email == '') {
       data = {
-      contactBy: dataform.contactBy,
-      type: dataform.type,
-      name: dataform.name,
-      phone: dataform.phone,
-      address: dataform.address,
-      subdistrict: dataform.subdistrict_name,
-      district: dataform.district_name,
-      province: dataform.province_name,
-      postcode: dataform.postcode,
-      detail: dataform.detail,
-      status: dataform2.status,
-      note: dataform.note,
-      statusLog: dataform2.status
-    }
+        contactBy: dataform.contactBy,
+        type: dataform.type,
+        name: dataform.name,
+        phone: dataform.phone,
+        address: dataform.address,
+        subdistrict: dataform.subdistrict_name,
+        district: dataform.district_name,
+        province: dataform.province_name,
+        postcode: dataform.postcode,
+        detail: dataform.detail,
+        status: dataform2.status,
+        note: dataform.note,
+        statusLog: dataform2.status
+      }
     }
     else {
       data = {
-      contactBy: dataform.contactBy,
-      type: dataform.type,
-      name: dataform.name,
-      phone: dataform.phone,
-      email: dataform.email,
-      address: dataform.address,
-      subdistrict: dataform.subdistrict_name,
-      district: dataform.district_name,
-      province: dataform.province_name,
-      postcode: dataform.postcode,
-      detail: dataform.detail,
-      status: dataform2.status,
-      note: dataform.note,
-      statusLog: dataform2.status
-    }
+        contactBy: dataform.contactBy,
+        type: dataform.type,
+        name: dataform.name,
+        phone: dataform.phone,
+        email: dataform.email,
+        address: dataform.address,
+        subdistrict: dataform.subdistrict_name,
+        district: dataform.district_name,
+        province: dataform.province_name,
+        postcode: dataform.postcode,
+        detail: dataform.detail,
+        status: dataform2.status,
+        note: dataform.note,
+        statusLog: dataform2.status
+      }
     }
     // Add data
-    ApiMain.post("/other-customer",data).then(async (response) => {
+    ApiMain.post("/other-customer", data).then(async (response) => {
       const customer_id = response.data.data.id;
       if (response.data.status == 204 || response.data.status == 200 || response.data.status == 201) {
 
         let product = dataform.otherCustomerProduct;
 
-      for (let index = 0; index < product.length; index++) {
-        const element = product[index];
-        //  เพิ่มข้อมูลสินค้าของลูกค้าคนนี้
-        await ApiMain.post(`/other-customer/${customer_id}/add-product`, {
-          estimate: element.estimate,
-          quotation: element.quotation,
-          name: element.name,
-          serialNumber: element.serialNumber,
-          purchaseDate: element.purchaseDate,
-          warrantyExpired: element.warrantyExpired,
-          additionalServices: element.additionalServices,
-          etc: element.etc
-        }).then((response) => {
-          if(response.data.status == 201 || response.data.status == 200){
-            Swal.fire({
+        for (let index = 0; index < product.length; index++) {
+          const element = product[index];
+
+          if ((element.name && element.serialNumber) && (element.purchaseDate && element.warrantyExpired)) {
+            //  เพิ่มข้อมูลสินค้าของลูกค้าคนนี้
+            await ApiMain.post(`/other-customer/${customer_id}/add-product`, {
+              estimate: element.estimate,
+              quotation: element.quotation,
+              name: element.name,
+              serialNumber: element.serialNumber,
+              purchaseDate: element.purchaseDate,
+              warrantyExpired: element.warrantyExpired,
+              additionalServices: element.additionalServices,
+              etc: element.etc
+            }).then((response) => {
+              if (response.data.status == 201 || response.data.status == 200) {
+                console.log('add successfully !!!');
+
+              }
+              else {
+                Swal.fire({
+                  icon: "success",
+                  title: "เพิ่มข้อมูลลูกค้าสไม่สำเร็จ",
+                  confirmButtonText: 'ตกลง',
+                  showConfirmButton: 1,
+                });
+              }
+
+            }).catch((error) => {
+              console.log(error.message);
+            });
+          }
+
+        }
+        Swal.fire({
               icon: "success",
               title: "เพิ่มข้อมูลลูกค้าสำเร็จ",
               confirmButtonText: 'ตกลง',
               showConfirmButton: 1,
             });
             router.push("/customers");
-          }
-          else  {
-            Swal.fire({
-              icon: "success",
-              title: "เพิ่มข้อมูลลูกค้าสไม่สำเร็จ",
-              confirmButtonText: 'ตกลง',
-              showConfirmButton: 1,
-            });
-          }
-
-        }).catch((error) => {
-          if(error.response.status == 400){
-
-            // กรณีที่ข้อมุลสินค้าว่าง
-            Swal.fire({
-              icon: "success",
-              title: "เพิ่มข้อมูลลูกค้าสำเร็จ",
-              confirmButtonText: 'ตกลง',
-              showConfirmButton: 1,
-            });
-            router.push("/customers");
-          }
-        });
-      }
 
 
       } else {
@@ -585,8 +586,8 @@ const nextStep = async () => {
 
 
 const addGroup = () => {
-  if(id){
-    dataform.otherCustomerProduct.push({id:'', estimate: '', quotation: '', name: '', serialNumber: '', purchaseDate: '', warrantyExpired: '', additionalServices: '', etc: '' })
+  if (id) {
+    dataform.otherCustomerProduct.push({ id: '', estimate: '', quotation: '', name: '', serialNumber: '', purchaseDate: '', warrantyExpired: '', additionalServices: '', etc: '' })
   }
   else {
     dataform.otherCustomerProduct.push({ estimate: '', quotation: '', name: '', serialNumber: '', purchaseDate: '', warrantyExpired: '', additionalServices: '', etc: '' })
@@ -594,8 +595,8 @@ const addGroup = () => {
 
 };
 
-const deleteItem = (index,customer,product_id) => {
-  if(id){
+const deleteItem = (index, customer, product_id) => {
+  if (id) {
     Swal.fire({
       title: "ยืนยันการลบ",
       text: `คุณต้องการลบสินค้าชิ้นนี้หรือไม่ ?`,
@@ -605,20 +606,20 @@ const deleteItem = (index,customer,product_id) => {
       cancelButtonColor: "#d33",
       confirmButtonText: "Ok"
     }).then((result) => {
-      if(result.isConfirmed){
-        ApiMain.delete(`/other-customer/${customer}/delete-product/${product_id}`).then(res=>{
+      if (result.isConfirmed) {
+        ApiMain.delete(`/other-customer/${customer}/delete-product/${product_id}`).then(res => {
           console.log(res);
-          if((dataform.otherCustomerProduct).length > 1) {
+          if ((dataform.otherCustomerProduct).length > 1) {
             dataform.otherCustomerProduct.splice(index, 1);
           }
-        }).catch(error =>{
+        }).catch(error => {
           console.log(error.message);
         });
       }
     })
   }
   else {
-    if((dataform.otherCustomerProduct).length > 1) {
+    if ((dataform.otherCustomerProduct).length > 1) {
       dataform.otherCustomerProduct.splice(index, 1);
     }
   }
@@ -854,7 +855,8 @@ const deleteItem = (index,customer,product_id) => {
               <h1 class="font-bold text-lg text-center mb-10">{{ type_form }}ข้อมูลสินค้า</h1>
               <div v-for="(group, index) in dataform.otherCustomerProduct" :key="index"
                 class="shadow-custom mt-4  p-4 rounded-lg">
-                <div class="flex justify-end"><button type="button" @click="deleteItem(index,group.otherCustomerId,group.id)"><i
+                <div class="flex justify-end"><button type="button"
+                    @click="deleteItem(index, group.otherCustomerId, group.id)"><i
                       class="fa-solid fa-circle-xmark text-[32px] text-red-500 hover:text-red-700 cursor-pointer"></i></button>
                 </div>
                 <p class="text-basse font-bold mb-4 text-center">สินค้าชิ้นที่ {{ index+ 1 }} </p>
@@ -869,8 +871,8 @@ const deleteItem = (index,customer,product_id) => {
                     </select>
                   </div>
                   <div class="mb-4 w-full ">
-                    <label for="serialNumber"
-                      class="block mb-2 text-base font-medium text-black dark:text-white">Serial number</label>
+                    <label for="serialNumber" class="block mb-2 text-base font-medium text-black dark:text-white">Serial
+                      number</label>
                     <input type="text" id="serialNumber" v-model="group.serialNumber"
                       class="bg-gray-50  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                   </div>
@@ -929,7 +931,8 @@ const deleteItem = (index,customer,product_id) => {
             <div class="flex flex-row justify-between ">
               <button type="button" class="bg-gray-200 py-2 px-4 rounded-lg hover:bg-gray-400 font-medium"
                 @click="prevStep"> <i class="fa-solid fa-arrow-left mr-2"></i> ก่อนหน้า</button>
-              <button type="submit" class="bg-green-500 py-2 px-4 rounded-lg hover:bg-green-700 font-medium">เสร็จสิ้น</button>
+              <button type="submit"
+                class="bg-green-500 py-2 px-4 rounded-lg hover:bg-green-700 font-medium">เสร็จสิ้น</button>
             </div>
           </form>
 
