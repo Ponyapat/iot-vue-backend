@@ -112,7 +112,6 @@ const fetchData = () => {
   ApiMain.get("/other-customer?order=DESC&page=1&take=99999").then((response) => {
     states.customers = response.data.data;
 
-    console.log(states.customers);
   }).catch((error) => {
     console.log(error);
   });;

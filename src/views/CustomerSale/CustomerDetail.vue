@@ -100,6 +100,7 @@ const formatdate =(date)=>{
           </div>
           <div class="font-medium mb-2">ที่อยู่ :
             <span v-if="states.address == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
+            <!-- <span v-else class="font-normal text-gray-800">{{ states.address }} ต.{{ states.subdistrict_name }} อ.{{ states.district_name }} จ. {{ states.province_name }} {{ states.postcode }}</span> -->
             <span v-else class="font-normal text-gray-800">{{ states.address }}</span>
           </div>
           <div class="font-medium mb-2">จังหวัด :
@@ -113,6 +114,10 @@ const formatdate =(date)=>{
           <div class="font-medium mb-2">ตำบล :
             <span v-if="states.subdistrict_name == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
             <span v-else class="font-normal text-gray-800">{{ states.subdistrict_name }}</span>
+          </div>
+          <div class="font-medium mb-2">รหัสไปรษณีย์ :
+            <span v-if="states.postcode == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
+            <span v-else class="font-normal text-gray-800">{{ states.postcode }}</span>
           </div>
           <div class="font-medium mb-2">ประเภท :
             <span v-if="states.type == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>

@@ -245,7 +245,6 @@ const getProvinceAll = () => {
   ApiCore.get("/v2/get-province").then((response) => {
 
     let obj = response.data.data;
-    console.log('obj == ',obj);
 
     let arr_th = [];
     obj.forEach((element, index) => {
@@ -387,7 +386,9 @@ const submitForm = async () => {
             etc: element.etc
           }).then(response => {
             console.log(response.data);
-          }).catch(error => console.log(error));
+          }).catch(error => {
+            console.log(error.message);
+          });
           }
           else {
 
@@ -484,6 +485,7 @@ const submitForm = async () => {
       if (response.data.status == 204 || response.data.status == 200 || response.data.status == 201) {
 
         let product = dataform.otherCustomerProduct;
+
       for (let index = 0; index < product.length; index++) {
         const element = product[index];
         //  เพิ่มข้อมูลสินค้าของลูกค้าคนนี้
@@ -497,8 +499,6 @@ const submitForm = async () => {
           additionalServices: element.additionalServices,
           etc: element.etc
         }).then((response) => {
-
-          console.log(response.data);
           if(response.data.status == 201 || response.data.status == 200){
             Swal.fire({
               icon: "success",
@@ -518,7 +518,17 @@ const submitForm = async () => {
           }
 
         }).catch((error) => {
-          console.log(error)
+          if(error.response.status == 400){
+
+            // กรณีที่ข้อมุลสินค้าว่าง
+            Swal.fire({
+              icon: "success",
+              title: "เพิ่มข้อมูลลูกค้าสำเร็จ",
+              confirmButtonText: 'ตกลง',
+              showConfirmButton: 1,
+            });
+            router.push("/customers");
+          }
         });
       }
 
@@ -667,8 +677,7 @@ const deleteItem = (index,customer,product_id) => {
                   }}</small>
                 </div>
                 <div class="mb-4 w-full ">
-                  <label for="phone" class="block mb-2 text-base font-medium text-black dark:text-white">E-mail<span
-                      class="text-red-500">*</span></label>
+                  <label for="phone" class="block mb-2 text-base font-medium text-black dark:text-white">E-mail</label>
                   <input type="email" id="email" v-model="dataform.email"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
