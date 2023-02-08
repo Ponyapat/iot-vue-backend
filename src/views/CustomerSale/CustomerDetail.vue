@@ -193,15 +193,15 @@ const formatdate =(date)=>{
                     -
                   </div>
                   <div v-else>
-                    <a :href="product.estimate" class="hover:text-blue-500">link</a>
+                    <a :href="product.estimate" class="hover:text-blue-500"><i class="fa-solid fa-file"></i></a>
                   </div>
                 </td>
                 <td class="px-6 py-4 text-center">
-                  <div v-if="product.estimate == 'string' || product.estimate == ''">
+                  <div v-if="product.quotation == 'string' || product.quotation == ''">
                     -
                   </div>
                   <div v-else>
-                    <a :href="product.quotation" class="hover:text-blue-500">link</a>
+                    <a :href="product.quotation" class="hover:text-blue-500"><i class="fa-solid fa-file"></i></a>
                   </div>
                 </td>
                 <td class="px-6 py-4 bg-gray-50">
