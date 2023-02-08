@@ -394,7 +394,7 @@ const submitForm = async () => {
           }
           else {
 
-            if ((element.name && element.serialNumber) && (element.purchaseDate && element.warrantyExpired)) {
+            if (element.name ) {
               await ApiMain.post(`/other-customer/${id}/add-product`, {
                 estimate: element.estimate,
                 quotation: element.quotation,
@@ -494,7 +494,8 @@ const submitForm = async () => {
         for (let index = 0; index < product.length; index++) {
           const element = product[index];
 
-          if ((element.name && element.serialNumber) && (element.purchaseDate && element.warrantyExpired)) {
+          if (element.name) {
+          // if ((element.name && element.serialNumber) && (element.purchaseDate && element.warrantyExpired)) {
             //  เพิ่มข้อมูลสินค้าของลูกค้าคนนี้
             await ApiMain.post(`/other-customer/${customer_id}/add-product`, {
               estimate: element.estimate,

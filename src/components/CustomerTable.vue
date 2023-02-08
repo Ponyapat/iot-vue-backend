@@ -66,7 +66,7 @@ let product_filter = reactive([
   {id:15,product:'2061 (Weather station)'},{id:16,product:'2053 (MA+AP)'},{id:17,product:'2053 (MA)'},{id:18,product:'2053 (AP)'},{id:19,product:'Smart garden A'},{id:20,product:'Smart garden B'},{id:21,product:'Smart Bag'}
 ]);
 
-let contactby_filter = reactive([{id:1,data:'Facebook'},{id:2,data:'Line'},{id:3,data:'Walk in'},{id:4,data:'By phone'},{id:5,data:'M2M'},{id:6,data:'M2ตัวแทนจำหน่ายM'}]);
+let contactby_filter = reactive([{id:1,data:'Facebook'},{id:2,data:'Line'},{id:3,data:'Walk in'},{id:4,data:'By phone'},{id:5,data:'M2M'},{id:6,data:'ตัวแทนจำหน่าย'}]);
 let status_filter = reactive([{id:1,status:'ปิดการขาย'},{id:2,status:'กำลังดำเนินการ'},{id:3,status:'จัดเตรียมสินค้า'},{id:4,status:'ติดตามผล'},{id:5,status:'สอบถามข้อมูล'}]);
 
 onBeforeMount(() => {
