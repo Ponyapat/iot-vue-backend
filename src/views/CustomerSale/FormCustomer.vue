@@ -324,11 +324,8 @@ const select_subdistrict = (data) => {
 
 };
 
-
-
 // step 1
 const submitForm = async () => {
-
   // แก้ไขข้อมูล
   if (id) {
     let data = {};
@@ -367,81 +364,99 @@ const submitForm = async () => {
         statusLog: dataform2.status
       }
     }
-    ApiMain.put(`/other-customer/${id}`, data).then(async (res) => {
+    Swal.fire({
+      icon: 'warning',
+      title: "ยืนยันการแก้ไขข้อมูล",
+      text: 'ยืนยันที่จะแก้ไขข้อมุลหรือไม่ ?',
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
+      allowOutsideClick: false
+    }).then((result) => {
+      console.log(result);
+      if (result.isConfirmed == true) {
+        ApiMain.put(`/other-customer/${id}`, data).then(async (res) => {
 
-      if (res.data.status == 204 || res.data.status == 200 || res.data.status == 201) {
+          if (res.data.status == 204 || res.data.status == 200 || res.data.status == 201) {
 
 
-        console.log(dataform.otherCustomerProduct);
-        let product = dataform.otherCustomerProduct;
-        for (let index = 0; index < product.length; index++) {
-          const element = product[index];
-          if (element.id) {
-            await ApiMain.put(`/other-customer/${id}/edit-product/${element.id}`, {
-              estimate: element.estimate,
-              quotation: element.quotation,
-              name: element.name,
-              serialNumber: element.serialNumber,
-              purchaseDate: element.purchaseDate,
-              warrantyExpired: element.warrantyExpired,
-              additionalServices: element.additionalServices,
-              etc: element.etc
-            }).then(response => {
-              console.log(response.data);
-            }).catch(error => {
-              console.log(error.message);
+            console.log(dataform.otherCustomerProduct);
+            let product = dataform.otherCustomerProduct;
+            for (let index = 0; index < product.length; index++) {
+              const element = product[index];
+              if (element.id) {
+                await ApiMain.put(`/other-customer/${id}/edit-product/${element.id}`, {
+                  estimate: element.estimate,
+                  quotation: element.quotation,
+                  name: element.name,
+                  serialNumber: element.serialNumber,
+                  purchaseDate: element.purchaseDate,
+                  warrantyExpired: element.warrantyExpired,
+                  additionalServices: element.additionalServices,
+                  etc: element.etc
+                }).then(response => {
+                  console.log(response.data);
+                }).catch(error => {
+                  console.log(error.message);
+                });
+              }
+              else {
+
+                if (element.name !='') {
+                  await ApiMain.post(`/other-customer/${id}/add-product`, {
+                    estimate: element.estimate,
+                    quotation: element.quotation,
+                    name: element.name,
+                    serialNumber: element.serialNumber,
+                    purchaseDate: element.purchaseDate,
+                    warrantyExpired: element.warrantyExpired,
+                    additionalServices: element.additionalServices,
+                    etc: element.etc
+                  }).then(response => {
+                    console.log(response.data);
+                  }).catch(error => console.log(error));
+                }
+              }
+            }
+
+            Swal.fire({
+              icon: "success",
+              title: "แก้ไขข้อมูลสถานะสำเร็จ",
+              showConfirmButton: 1,
             });
+            router.push("/customers");
+
+          } else {
+            Swal.fire({
+              icon: "warning",
+              title: "แก้ไขข้อมูลผิดพลาด",
+              showConfirmButton: 1,
+            });
+
+          }
+        });
+
+        // เพิ่ม log
+        ApiMain.put(`/other-customer/${id}/update-status`, {
+          status: dataform2.status,
+          statusLog: dataform2.detail,
+        }).then(response => {
+          if (response.data.status == 204 || response.data.status == 200 || response.data.status == 201) {
+            console.log(' เพิ่ม Log  สำเร็จ', response.data);
           }
           else {
-
-            if (element.name ) {
-              await ApiMain.post(`/other-customer/${id}/add-product`, {
-                estimate: element.estimate,
-                quotation: element.quotation,
-                name: element.name,
-                serialNumber: element.serialNumber,
-                purchaseDate: element.purchaseDate,
-                warrantyExpired: element.warrantyExpired,
-                additionalServices: element.additionalServices,
-                etc: element.etc
-              }).then(response => {
-                console.log(response.data);
-              }).catch(error => console.log(error));
-            }
+            console.log(' เพิ่ม Log  ไม่สำเร็จ', response.data);
           }
-        }
-
-        Swal.fire({
-          icon: "success",
-          title: "แก้ไขข้อมูลสถานะสำเร็จ",
-          showConfirmButton: 1,
+        }).catch(error => {
+          console.log(error);
         });
-        router.push("/customers");
-
-      } else {
-        Swal.fire({
-          icon: "warning",
-          title: "แก้ไขข้อมูลผิดพลาด",
-          showConfirmButton: 1,
-        });
-        return false;
-      }
-    });
-
-    // เพิ่ม log
-    ApiMain.put(`/other-customer/${id}/update-status`, {
-      status: dataform2.status,
-      statusLog: dataform2.detail,
-    }).then(response => {
-      if (response.data.status == 204 || response.data.status == 200 || response.data.status == 201) {
-        console.log(' เพิ่ม Log  สำเร็จ', response.data);
       }
       else {
-        console.log(' เพิ่ม Log  ไม่สำเร็จ', response.data);
+        router.push('/customers');
       }
-    }).catch(error => {
-      console.log(error);
-    });
+    })
 
   }
   // เพิ่มข้อมูล
@@ -463,7 +478,7 @@ const submitForm = async () => {
         detail: dataform.detail,
         status: dataform2.status,
         note: dataform.note,
-        statusLog: dataform2.status
+        statusLog: dataform2.detail
       }
     }
     else {
@@ -481,11 +496,23 @@ const submitForm = async () => {
         detail: dataform.detail,
         status: dataform2.status,
         note: dataform.note,
-        statusLog: dataform2.status
+        statusLog: dataform2.detail
       }
     }
-    // Add data
-    ApiMain.post("/other-customer", data).then(async (response) => {
+    Swal.fire({
+      icon: 'warning',
+      title: "ยืนยันการแก้ไขข้อมูล",
+      text: 'ยืนยันที่จะแก้ไขข้อมุลหรือไม่ ?',
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
+      allowOutsideClick: false
+    }).then((result) => {
+      console.log(result);
+      if (result.isConfirmed == true) {
+        ApiMain.post("/other-customer", data).then(async (response) => {
       const customer_id = response.data.data.id;
       if (response.data.status == 204 || response.data.status == 200 || response.data.status == 201) {
 
@@ -495,7 +522,7 @@ const submitForm = async () => {
           const element = product[index];
 
           if (element.name) {
-          // if ((element.name && element.serialNumber) && (element.purchaseDate && element.warrantyExpired)) {
+            // if ((element.name && element.serialNumber) && (element.purchaseDate && element.warrantyExpired)) {
             //  เพิ่มข้อมูลสินค้าของลูกค้าคนนี้
             await ApiMain.post(`/other-customer/${customer_id}/add-product`, {
               estimate: element.estimate,
@@ -509,7 +536,6 @@ const submitForm = async () => {
             }).then((response) => {
               if (response.data.status == 201 || response.data.status == 200) {
                 console.log('add successfully !!!');
-
               }
               else {
                 Swal.fire({
@@ -527,12 +553,12 @@ const submitForm = async () => {
 
         }
         Swal.fire({
-              icon: "success",
-              title: "เพิ่มข้อมูลลูกค้าสำเร็จ",
-              confirmButtonText: 'ตกลง',
-              showConfirmButton: 1,
-            });
-            router.push("/customers");
+          icon: "success",
+          title: "เพิ่มข้อมูลลูกค้าสำเร็จ",
+          confirmButtonText: 'ตกลง',
+          showConfirmButton: 1,
+        });
+        router.push("/customers");
 
 
       } else {
@@ -545,6 +571,12 @@ const submitForm = async () => {
       }
 
     });
+      }
+      else{
+        router.push('/customers')
+      }
+    })
+
   }
 
 }
@@ -897,13 +929,15 @@ const deleteItem = (index, customer, product_id) => {
                     <label for="quotation"
                       class="block mb-2 text-base font-medium text-black dark:text-white">ใบเสนอราคา</label>
                     <input type="url" id="quotation" v-model="group.quotation"
-                      class="bg-gray-50  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <small class="text-[10px]">แนบ link Url</small>
                   </div>
                   <div class="mb-4 w-full ">
                     <label for="estimate"
                       class="block mb-2 text-base font-medium text-black dark:text-white">ใบประเมินราคา</label>
                     <input type="url" id="estimate" v-model="group.estimate"
                       class="bg-gray-50  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <small class="text-[10px]">แนบ link Url</small>
                   </div>
                 </div>
                 <div class="flex flex-row gap-2">
