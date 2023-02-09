@@ -21,7 +21,7 @@ let check_username = ref(false);
 const config = {
         auth: {
           username: 'admin',
-          password: 'password'
+          password: import.meta.env.VITE_PASS_CUSTOMER
         },
         headers: {
           Authorization: "Bearer " + token,

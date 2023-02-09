@@ -59,7 +59,7 @@ const fetchData = () => {
   ApiSso.get("/api/mgr/users",{
         auth: {
           username: 'admin',
-          password: 'password'
+          password: import.meta.env.VITE_PASS_CUSTOMER
         },
         headers: {
           Authorization: "Bearer " + token,
