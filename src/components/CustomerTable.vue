@@ -342,12 +342,12 @@ const dynamicSelect = computed(()=>{
       <thead class="text-base text-white uppercase bg-gray-600 dark:bg-gray-700 dark:text-white">
         <tr>
           <th scope="col" class="text-center py-3 w-[100px]">ID</th>
-          <th scope="col" class="text-center py-3 w-[200px]">ชื่อลูกค้า</th>
-          <th scope="col" class="text-center py-3 w-[200px]">เบอร์โทร</th>
-          <th scope="col" class="text-center py-3 w-[150px]">จังหวัด</th>
-          <th scope="col" class="text-center py-3 w-[150px]">ประเภท</th>
-          <th scope="col" class="text-center py-3 w-[150px]">ช่องทาง</th>
-          <th scope="col" class="text-center py-3 w-[150px]">สถานะ</th>
+          <th scope="col" class=" py-3 w-[200px]">ชื่อลูกค้า</th>
+          <th scope="col" class=" py-3 w-[200px]">เบอร์โทร</th>
+          <th scope="col" class=" py-3 w-[150px]">จังหวัด</th>
+          <th scope="col" class=" py-3 w-[150px]">ประเภท</th>
+          <th scope="col" class=" py-3 w-[150px]">ช่องทาง</th>
+          <th scope="col" class=" py-3 w-[150px]">สถานะ</th>
           <th scope="col" class="text-center py-3 w-[150px]">Action</th>
         </tr>
       </thead>
@@ -355,58 +355,58 @@ const dynamicSelect = computed(()=>{
         <tr v-for="(item, index) in customers_list.slice(pageStart, pageStart + perPage)" :key="item.id" :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']">
           <td class="text-center">{{item.id}}</td>
           <td >
-            <div >
+            <div class="text-sm font-medium" >
               <span v-if="item.name !=''">{{item.name}}</span>
               <span v-else>-</span>
             </div>
           </td>
-          <td class="text-center">
+          <td >
             <span v-if="item.phone !=''">{{item.phone}}</span>
               <span v-else>-</span>
           </td>
-            <td class="text-center relative">
+            <td class=" ">
               <div >
                 <span v-if="item.province !=''">{{ item.province }}</span>
                 <span v-else>-</span>
               </div>
             </td>
-          <td class="text-center ">
+          <td >
           <div v-if="item.type">
             <div v-if="item.type=='B2C'">
-            <span class="bg-[#b1a3eb] rounded-2xl text-black font-medium py-1.5 px-4">{{item.type}}</span>
+            <span class="bg-[#d7fcf8] rounded-2xl text-black font-medium py-2 px-4"><i class="fa-solid fa-building-user text-lg mr-2"></i> {{item.type}}</span>
           </div>
           <div v-if="item.type=='B2B'">
-            <span class="bg-[#9aedee]  rounded-2xl text-black font-medium py-1.5 px-4">{{item.type}}</span>
+            <span class="bg-[#d7e3fc] rounded-2xl text-black font-medium py-1.5 px-4"><i class="fa-solid fa-building-circle-arrow-right mr-2"></i> {{item.type}}</span>
           </div>
           <div v-if="item.type=='Dealer'">
-            <span class="bg-[#ea96cc] rounded-2xl text-black font-medium py-1.5 px-4">{{item.type}}</span>
+            <span class="bg-[#f0d7fc] rounded-2xl text-black font-medium py-1.5 px-4"><i class="fa-solid fa-user-astronaut text-lg mr-2"></i> {{item.type}}</span>
           </div>
           <div v-if="item.type=='Seller'">
-            <span class="bg-[#a4f392] rounded-2xl text-black font-medium py-1.5 px-4">{{item.type}}</span>
+            <span class="bg-[#fcd7d7] rounded-2xl text-black font-medium py-1.5 px-4"><i class="fa-solid fa-user-tie text-lg mr-2"></i> {{item.type}}</span>
           </div>
           <div v-if="item.type=='Dropship'">
-            <span class="bg-[#f7ab40] rounded-2xl text-black font-medium py-1.5 px-4">{{item.type}}</span>
+            <span class="bg-[#d8fcd7] rounded-2xl text-black font-medium py-1.5 px-4"><i class="fa-solid fa-box text-lg mr-2"></i> {{item.type}}</span>
           </div>
           </div>
           <div v-else>-</div>
           </td>
-          <td class="text-center">
+          <td >
             <div v-if="item.contactBy">
-              <div class="bg-[#3e64ec] rounded-2xl text-black font-medium py-1.5 px-2" v-if="item.contactBy=='Facebook'">{{item.contactBy}}</div>
-            <div class="bg-[#a1f67f] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'Line'">{{item.contactBy}}</div>
-            <div class="bg-[#3dcca6] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'Walk in'">{{item.contactBy}}</div>
-            <div class="bg-[#4ecc3d] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'By phone'">{{item.contactBy}}</div>
-            <div class="bg-[#cc4b3d] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'M2M'">{{item.contactBy}}</div>
-            <div class="bg-[#cc873d] rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'ตัวแทน'">ตัวแทนจำหน่าย</div>
+              <div class="rounded-2xl text-black font-medium py-1.5 px-2" v-if="item.contactBy=='Facebook'"><i class="fa-brands fa-facebook text-[#3e64ec] text-lg mr-2"></i>{{item.contactBy}}</div>
+            <div class=" rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'Line'"><i class="fa-brands fa-line text-[#5eb13d] text-lg mr-2"></i>{{item.contactBy}}</div>
+            <div class=" rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'Walk in'"><i class="fa-solid fa-person-walking-dashed-line-arrow-right text-black text-lg mr-2"></i>{{item.contactBy}}</div>
+            <div class=" rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'By phone'"><i class="fa-solid fa-phone text-[#4ecc3d] text-lg mr-2"></i>{{item.contactBy}}</div>
+            <div class=" rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'M2M'"><i class="fa-solid fa-people-arrows text-[rgb(204,75,61)] text-lg mr-2"></i>{{item.contactBy}}</div>
+            <div class=" rounded-2xl text-black font-medium py-1.5 px-2" v-else-if="item.contactBy == 'ตัวแทน'"> <i class="fa-solid fa-user-tie text-black text-lg mr-2"></i>ตัวแทนจำหน่าย</div>
             </div>
             <div v-else>-</div>
           </td>
           <td class="text-center">
-            <div class="bg-[#f17171] rounded-2xl text-xs text-black font-medium py-2 px-2 " v-if="item.status=='ปิดการขาย'">{{item.status}}</div>
-            <div class="bg-[#ffc34a] rounded-2xl text-xs text-black font-medium py-2 px-2" v-else-if="item.status == 'กำลังดำเนินการ'">{{item.status}}</div>
-            <div class="bg-[#4aa1ff] rounded-2xl text-xs text-black font-medium py-2 px-2" v-else-if="item.status == 'สอบถามข้อมูล'">{{item.status}}</div>
-            <div class="bg-[#4affa4] rounded-2xl text-xs text-black font-medium py-2 px-2" v-else-if="item.status == 'จัดเตรียมสินค้า'">{{item.status}}</div>
-            <div class="bg-[#ff4ab4] rounded-2xl text-xs text-black font-medium py-2 px-2" v-else-if="item.status == 'ติดตามผล'">{{item.status}}</div>
+            <div class=" bg-[#8dfd85] rounded-2xl text-sm text-black font-medium py-1" v-if="item.status=='ปิดการขาย'"> <i class="fa-solid fa-truck-fast text-[#000000] text-lg mr-2"></i>{{item.status}}</div>
+            <div class="bg-[#ffefb0] rounded-2xl text-sm text-black font-medium py-1" v-else-if="item.status == 'กำลังดำเนินการ'"><i class="fa-regular fa-comment-dots text-lg mr-2"></i> {{item.status}}</div>
+            <div class="bg-[#ffb4e6] rounded-2xl text-sm text-black font-medium py-1" v-else-if="item.status == 'สอบถามข้อมูล'"><i class="fa-solid fa-headset text-[#000000] text-lg mr-2"></i>{{item.status}}</div>
+            <div class="bg-[#f8bd93] rounded-2xl text-sm text-black font-medium py-1" v-else-if="item.status == 'จัดเตรียมสินค้า'"><i class="fa-solid fa-arrows-to-dot text-lg mr-2"></i>{{item.status}}</div>
+            <div class="bg-[#aaaaff] rounded-2xl text-sm text-black font-medium py-1" v-else-if="item.status == 'ติดตามผล'"><i class="fa-solid fa-chart-line text-[#000000] text-lg mr-2"></i> {{item.status}}</div>
           </td>
 
           <!-- <td class="text-center">
