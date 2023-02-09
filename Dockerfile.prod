@@ -2,7 +2,7 @@ FROM asia.gcr.io/farmpress-production/farmworld-vue-backend:base as build-stage
 
 COPY . .
 
-RUN yarn run build:stage
+RUN yarn run build:prod
 
 FROM nginx:mainline-alpine as production-stage
 
