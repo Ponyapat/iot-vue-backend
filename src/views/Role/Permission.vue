@@ -54,8 +54,8 @@ onBeforeMount(() => {
 
 const submit = () => {
   const propertyValues = Object.values(form.userRoles);
-  console.log(propertyValues); 
-  
+  console.log(propertyValues);
+
   if (id) {
     ApiMain.post("/role/"+id+"/role-permission",{
     permissionId:propertyValues})

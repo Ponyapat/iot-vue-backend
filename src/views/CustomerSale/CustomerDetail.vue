@@ -234,52 +234,52 @@ const formatdate = (date) => {
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 ">
           <thead class="text-base text-gray-900  bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" class="px-4 py-3 truncate ">
+              <th scope="col" class="px-4 py-3 truncate text-center">
                 ชื่อสินค้า
               </th>
-              <th scope="col" class="px-4 py-3 truncate">
+              <th scope="col" class="px-4 py-3 truncate text-center">
                 Serial Number
               </th>
-              <th scope="col" class="px-4 py-3 truncate ">
+              <th scope="col" class="px-4 py-3 truncate text-center">
                 วันที่ซื้อ
               </th>
-              <th scope="col" class="px-4 py-3 truncate">
+              <th scope="col" class="px-4 py-3 truncate text-center">
                 วันที่หมดประกัน
               </th>
-              <th scope="col" class="px-4 py-3 truncate ">
+              <th scope="col" class="px-4 py-3 truncate text-center">
                 ใบประเมินราคา
               </th>
-              <th scope="col" class="px-4 py-3 truncate">
+              <th scope="col" class="px-4 py-3 truncate text-center">
                 ใบเสนอราคา
               </th>
 
-              <th scope="col" class="px-6 py-3 truncate ">
+              <th scope="col" class="px-6 py-3 truncate text-center">
                 บริการเสริม
               </th>
-              <th scope="col" class="px-6 py-3">
+              <th scope="col" class="px-6 py-3 text-center">
                 อื่นๆ
               </th>
             </tr>
           </thead>
           <tbody>
             <tr class="bg-white dark:bg-gray-800 " v-for="(product,index) in states.otherCustomerProduct" :key="index">
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white bg-gray-50">
+              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white bg-gray-50 text-center">
                 {{ product.name }}
               </th>
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-center">
                 {{ product.serialNumber }}
               </td>
-              <td class="px-6 py-4 bg-gray-50">
+              <td class="px-6 py-4 bg-gray-50 text-center">
                 <span v-if=" product.purchaseDate == null">-</span>
                 <span v-else>{{ moment(new Date( product.purchaseDate)).format('DD/MM/YYYY') }}</span>
 
               </td>
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-center">
                 <span v-if=" product.warrantyExpired == null">-</span>
                 <span v-else>{{ moment(new Date( product.warrantyExpired)).format('DD/MM/YYYY') }}</span>
 
               </td>
-              <td class="px-6 py-4 bg-gray-50 text-center">
+              <td class="px-6 py-4 bg-gray-50 text-center text-center">
                 <div v-if="product.estimate == 'string' || product.estimate ==''">
                   -
                 </div>
@@ -297,7 +297,7 @@ const formatdate = (date) => {
                       class="fa-solid fa-file text-lg"></i><span>link</span></a>
                 </div>
               </td>
-              <td class="px-6 py-4 bg-gray-50">
+              <td class="px-6 py-4 bg-gray-50 text-center">
                 <div v-if="product.additionalServices == 'string' || product.additionalServices == ''">
                   -
                 </div>
@@ -305,7 +305,7 @@ const formatdate = (date) => {
                   {{ product.additionalServices }}
                 </div>
               </td>
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-center">
                 <div v-if="product.etc == 'string' || product.etc == ''">
                   -
                 </div>

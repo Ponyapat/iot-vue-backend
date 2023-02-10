@@ -3,7 +3,7 @@
     <title-bar :title-stack="titleStack" />
     <card-component class="m-4"
       :icon="mdiMonitorCellphone"
-      title="ข้อมูลลูกค้าของฉัน"
+      title="ผู้ใช้งานแพลตฟอร์ม"
       has-table>
       <!-- table -->
       <MyCustomerTable />
@@ -17,5 +17,5 @@ import TitleBar from "@/components/TitleBar.vue";
 import MyCustomerTable from "@/components/MyCustomerTable.vue";
 import CardComponent from "@/components/CardComponent.vue";
 
-const titleStack = ref(["My Customers", "ข้อมูลลูกค้าของฉัน"]);
+const titleStack = ref(["My Customers", "ผู้ใช้งานแพลตฟอร์ม"]);
 </script>

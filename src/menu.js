@@ -66,7 +66,7 @@ if (roleid) {
         icon: mdiViewList,
         menu: sub_geo,
       })
-      
+
       const rolePermission = data.data.data.rolePermission;
       let pms = [];
       for (const [key, value] of Object.entries(rolePermission)) {
@@ -134,11 +134,11 @@ if (roleid) {
             menu: [
               {
                 to: "/my-customers",
-                label: "ข้อมูลลูกค้าของฉัน",
+                label: "ผู้ใช้งานแพลตฟอร์ม",
                 icon: mdiAccountSupervisorOutline,
               },
             ],
-          })         
+          })
         }
         if (
           value.permission[0].action == "read" &&
@@ -155,7 +155,7 @@ if (roleid) {
                   icon: mdiFaceAgent,
                 },
               ],
-            }          
+            }
           );
         }
 
@@ -174,7 +174,7 @@ if (roleid) {
                   icon: mdiFaceAgent,
                 },
               ],
-            }          
+            }
           );
         }
       }
