@@ -123,7 +123,7 @@ const formatdate = (date) => {
             </div>
             <div class="font-bold mb-2 ">รายละเอียด :
               <p v-if="states.detail == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</p>
-              <p v-else class="font-normal text-gray-800 indent-10" style="word-wrap: break-word;">{{ states.detail }}
+              <p v-else class="font-normal text-gray-800 indent-10" style="word-wrap: break-word; width: 500px;">{{ states.detail }}
               </p>
             </div>
             <div class="font-bold mb-2">ช่องทาง :
