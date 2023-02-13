@@ -205,10 +205,10 @@ const formatdate = (date) => {
           <div class="mx-10">
             <ol class="relative border-l border-gray-200 dark:border-gray-700">
               <li class="mb-10 ml-6 bg-white  w-[500px] shadow-custom-test p-2 rounded-lg"  v-for="(log, index) in reversedArray" :key="index">
-                <span :class="index==0?'bg-red-100':'bg-blue-100'"
+                <span :class="index==0?'bg-red-100':'bg-gray-200'"
                   class="absolute flex items-center justify-center w-6 h-6  rounded-full -left-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
                   <i v-if="index==0" class="fa-solid fa-fire text-red-500"></i>
-                  <i v-else class="fa-solid fa-circle-dot"></i>
+                  <i v-else class="fa-solid fa-circle-dot text-gray-700"></i>
                 </span>
                 <h3 class="flex items-center mb-1 text-base font-semibold text-gray-900 dark:text-white">{{ log.status }}
                   <span v-if="index==0" class="bg-red-200 text-black text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-blue-300 ml-3">ล่าสุด</span>
