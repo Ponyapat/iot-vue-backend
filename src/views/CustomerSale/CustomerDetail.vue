@@ -215,7 +215,8 @@ const formatdate = (date) => {
                 </h3>
                 <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{{ moment(new Date(log.createdAt)).format('DD-MM-YYYY') }}
                   เวลา {{ formatdate(log.createdAt) }} น.</time>
-                <p class="mb-4 text-base font-normal text-gray-900 "><span class="text-black font-medium">รายละเอียด :</span> {{ log.detailLog }}</p>
+                <p class="mb-2 text-sm font-normal text-gray-900 "><span class="text-black font-medium ">รายละเอียด :</span> {{ log.detailLog }}</p>
+                <p class="mb-4 text-sm font-normal text-gray-900 "><span class="text-black font-medium ">ผู้บันทึก : </span> {{ (log.createdBy).substring(0, (log.createdBy).indexOf('.')) }}</p>
               </li>
             </ol>
           </div>
