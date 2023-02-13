@@ -159,7 +159,7 @@ onBeforeMount(() => {
   <div>
     <table>
       <thead>
-        <tr>
+        <tr class="bg-gray-700 text-white">
           <th>ID</th>
           <th>คำค้นหาสถานที่</th>
           <th></th>

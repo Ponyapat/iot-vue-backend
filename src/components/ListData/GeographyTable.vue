@@ -203,7 +203,7 @@ const drainage = (data) => {
 <template>
   <table>
     <thead>
-      <tr class="text-sm">
+      <tr class="text-sm bg-gray-700 text-white">
         <th v-if="checkable" />
         <th>FarmID</th>
         <th>ละติจูด</th>
@@ -250,19 +250,12 @@ const drainage = (data) => {
         </td>
         <td class="actions-cell align-top">
             <jb-button
-              v-if="per_edit" 
+              v-if="per_edit"
               color="info"
               :icon="mdiGreasePencil"
               small
               @click="edit(item.id)"
             />
-            <!-- <jb-button
-              class="mt-2"
-              color="danger"
-              :icon="mdiTrashCan"
-              small
-              @click="del(item.id)"
-            /> -->
         </td>
       </tr>
     </tbody>
