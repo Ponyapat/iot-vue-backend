@@ -19,7 +19,7 @@ import TitleBar from "@/components/TitleBar.vue";
 import CustomerTable from "@/components/CustomerTable.vue";
 import CardComponent from "@/components/CardComponent.vue";
 
-const titleStack = ref(["Customers", "ข้อมูลลูกค้าสำหรับฝ่ายขาย"]);
+const titleStack = ref(["ข้อมูลลูกค้าสำหรับฝ่ายขาย"]);
 const Addlink = ref(null);
 
 onBeforeMount(() => {

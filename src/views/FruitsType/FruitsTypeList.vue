@@ -16,7 +16,7 @@ import TitleBar from "@/components/TitleBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import FruitsTypeTable from '@/components/FruitsTypeTable.vue'
 import { mdiFruitWatermelon } from '@mdi/js'
-const titleStack = ref(["ประเภทพืชพรรณผลไม้", "ผู้ดูแลระบบ"]);
+const titleStack = ref(["ประเภทพืชพรรณผลไม้"]);
 const Addlink = ref(null);
 
 onBeforeMount(() => {

@@ -8,7 +8,7 @@ defineProps({
     type: Array,
     default: () => []
   }
-})  
+})
 </script>
 
 <template>

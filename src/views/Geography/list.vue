@@ -20,7 +20,7 @@ import HeroBar from "@/components/HeroBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import GeographyTable from '@/components/ListData/GeographyTable.vue'
 
-const titleStack = ref(["Admin", "ภูมิศาสตร์(ข้อมูลลูกค้า)"]);
+const titleStack = ref(["ภูมิศาสตร์(ข้อมูลลูกค้า)"]);
 
 
 

@@ -20,5 +20,5 @@ import HeroBar from "@/components/HeroBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import RoleTable from '@/components/RoleTable.vue';
 
-const titleStack = ref(["Admin", "สถานะผู้ดูแล (Admin)"]);
+const titleStack = ref(["สถานะผู้ดูแล (Admin)"]);
 </script>

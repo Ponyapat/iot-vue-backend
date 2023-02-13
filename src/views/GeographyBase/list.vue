@@ -21,7 +21,7 @@ import HeroBar from "@/components/HeroBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import GeographyTableBase from '@/components/ListData/GeographyBase.vue'
 
-const titleStack = ref(["Admin", "ภูมิศาสตร์(ข้อมูลกลาง)"]);
+const titleStack = ref(["ภูมิศาสตร์(ข้อมูลกลาง)"]);
 const Addlink = ref(null);
 
 onBeforeMount(() => {

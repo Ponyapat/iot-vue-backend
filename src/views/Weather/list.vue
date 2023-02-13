@@ -20,7 +20,7 @@ import HeroBar from "@/components/HeroBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import WeatherTable from '@/components/ListData/WeatherTable.vue'
 
-const titleStack = ref(["Admin", "ภูมิอากาศ"]);
+const titleStack = ref(["ภูมิอากาศ"]);
 
 
 

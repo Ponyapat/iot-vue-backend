@@ -20,7 +20,7 @@ import HeroBar from "@/components/HeroBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import KeywordTable from '@/components/KeywordTable.vue';
 
-const titleStack = ref(["ตลาด", "คำค้นหาสถานที่"]);
+const titleStack = ref(["คำค้นหาสถานที่"]);
 const Addlink = ref(null);
 onMounted(() => {
   if(ck_pms("create","keyword")){
