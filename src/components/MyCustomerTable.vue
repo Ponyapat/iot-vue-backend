@@ -95,6 +95,8 @@ const fetchData = () => {
     totalRecord.value = respones.data.total_record;
     states.customers = respones.data.data;
 
+    console.log(states.customers);
+
   }).catch((error) => {
     console.log(error);
   });

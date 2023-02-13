@@ -146,62 +146,7 @@ const formatdate = (date) => {
     <div class="w-full bg-white shadow rounded-lg py-10">
       <h6 class="text-center font-bold text-lg mb-4">สถานะดำเนินการ</h6>
       <div v-if="(states.otherCustomerLog).length !=0">
-        <div class="relative overflow-x-auto">
-          <!-- <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-800 uppercase  dark:text-gray-400 ">
-              <tr class="bg-gray-100">
-                <th scope="col" class="w-[10px] p-0"></th>
-                <th scope="col" class="px-2 py-3 text-base font-bold text-start ml-2 ">
-                  สถานะ
-                </th>
-                <th scope="col" class="px-2 py-3 text-base font-bold text-center truncate">
-                  รายละเอียด
-                </th>
-                <th scope="col" class="px-2 py-3 text-base font-bold text-center truncate">
-                  วันที่ / เวลา
-                </th>
-                <th scope="col" class="px-2 py-3 text-base font-bold text-center truncate">
-                  ผู้บันทึก
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="bg-white border-b dark:bg-gray-800 " :class="index==0?'bg-green-50':''" v-for="(log, index) in reversedArray" :key="index">
-                <td class="w-[10px] px-2"><i v-if="index==0" class="text-green-500 fa-solid fa-circle-dot"></i></td>
-                <td  class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <div v-if="log.status == 'สอบถามข้อมูล'">
-                    <span class="bg-gray-200 py-1.5 px-4 rounded-lg">{{ log.status }}</span>
-                  </div>
-                  <div v-else-if="log.status == 'กำลังดำเนินการ'">
-                    <span class="bg-pink-200 py-1.5 px-4 rounded-lg">{{ log.status }}</span>
-                  </div>
-                  <div v-else-if="log.status == 'จัดเตรียมสินค้า'">
-                    <span class="bg-orange-200 py-1.5 px-4 rounded-lg">{{ log.status }}</span>
-                  </div>
-                  <div v-else-if="log.status == 'ปิดการขาย'">
-                    <span class="bg-green-400 py-1.5 px-4 rounded-lg">{{ log.status }}</span>
-                  </div>
-                  <div v-else-if="log.status == 'ติดตามผล'">
-                    <span class="bg-indigo-200 py-1.5 px-4 rounded-lg">{{ log.status }}</span>
-                  </div>
-                  <div v-else>
-                    <span class="bg-blue-200 py-1.5 px-4 rounded-lg">{{ log.status }}</span>
-                  </div>
-
-                </td>
-                <td class="px-2 py-4 text-center text-gray-900 ">
-                  <p class="">{{ log.detailLog }}</p>
-                </td>
-                <td class="px-2 py-4 text-center text-gray-900">
-                  {{ moment(new Date(log.createdAt)).format('DD/MM/YYYY') }} <br>
-                  {{ formatdate(log.createdAt) }} น.
-                </td>
-                <td class="px-2 py-4 text-center text-gray-900">
-                  {{ (log.createdBy).substring(0, (log.createdBy).indexOf('.')) }}
-                </td>
-              </tr>
-            </tbody>
-          </table> -->
+        <div class="relative overflow-x-auto overflow-y-auto h-[500px]">
           <div class="mx-10">
             <ol class="relative border-l border-gray-200 dark:border-gray-700">
               <li class="mb-10 ml-6 bg-white  w-[500px] shadow-custom-test p-2 rounded-lg"  v-for="(log, index) in reversedArray" :key="index">
