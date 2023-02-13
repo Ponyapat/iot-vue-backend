@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive ,computed} from "vue";
+import { ref, reactive , onMounted} from "vue";
 import { useMainStore } from "@/stores/main";
 import {
   mdiAccount,
@@ -24,15 +24,13 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 const mainStore = useMainStore();
-
 const titleStack = ref(["Admin", "Profile"]);
-
 const ck_edit = ref(0);
-
 const profileForm = reactive({
-  name: computed(() => mainStore.userName),
-  username: computed(() => mainStore.userName),
-  email: computed(() => mainStore.userEmail)
+  name: "",
+  username: "",
+  email: "",
+  roleId: ""
 });
 
 const passwordForm = reactive({
@@ -41,12 +39,21 @@ const passwordForm = reactive({
   password_confirmation: "",
 });
 
+onMounted(() => {
+  ApiMain.get("/users/myprofile")
+  .then((response) => {
+    profileForm.name = response.data.name
+    profileForm.username = response.data.username
+    profileForm.email = response.data.email
+    profileForm.roleId = response.data.roleId
+  })
+})
+
 const submitProfile = () => {
   const token = localStorage.getItem("tkfw");
   const userid = localStorage.getItem("userid");
   ApiMain.put("/users/" + userid + "/profile",profileForm)
     .then((data) => {
-      console.log(data);
       mainStore.setUser(profileForm);
       Swal.fire({
         icon: "success",
@@ -72,7 +79,6 @@ const submitPass = () => {
       return false
 
   }else{
-    console.log("mainStore.userEmail",mainStore.userEmail)
     console.log(passwordForm.password)
     console.log(passwordForm.password_confirmation)
     ApiMain.post("/auth/change-password", {
@@ -136,6 +142,7 @@ const submitPass = () => {
             type="email"
             name="email"
             autocomplete="email"
+            readonly
           />
         </field>
 
