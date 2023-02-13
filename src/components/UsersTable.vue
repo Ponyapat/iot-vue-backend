@@ -198,7 +198,7 @@ const statusText = (value) => {
 <template>
   <div>
     <table>
-      <thead>
+      <thead class="bg-gray-700 text-white">
         <tr>
           <th>#</th>
           <th>Name</th>

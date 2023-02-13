@@ -188,7 +188,7 @@ const pages = computed(() => {
 <template>
   <div class=" relative">
     <table class="w-full text-sm text-left text-black dark:text-white">
-      <thead class="text-base text-black bg-gray-50 dark:bg-gray-700 dark:text-white">
+      <thead class="text-base bg-gray-700 dark:bg-gray-700 text-white">
         <tr>
           <th scope="col" class="text-center py-3 w-[100px]">ID</th>
           <th scope="col" class="text-center py-3 w-[200px]">ชื่อ</th>

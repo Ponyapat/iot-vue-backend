@@ -153,7 +153,7 @@ onBeforeMount(() => {
 <template>
   <div>
     <table>
-      <thead>
+      <thead class="bg-gray-700 text-white">
         <tr>
           <th>ID</th>
           <th>NAME</th>

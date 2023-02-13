@@ -183,7 +183,6 @@ const pages = computed(() => {
     return [...Array(numShown)].map((k,i) => i + first);
 });
 
-
 // custom solution
 // const numPages = computed(() => {
 //   return Math.ceil(items.value / perPage.value);
@@ -265,9 +264,6 @@ const pages = computed(() => {
 //     return [...Array(numShown)].map((k,i) => i + first);
 // });
 
-
-
-
 </script>
 
 <template>
@@ -278,9 +274,6 @@ const pages = computed(() => {
           <input v-model="searchName" id="search_input" type="text"
             class="block w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="ค้นหาชื่อพืชพรรณ">
-            <!-- <input v-model="states.searchName" id="search_input" v-on:keyup="myFunction()" type="text"
-            class="block w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="ค้นหาชื่อพืชพรรณ">-->
           <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor"
               viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -304,27 +297,19 @@ const pages = computed(() => {
   </div>
   <div class=" relative">
     <table class="w-full text-sm text-left text-black dark:text-white">
-      <thead class="text-base text-black uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
+      <thead class="text-base uppercase  bg-gray-700 text-white">
         <tr>
-          <th scope="col" class="text-center py-3 w-[100px]">ID</th>
-          <th scope="col" class="text-center py-3 w-[200px]">ชื่อ</th>
-          <th scope="col" class="text-center py-3 w-[100px]">สายพันธุ์</th>
-          <!-- <th scope="col" class="text-center py-3 px-6">ชื่อวิทยาศาสตร์</th>
-          <th scope="col" class="text-center py-3 px-6">ชื่อสามัญ</th> -->
-          <!-- <th scope="col" class="text-center py-3 px-6">รายละเอียด</th> -->
-          <th scope="col" class="text-center py-3 w-[150px]">ประเภท</th>
-          <th scope="col" class="text-center py-3 w-[150px]">อายุการเก็บเกี่ยว</th>
-          <th scope="col" class="text-center py-3 w-[150px]">อุณหภูมิในอากาศ (°C)</th>
-          <th scope="col" class="text-center py-3 w-[150px]">อุณหภูมิในดิน (°C)</th>
-          <th scope="col" class="text-center py-3 w-[150px]">ความชื้นในดิน (%)</th>
-          <th scope="col" class="text-center py-3 w-[150px]">pH ในดิน</th>
-          <th scope="col" class="text-center py-3 px-6">EC ในดิน (μs/cm)</th>
-          <!-- <th scope="col" class="text-center py-3 px-6">N</th> -->
-          <!-- <th scope="col" class="text-center py-3 px-6">P</th> -->
-          <!-- <th scope="col" class="text-center py-3 px-6">K</th> -->
-          <!-- <th scope="col" class="text-center py-3 px-6">ปริมาณน้ำ</th> -->
-          <!-- <th scope="col" class="text-center py-3 px-6">ความเข้มแสง</th> -->
-          <th scope="col" class="text-center py-3 w-[150px]">Action</th>
+          <th scope="col" class="text-sm text-center py-3 w-[100px]">ID</th>
+          <th scope="col" class="text-sm text-center py-3 w-[200px]">ชื่อ</th>
+          <th scope="col" class="text-sm text-center py-3 w-[100px]">สายพันธุ์</th>
+          <th scope="col" class="text-sm text-center py-3 w-[150px]">ประเภท</th>
+          <th scope="col" class="text-sm text-center py-3 w-[150px]">อายุการเก็บเกี่ยว</th>
+          <th scope="col" class="text-sm text-center py-3 w-[150px] truncate">อุณหภูมิในอากาศ (°C)</th>
+          <th scope="col" class="text-sm text-center py-3 w-[150px] truncate">อุณหภูมิในดิน (°C)</th>
+          <th scope="col" class="text-sm text-center py-3 w-[150px] truncate">ความชื้นในดิน (%)</th>
+          <th scope="col" class="text-sm text-center py-3 w-[150px] truncate">pH ในดิน</th>
+          <th scope="col" class="text-sm text-center py-3 px-6 truncate">EC ในดิน (μs/cm)</th>
+          <th scope="col" class="text-sm text-center py-3 w-[150px]">Action</th>
         </tr>
       </thead>
       <tbody>

@@ -173,7 +173,7 @@ const pages = computed(() => {
 <template>
   <table>
     <thead>
-      <tr>
+      <tr class="bg-gray-700 text-white">
         <th v-if="checkable" />
         <th>ID</th>
         <th>หัวข้อ</th>
