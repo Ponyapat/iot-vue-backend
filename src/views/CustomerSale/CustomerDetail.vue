@@ -214,9 +214,9 @@ const formatdate = (date) => {
                   <span v-if="index==0" class="bg-red-200 text-black text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-blue-300 ml-3">ล่าสุด</span>
                 </h3>
                 <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{{ moment(new Date(log.createdAt)).format('DD-MM-YYYY') }}
-                  เวลา {{ formatdate(log.createdAt) }} น.</time>
+                  เวลา {{ formatdate(log.createdAt) }} น. <span class="ml-4"> ผู้บันทึก: {{ (log.createdBy).substring(0, (log.createdBy).indexOf('.')) }}</span></time>
                 <p class="mb-2 text-sm font-normal text-gray-900 "><span class="text-black font-medium ">รายละเอียด :</span> {{ log.detailLog }}</p>
-                <p class="mb-4 text-sm font-normal text-gray-900 "><span class="text-black font-medium ">ผู้บันทึก : </span> {{ (log.createdBy).substring(0, (log.createdBy).indexOf('.')) }}</p>
+                <!-- <p class="mb-4 text-sm font-normal text-gray-900 "><span class="text-black font-medium ">ผู้บันทึก : </span> {{ (log.createdBy).substring(0, (log.createdBy).indexOf('.')) }}</p> -->
               </li>
             </ol>
           </div>
