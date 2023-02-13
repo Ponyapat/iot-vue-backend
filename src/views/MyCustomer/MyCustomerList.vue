@@ -17,5 +17,5 @@ import TitleBar from "@/components/TitleBar.vue";
 import MyCustomerTable from "@/components/MyCustomerTable.vue";
 import CardComponent from "@/components/CardComponent.vue";
 
-const titleStack = ref(["My Customers", "ผู้ใช้งานแพลตฟอร์ม"]);
+const titleStack = ref(["ผู้ใช้งานแพลตฟอร์ม"]);
 </script>

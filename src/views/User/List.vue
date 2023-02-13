@@ -1,6 +1,7 @@
 <template lang="">
   <div>
     <title-bar :title-stack="titleStack" />
+
     <card-component
       :icon="mdiMonitorCellphone"
       title="ผู้ดูแล (Admin)"
@@ -20,5 +21,5 @@ import HeroBar from "@/components/HeroBar.vue";
 import CardComponent from "@/components/CardComponent.vue";
 import UsersTable from '@/components/UsersTable.vue';
 
-const titleStack = ref(["Admin", "ผู้ดูแลระบบ"]);
+const titleStack = ref(["ผู้ดูแลระบบ"]);
 </script>
