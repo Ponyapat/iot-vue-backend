@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed, onUpdated } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, helpers } from '@vuelidate/validators'
 import axios from "axios";
@@ -62,9 +62,11 @@ const dataform = reactive({
   province: "",
   postcode: "",
   detail: "",
+  otherCustomerComment:[{ commentDetail:'' }],
   otherCustomerProduct: [
     { estimate: '', quotation: '', name: '', serialNumber: '', purchaseDate: '', warrantyExpired: '', additionalServices: '', etc: '' },
   ],
+  otherCustomerImage:[],
   status: "",
   note: "",
 
@@ -135,8 +137,19 @@ onMounted(() => {
       dataform.postcode = res.data.data.postcode;
       dataform.detail = res.data.data.detail;
       dataform.note = res.data.data.note;
-      dataform.contactBy = res.data.data.contactBy;
       dataform.status = res.data.data.status;
+      dataform.otherCustomerComment = res.data.data.otherCustomerComment;
+      dataform.otherCustomerImage = res.data.data.otherCustomerImage;
+
+
+
+      // ทำการลบคอมเม้นได้ด้วย
+      // if ((res.data.data.otherCustomerComment).length == 0) {
+
+      // }else {
+
+      // }
+
 
       if ((res.data.data.otherCustomerProduct).length == 0) {
         dataform.otherCustomerProduct = [{ estimate: '', quotation: '', name: '', serialNumber: '', purchaseDate: '', warrantyExpired: '', additionalServices: '', etc: '' }]
@@ -324,6 +337,14 @@ const select_subdistrict = (data) => {
 
 };
 
+// ของ Step
+let progress_step = ref(0);
+let percent_step = computed(()=>progress_step.value) ;
+
+// ของ Image
+let progress= ref(0);
+let percent = computed(()=>progress.value) ;
+
 // step 1
 const submitForm = async () => {
   // แก้ไขข้อมูล
@@ -340,7 +361,7 @@ const submitForm = async () => {
         district: dataform.district_name,
         province: dataform.province_name,
         postcode: dataform.postcode,
-        detail: dataform.detail,
+        detail: '',
         status: dataform2.status,
         note: dataform.note,
         statusLog: dataform2.status,
@@ -358,14 +379,14 @@ const submitForm = async () => {
         district: dataform.district_name,
         province: dataform.province_name,
         postcode: dataform.postcode,
-        detail: dataform.detail,
+        detail: '',
         status: dataform2.status,
         note: dataform.note,
         statusLog: dataform2.status
       }
     }
     Swal.fire({
-      icon: 'warning',
+      icon: 'question',
       title: "ยืนยันการแก้ไขข้อมูล",
       text: 'ยืนยันที่จะแก้ไขข้อมุลหรือไม่ ?',
       showCancelButton: true,
@@ -384,9 +405,7 @@ const submitForm = async () => {
             let product = dataform.otherCustomerProduct;
             for (let index = 0; index < product.length; index++) {
               const element = product[index];
-
               if (element.id) {
-
                 await ApiMain.put(`/other-customer/${id}/edit-product/${element.id}`, {
                   estimate: element.estimate,
                   quotation: element.quotation,
@@ -403,11 +422,8 @@ const submitForm = async () => {
                 });
               }
               else {
-
                 if (element.name != '') {
-
                   let fix_data = {};
-
                   // ดักไว้กรณีที่ไม่มีการใส่ วันซื้อและวันประกันหมดอายุ
                   if (element.purchaseDate != '' && element.warrantyExpired == '') {
                     fix_data = {
@@ -460,6 +476,46 @@ const submitForm = async () => {
               }
             }
 
+            // Comment
+
+            let comments = dataform.otherCustomerComment;
+
+            for (let i = 0; i < comments.length; i++) {
+              const element = comments[i];
+
+              if(element.id){
+                await ApiMain.put(`/other-customer/${id}/edit-comment/${element.id}`, {
+                  commentDetail: element.commentDetail,
+                }).then(response => {
+                  console.log(response.data);
+                }).catch(error => {
+                  console.log(error.message);
+                });
+              }
+              else{
+                await ApiMain.post(`/other-customer/${id}/add-comment`, {
+                  commentDetail: element.commentDetail,
+                }).then(response => {
+                  console.log(response.data);
+                }).catch(error => {
+                  console.log(error.message);
+                });
+              }
+            }
+
+            let images = dataform.otherCustomerImage;
+            console.log(images);
+            let obj = [];
+            images.forEach(element => {
+              obj.push(element.imageName);
+            });
+            await ApiMain.post(`/other-customer/${id}/images`, {
+                  imageName: obj,
+                }).then(response => {
+                  console.log(response.data);
+                }).catch(error => {
+                  console.log(error.message);
+                });
             Swal.fire({
               icon: "success",
               title: "แก้ไขข้อมูลสถานะสำเร็จ",
@@ -514,7 +570,7 @@ const submitForm = async () => {
         district: dataform.district_name,
         province: dataform.province_name,
         postcode: dataform.postcode,
-        detail: dataform.detail,
+        detail: '',
         status: dataform2.status,
         note: dataform.note,
         statusLog: dataform2.detail
@@ -532,7 +588,7 @@ const submitForm = async () => {
         district: dataform.district_name,
         province: dataform.province_name,
         postcode: dataform.postcode,
-        detail: dataform.detail,
+        detail: '',
         status: dataform2.status,
         note: dataform.note,
         statusLog: dataform2.detail
@@ -549,20 +605,35 @@ const submitForm = async () => {
       cancelButtonText: "ยกเลิก",
       allowOutsideClick: false
     }).then((result) => {
-      console.log(result);
       if (result.isConfirmed == true) {
         ApiMain.post("/other-customer", data).then(async (response) => {
           const customer_id = response.data.data.id;
           if (response.data.status == 204 || response.data.status == 200 || response.data.status == 201) {
-
+            // Comment
+            for (let i = 0; i < dataform.otherCustomerComment.length; i++) {
+                  let data = dataform.otherCustomerComment[i];
+                  await ApiMain.post(`/other-customer/${customer_id}/add-comment`, data).then((response) => {
+                  if (response.data.status == 201 || response.data.status == 200) {
+                    console.log('add successfully !!!');
+                  }
+                  else {
+                    Swal.fire({
+                      icon: "success",
+                      title: "เพิ่มข้อมูลลูกค้าสไม่สำเร็จ",
+                      confirmButtonText: 'ตกลง',
+                      showConfirmButton: 1,
+                    });
+                  }
+                }).catch((error) => {
+                  console.log(error.message);
+                });
+                }
+            //  Product
             let product = dataform.otherCustomerProduct;
-
             for (let index = 0; index < product.length; index++) {
               const element = product[index];
-
               if (element.name) {
                 let fix_data = {};
-
                 // ดักไว้กรณีที่ไม่มีการใส่ วันซื้อและวันประกันหมดอายุ
                 if (element.purchaseDate != '' && element.warrantyExpired == '') {
                   fix_data = {
@@ -620,13 +691,21 @@ const submitForm = async () => {
                       showConfirmButton: 1,
                     });
                   }
-
                 }).catch((error) => {
                   console.log(error.message);
                 });
               }
-
             }
+            // Image Upload
+            let images = dataform.otherCustomerImage;
+
+            await ApiMain.post(`/other-customer/${customer_id}/images`, {
+                  imageName: images,
+                }).then(response => {
+                  console.log(response.data);
+                }).catch(error => {
+                  console.log(error.message);
+                });
             Swal.fire({
               icon: "success",
               title: "เพิ่มข้อมูลลูกค้าสำเร็จ",
@@ -634,8 +713,6 @@ const submitForm = async () => {
               showConfirmButton: 1,
             });
             router.push("/customers");
-
-
           } else {
             Swal.fire({
               icon: "warning",
@@ -660,10 +737,6 @@ const submitForm = async () => {
 const closeForm = () => {
   router.push('/customers');
 };
-
-
-let progress = ref(0);
-let percent = computed(() => progress.value);
 
 const prevStep = () => {
   step.value = 1;
@@ -703,6 +776,37 @@ const addGroup = () => {
 
 };
 
+
+let x = ref(1);
+const addComment = () => {
+  if (id) {
+    if(dataform.otherCustomerComment.length < 9){
+      dataform.otherCustomerComment.push({ commentDetail:'' });
+    }
+    else{
+      Swal.fire({
+        icon: 'error',
+        text: 'เพิ่มได้ไม่เกิน 10 ช่อง',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }
+  }
+  else {
+    if(dataform.otherCustomerComment.length <= 9){
+      dataform.otherCustomerComment.push({ commentDetail:'' })
+    }
+    else{
+      Swal.fire({
+        icon: 'error',
+        text: 'เพิ่มได้ไม่เกิน 10 ช่อง',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }
+  }
+};
+
 const deleteItem = (index, customer, product_id) => {
   if (id) {
     Swal.fire({
@@ -733,6 +837,154 @@ const deleteItem = (index, customer, product_id) => {
   }
 };
 
+
+let spiner_load = ref(false);
+
+// ============ function  Upload Image =======================
+const upload_image = async (event)=>{
+  spiner_load.value = true ;
+  const config = await {
+    headers: {
+    'Content-Type': 'multipart/form-data',
+    },
+    onUploadProgress: function(progressEvent) {
+      progress.value = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
+      console.log('process : '+progress.value+'%');
+    }
+  }
+  let multiple_img = event.target.files.length ;
+
+  if(dataform.otherCustomerImage.length+multiple_img <=5){
+    console.log('อัปรูป work!!');
+    for (let index = 0; index < multiple_img ; index++) {
+      let img = event.target.files[index];
+      const formdata = new FormData();
+      formdata.append('file', img);
+      await ApiMain.post("/image/upload?imageableType=other",formdata,config).then((res) => {
+        if (res.status == 201) {
+          if(id){
+            if(dataform.otherCustomerImage.length < 5){
+              dataform.otherCustomerImage.push({imageName:res.data});
+            } else{
+              Swal.fire({
+                icon: "error",
+                title: "อัปโหลดรูปภาพได้ไม่เกิน 5 รูป",
+                timer: 200,
+              });
+            }
+          }
+          else{
+            if(dataform.otherCustomerImage.length < 5){
+              dataform.otherCustomerImage.push(res.data);
+            }
+            else{
+              Swal.fire({
+                icon: "error",
+                title: "อัปโหลดรูปภาพได้ไม่เกิน 5 รูป",
+                timer: 200,
+              });
+            }
+          }
+        } else {
+          Swal.fire({
+            position: 'top-end',
+            icon: "warning",
+            title: "ไม่สามารถอัพโหลดรูปได้",
+            timer: 200,
+          });
+          return false;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+    Swal.fire({
+    icon: "success",
+    title: "อัปโหลดรูปภาพสำเร็จ",
+    timer:1000
+  }).then(()=>{
+    spiner_load.value = false ;
+
+    console.log(dataform.otherCustomerImage);
+  });
+  }
+  // ถ้ารูปเกิน
+  else{
+    Swal.fire({
+      icon: "warning",
+      title:'จำนวนรูปภาพเยอะเกินไป !',
+      text: "อัปโหลดได้สูงสุด ไม่เกิน 5 รูปภาพ",
+      timer:4000
+    });
+
+  document.getElementById('file_input').value = "";
+  const input_file = document.getElementById('file_input') ;
+  input_file.classList.add('border-[#F05252]');
+  spiner_load.value = false ;
+
+  }
+};
+
+
+// ============ function  Delete Image Module =======================
+const delete_img = (filename,img_type,index) =>{
+  Swal.fire({
+    title: "ยืนยันการลบ",
+    text: "คุณต้องการลบใช่หรือไม่",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Ok",
+  }).then((result) => {
+    console.log(result);
+    if (result.isConfirmed == true) {
+      dataform.otherCustomerImage.splice(index, 1);
+      const input = document.getElementById('file_input');
+      const fileListArr = Array.from(input.files)
+      fileListArr.splice(index, 1);
+      console.log(fileListArr);
+      ApiMain.delete(`/image/delete/${filename}?imageableType=${img_type}`).then(response => console.log(response.data)).catch(error => console.log(error));
+    }
+  })
+};
+
+// ========= function  delete Comment =============
+const deleteComment =(index,comment_id)=>{
+
+if (id) {
+  Swal.fire({
+    title: "ยืนยันการลบ",
+    text: `คุณต้องการลบรายละเอียดนี้หรือไม่ ?`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Ok"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // ลบคอมเม้น
+      ApiMain.delete(`/other-customer/${id}/delete-comment/${comment_id}`).then(() => {
+        if ((dataform.otherCustomerComment).length > 1) {
+          dataform.otherCustomerComment.splice(index, 1);
+        }
+      }).catch(error => {
+        console.log(error.message);
+      })
+    }
+  })
+}
+else {
+  if ((dataform.otherCustomerComment).length > 1) {
+    dataform.otherCustomerComment.splice(index, 1);
+  }
+}
+};
+
+
+
+
 </script>
 <template>
 
@@ -743,16 +995,16 @@ const deleteItem = (index, customer, product_id) => {
       <!-- steper -->
       <div class="relative">
         <div class="w-[800px] bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-4">
-          <div class="bg-green-600 h-2.5 rounded-full" style="width:0%" :style="{ 'width': percent + '%' }"></div>
+          <div class="bg-green-600 h-2.5 rounded-full" style="width:0%" :style="{ 'width': percent_step + '%' }"></div>
         </div>
         <button type="button"
-          :class="percent == 0 ? ' border-green-600 bg-green-100 border-2' : step == 2 ? 'bg-green-500 border-0' : 'bg-gray-200'"
+          :class="percent_step == 0 ? ' border-green-600 bg-green-100 border-2' : step == 2 ? 'bg-green-500 border-0' : 'bg-gray-200'"
           class="bg-gray-50 rounded-full py-2 px-3 absolute top-0">
-          <span v-if="percent == 0" class="text-base p-1">1</span>
+          <span v-if="percent_step == 0" class="text-base p-1">1</span>
           <span v-else><i class="fa-solid fa-check text-green-800"></i></span>
         </button>
         <button type="button"
-          :class="percent == 100 ? ' border-green-600 bg-green-200 border-2' : step == 2 ? 'bg-green-500 border-0' : 'bg-gray-200'"
+          :class="percent_step == 100 ? ' border-green-600 bg-green-200 border-2' : step == 2 ? 'bg-green-500 border-0' : 'bg-gray-200'"
           class="bg-gray-50 rounded-full py-2 px-4 border-2 border-gray-200 absolute top-0 right-0">2</button>
       </div>
     </div>
@@ -893,13 +1145,6 @@ const deleteItem = (index, customer, product_id) => {
                     <option v-for="val of type_list" :key="val" :value="val.type">{{ val.type }}</option>
                   </select>
                 </div>
-                <div class="mb-4 w-full ">
-                  <label for="detail" class="block mb-2 text-base font-medium text-black dark:text-white">รายละเอียด
-                    <span class="text-black opacity-50">(ไม่บังคับ)</span></label>
-                  <textarea id="address" rows="1" v-model="dataform.detail"
-                    class="block p-2.5 w-full text-sm border-gray-300  text-gray-900 bg-gray-50 rounded-lg border  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
-                </div>
-
                 <div class="flex flex-row w-full gap-2">
                   <div class="mb-4 w-full">
                     <label for="status" class="block mb-2 text-base font-medium text-black dark:text-white ">ช่องทาง
@@ -912,7 +1157,52 @@ const deleteItem = (index, customer, product_id) => {
                     </select>
                   </div>
                 </div>
-                <div class="mb-6 w-full ">
+                <div class="mb-4 w-full ">
+                  <label for="detail" class="block mb-2 text-base font-medium text-black dark:text-white">รายละเอียด
+                    <span class="text-black opacity-50">(ไม่บังคับ)</span></label>
+                  <div class="flex flex-row mb-4" v-for="(group, index) in dataform.otherCustomerComment" :key="index">
+                    <textarea id="address" rows="1" v-model="group.commentDetail"
+                    class="block p-2.5 w-full text-sm border-gray-300  text-gray-900 bg-gray-50 rounded-lg border  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                    <button type="button" @click="deleteComment(index,group.id)" class="py-1 px-4 bg-red-500 h-[50px] text-white rounded-lg ml-2 flex items-center"><i class="fa-solid fa-trash mr-2"></i> ลบ</button>
+                  </div>
+                  <div class="relative mt-10">
+                    <hr class="mt-4 mb-10 border border-green-700">
+                    <div class="absolute -bottom-4 left-[350px]">
+                      <button type="button" @click="addComment"
+                        class="bg-green-700 hover:bg-green-400 hover:text-black rounded-full py-1.5 px-3 text-white"><i
+                          class="fa-solid fa-plus "></i> เพื่มรายละเอียด</button>
+                    </div>
+                  </div>
+                </div>
+                <!-- Upload File image -->
+                <div class="mb-2">
+                  <label class="block mb-2 text-base font-medium text-gray-900 dark:text-white" for="file_input">อัปโหลดรูปภาพ</label>
+                  <div class="flex flex-row items-center">
+                    <input @change="upload_image" accept=".jpeg,.png ,.jpg"  id="file_input" type="file" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-300 focus:border-gray-300 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-300 dark:focus:border-gray-300"  multiple>
+                    <div v-if="spiner_load == true" class="ml-2">
+                      <svg aria-hidden="true" class="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                    </svg>
+                    </div>
+                  </div>
+                  <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="file_input_help">PNG, JPG or JPEG</p>
+                </div>
+                <div v-if="id" class="flex flex-row items-center gap-4">
+                  <div v-for="(item,index) in dataform.otherCustomerImage" :key="index" class="text-center relative">
+                    <button type="button" @click="delete_img(item.imageName,'other',index)" class="bg-red-500 hover:bg-red-400 text-white  py-0 px-2 rounded-lg absolute -right-2 -top-3 "><i class="fa fa-close"></i></button>
+                    <img :src="`/api-main/image/${item.imageName}?imageableType=other`"  alt="" class="object-cover w-[150px] h-[150px] rounded-lg">
+                    <span class="block w-[150px] truncate">{{ item.imageName }}</span>
+                  </div>
+                </div>
+                <div v-else class="flex flex-row items-center gap-4">
+                  <div v-for="(item,index) in dataform.otherCustomerImage" :key="index" class="text-center relative">
+                    <button type="button" @click="delete_img(item,'other',index)" class="bg-red-500 hover:bg-red-400 text-white  py-0 px-2 rounded-lg absolute -right-2 -top-3 "><i class="fa fa-close"></i></button>
+                    <img :src="`/api-main/image/${item}?imageableType=other`"  alt="" class="object-cover w-[150px] h-[150px] rounded-lg">
+                    <span class="block w-[150px] truncate">{{ item }}</span>
+                  </div>
+                </div>
+                <div class="mb-6 w-full mt-6">
                   <label for="note" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">หมายเหตุ
                     <span class="text-black opacity-50">(ไม่บังคับ)</span></label>
                   <textarea id="note" rows="1" v-model="dataform.note"
@@ -1055,6 +1345,15 @@ const deleteItem = (index, customer, product_id) => {
 <style scoped>
 .shadow-custom {
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+#file_input::file-selector-button {
+    font-weight: bold;
+    color: rgb(9, 124, 78);
+    padding: 0.5em;
+    border: 0;
+    border-radius: 10px;
+    margin-right: 20px;
 }
 </style>
 
