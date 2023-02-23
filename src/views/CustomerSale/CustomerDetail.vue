@@ -88,7 +88,7 @@ const formatdate = (date) => {
 <template>
   <title-bar class="p-4 pb-0" :title-stack="titleStack" />
   <div class="flex flex-row gap-2 m-4">
-    <div class="w-full bg-white shadow rounded-lg py-10 p-4">
+    <div class="w-full bg-white shadow rounded-lg py-10 p-4 h-[800px] overflow-y-auto">
       <div>
         <h1 class="text-xl font-bold text-center ">รายละเอียดลูกค้า</h1>
         <div class="flex justify-center mt-4 mb-4">
@@ -190,7 +190,7 @@ const formatdate = (date) => {
                   <span v-if="index==0" class="bg-red-200 text-black text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-blue-300 ml-3">ล่าสุด</span>
                 </h3>
                 <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{{ moment(new Date(log.createdAt)).format('DD-MM-YYYY') }}
-                  เวลา {{ formatdate(log.createdAt) }} น.</time>
+                  เวลา {{ formatdate(log.createdAt) }} น. <span class="ml-4"> ผู้บันทึก: {{ (log.createdBy).substring(0, (log.createdBy).indexOf('.')) }}</span></time>
                 <p class="mb-4 text-base font-normal text-gray-900 "><span class="text-black font-medium">รายละเอียด :</span> {{ log.detailLog }}</p>
               </li>
             </ol>

@@ -388,10 +388,10 @@ const submitForm = async () => {
     Swal.fire({
       icon: 'question',
       title: "ยืนยันการแก้ไขข้อมูล",
-      text: 'ยืนยันที่จะแก้ไขข้อมุลหรือไม่ ?',
+      text: 'ยืนยันที่จะแก้ไชข้อมูลหรือไม่ ?',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#31C48D",
+      cancelButtonColor: "#F98080",
       confirmButtonText: "ยืนยัน",
       cancelButtonText: "ยกเลิก",
       allowOutsideClick: false
@@ -596,11 +596,11 @@ const submitForm = async () => {
     }
     Swal.fire({
       icon: 'warning',
-      title: "ยืนยันการแก้ไขข้อมูล",
-      text: 'ยืนยันที่จะแก้ไขข้อมุลหรือไม่ ?',
+      title: "ยืนยันการเพิ่มข้อมูล",
+      text: 'ยืนยันที่จะเพิ่มข้อมูลหรือไม่ ?',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#31C48D",
+      cancelButtonColor: "#F98080",
       confirmButtonText: "ยืนยัน",
       cancelButtonText: "ยกเลิก",
       allowOutsideClick: false
