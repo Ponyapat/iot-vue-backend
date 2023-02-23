@@ -129,15 +129,11 @@ const formatdate = (date) => {
               <span v-if="states.type == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
               <span v-else class="font-normal text-gray-800">{{ states.type }}</span>
             </div>
-<<<<<<< HEAD
             <div class="font-bold mb-2 ">รายละเอียด :
               <p v-if="states.detail == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</p>
               <p v-else class="font-normal text-gray-800 indent-10" style="word-wrap: break-word; width: 500px;">{{ states.detail }}
               </p>
             </div>
-=======
-
->>>>>>> Boat
             <div class="font-bold mb-2">ช่องทาง :
               <span v-if="states.contactBy == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
               <span v-else class="font-normal ">{{ states.contactBy }}</span>
@@ -185,11 +181,7 @@ const formatdate = (date) => {
     <div class="w-full bg-white shadow rounded-lg py-10">
       <h6 class="text-center font-bold text-lg mb-4">สถานะดำเนินการ</h6>
       <div v-if="(states.otherCustomerLog).length !=0">
-<<<<<<< HEAD
         <div class="relative overflow-x-auto overflow-y-auto h-[500px]">
-=======
-        <div class="relative overflow-x-auto">
->>>>>>> Boat
           <div class="mx-10">
             <ol class="relative border-l border-gray-200 dark:border-gray-700">
               <li class="mb-10 ml-6 bg-white  w-[500px] shadow-custom-test p-2 rounded-lg"  v-for="(log, index) in reversedArray" :key="index">
