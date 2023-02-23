@@ -6,6 +6,8 @@ import moment from 'moment';
 let url = new URL(window.location.href);
 const id = url.searchParams.get("detail");
 const titleStack = ref(["Customers", "รายละเอียดของลูกค้า"]);
+
+let checkimage = ref([]);
 const states = reactive({
   contactBy: "",
   type: "",
@@ -19,6 +21,7 @@ const states = reactive({
   postcode: "",
   detail: "",
   otherCustomerProduct: [],
+  otherCustomerComment: [],
   serial_number: "",
   purchase_date: "",
   warranty_expired: "",
@@ -46,8 +49,13 @@ onMounted(() => {
     states.contactBy = res.data.data.contactBy;
     states.status = res.data.data.status;
     states.otherCustomerProduct = res.data.data.otherCustomerProduct;  //สินค้า
+    states.otherCustomerComment = res.data.data.otherCustomerComment;  //สินค้า
+    states.otherCustomerImage = res.data.data.otherCustomerImage;  //สินค้า
     states.otherCustomerLog = res.data.data.otherCustomerLog; // log
 
+
+    let img = res.data.data.otherCustomerImage ;
+    checkimage.value = img.length ;
 
   }).catch((error) => {
     console.log(error.message);
@@ -86,7 +94,7 @@ const formatdate = (date) => {
         <div class="flex justify-center mt-4 mb-4">
           <img src="../../assets/images/son.png" alt="" class=" bg-gray-100 px-4 py-3.5 rounded-full border-2">
         </div>
-        <div class="flex justify-center">
+        <div class="flex items-center justify-center">
           <div class="flex flex-col w-custom p-4">
             <div class="font-bold mb-2">ชื่อ :
               <span v-if="states.name == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
@@ -121,11 +129,15 @@ const formatdate = (date) => {
               <span v-if="states.type == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
               <span v-else class="font-normal text-gray-800">{{ states.type }}</span>
             </div>
+<<<<<<< HEAD
             <div class="font-bold mb-2 ">รายละเอียด :
               <p v-if="states.detail == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</p>
               <p v-else class="font-normal text-gray-800 indent-10" style="word-wrap: break-word; width: 500px;">{{ states.detail }}
               </p>
             </div>
+=======
+
+>>>>>>> Boat
             <div class="font-bold mb-2">ช่องทาง :
               <span v-if="states.contactBy == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
               <span v-else class="font-normal ">{{ states.contactBy }}</span>
@@ -138,15 +150,46 @@ const formatdate = (date) => {
               <span v-if="states.note == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
               <span v-else class="font-normal">{{ states.note }}</span>
             </div>
+            <div class="mb-2 ">
+              <div v-if="states.otherCustomerComment.length == 0" >
+                <h2 class="mb-2 text-base font-semibold text-gray-900 dark:text-white">
+                 รายละเอียด :<span class="text-gray-500 font-normal">ไม่ได้ระบุ</span>
+                </h2>
+                </div>
+              <div v-else>
+                <h2 class="mb-2 text-base font-semibold text-gray-900 dark:text-white">รายละเอียด : </h2>
+              <ul class="max-w-md space-y-1 text-gray-800 list-disc list-inside dark:text-gray-400">
+                  <li v-for="text in states.otherCustomerComment" :key="text.id" class="font-normal">
+                   <span class="break-words"> {{ text.commentDetail }}</span>
+                  </li>
+              </ul>
+              </div>
+            </div>
           </div>
         </div>
-
+      </div>
+      <div v-if="checkimage != 0">
+        <h1 class="text-lg text-gray-700 font-bold mb-2"><i class="fa-solid fa-paperclip"></i> ไฟล์แนบ</h1>
+        <div class="flex flex-row gap-2 items-center">
+          <div class="flex flex-col justify-center items-center" v-for="(item,index) in states.otherCustomerImage" :key="index">
+            <div>
+              <img  :src="`/api-main/image/${item.imageName}?imageableType=other`" alt="" class="object-cover rounded-md w-[150px] h-[150px]">
+            </div>
+            <div class="text-center">
+              <p class="text-xs w-[100px] truncate" >{{ item.imageName }}</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="w-full bg-white shadow rounded-lg py-10">
       <h6 class="text-center font-bold text-lg mb-4">สถานะดำเนินการ</h6>
       <div v-if="(states.otherCustomerLog).length !=0">
+<<<<<<< HEAD
         <div class="relative overflow-x-auto overflow-y-auto h-[500px]">
+=======
+        <div class="relative overflow-x-auto">
+>>>>>>> Boat
           <div class="mx-10">
             <ol class="relative border-l border-gray-200 dark:border-gray-700">
               <li class="mb-10 ml-6 bg-white  w-[500px] shadow-custom-test p-2 rounded-lg"  v-for="(log, index) in reversedArray" :key="index">
@@ -225,7 +268,7 @@ const formatdate = (date) => {
                 <span v-else>{{ moment(new Date( product.warrantyExpired)).format('DD/MM/YYYY') }}</span>
 
               </td>
-              <td class="px-6 py-4 bg-gray-50 text-center text-center">
+              <td class="px-6 py-4 bg-gray-50 text-center">
                 <div v-if="product.estimate == 'string' || product.estimate ==''">
                   -
                 </div>
@@ -258,7 +301,6 @@ const formatdate = (date) => {
                 <div v-else>
                   {{ product.etc }}
                 </div>
-
               </td>
             </tr>
           </tbody>
