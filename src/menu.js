@@ -41,8 +41,6 @@ if (roleid) {
       }
     )
     .then((data) => {
-
-      console.log(data);
       if (roleid == 1) {
         menu.push({
           label: "ตั้งค่า/จัดการผู้ดูแล",
@@ -77,7 +75,6 @@ if (roleid) {
       });
 
       const rolePermission = data.data.data.rolePermission;
-      console.log(data.data.data.rolePermission);
       let pms = [];
       for (const [key, value] of Object.entries(rolePermission)) {
         pms.push({
@@ -90,7 +87,6 @@ if (roleid) {
           action: value.permission[0].action,
           object: value.permission[0].object[0].name,
         });
-<<<<<<< HEAD
 
         if (
           value.permission[0].action == "read" &&
@@ -101,10 +97,6 @@ if (roleid) {
             label: "ประเภทพืชพรรณ",
             icon: mdiFruitWatermelon,
           });
-=======
-        if ( value.permission[0].action == "read" && value.permission[0].object[0].name == "breed-categorise") {
-          sub_menu_breed.push({ to: "/fruits-type", label: "ประเภทพืชพรรณ",icon: mdiFruitWatermelon,})
->>>>>>> Boat
         }
         if (
           value.permission[0].action == "read" &&
@@ -187,7 +179,7 @@ if (roleid) {
         ) {
           sub_customer.push({
             to: "/warranty-list",
-            label: "การรับประกัน",
+            label: "ข้อมูลลูกค้าประกันผลิตภัณฑ์",
             icon: mdiFaceAgent,
           });
         }
@@ -207,27 +199,6 @@ if (roleid) {
               },
             ],
           });
-        }
-
-
-        // เพิ่มใหม่
-        if (
-          value.permission[0].action == "read" &&
-          value.permission[0].object[0].name == "keyword"
-        ) {
-          menu.push(
-            {
-              label: "ข้อมูลลูกค้าประกันผลิตภัณฑ์",
-              icon: mdiViewList,
-              menu: [
-                {
-                  to: "/warranty-list",
-                  label: "ข้อมูลลูกค้าประกันผลิตภัณฑ์",
-                  icon: mdiFaceAgent,
-                },
-              ],
-            }
-          );
         }
       }
       //console.log(menu)
