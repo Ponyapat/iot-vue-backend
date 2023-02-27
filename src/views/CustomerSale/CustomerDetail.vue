@@ -94,7 +94,7 @@ const showModal =()=>{
       <div>
         <h1 class="text-xl font-bold text-center ">รายละเอียดลูกค้า</h1>
         <div class="flex justify-center mt-4 mb-4">
-          <img src="../../assets/images/son.png" alt="" class=" bg-gray-100 px-4 py-3.5 rounded-full border-2">
+          <img src="../../assets/images/mr.png" alt="" class=" bg-gray-100 px-4 py-3.5 rounded-full border-2">
         </div>
         <div class="flex items-center justify-center">
           <div class="flex flex-col w-custom p-4">
