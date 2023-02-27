@@ -26,8 +26,9 @@ import axios from "axios";
 const token = localStorage.getItem("tkfw");
 const roleid = localStorage.getItem("roleid");
 let menu = [];
-let sub_menu_breed = []
-let sub_geo = []
+let sub_menu_breed = [];
+let sub_geo = [];
+let sub_customer = [];
 
 if (roleid) {
   await axios
@@ -59,13 +60,19 @@ if (roleid) {
         label: "ข้อมูลด้านพืชพรรณ",
         icon: mdiViewList,
         menu: sub_menu_breed,
-      })
+      });
 
       menu.push({
         label: "ข้อมูลด้านภูมิศาสตร์",
         icon: mdiViewList,
         menu: sub_geo,
-      })
+      });
+
+      menu.push({
+        label: "ข้อมูลลูกค้าสำหรับฝ่ายขาย",
+        icon: mdiViewList,
+        menu: sub_customer,
+      });
 
       const rolePermission = data.data.data.rolePermission;
       let pms = [];
@@ -81,11 +88,25 @@ if (roleid) {
           object: value.permission[0].object[0].name,
         });
 
-        if ( value.permission[0].action == "read" && value.permission[0].object[0].name == "breed-categorise") {
-          sub_menu_breed.push({ to: "/fruits-type", label: "ประเภทพืชพรรณ",icon: mdiFruitWatermelon,})
+        if (
+          value.permission[0].action == "read" &&
+          value.permission[0].object[0].name == "breed-categorise"
+        ) {
+          sub_menu_breed.push({
+            to: "/fruits-type",
+            label: "ประเภทพืชพรรณ",
+            icon: mdiFruitWatermelon,
+          });
         }
-        if ( value.permission[0].action == "read" && value.permission[0].object[0].name == "breed") {
-          sub_menu_breed.push({ to: "/fruits", label: "ฐานข้อมูลพืชพรรณ", icon: mdiFruitCherries,})
+        if (
+          value.permission[0].action == "read" &&
+          value.permission[0].object[0].name == "breed"
+        ) {
+          sub_menu_breed.push({
+            to: "/fruits",
+            label: "ฐานข้อมูลพืชพรรณ",
+            icon: mdiFruitCherries,
+          });
         }
 
         if (
@@ -138,52 +159,57 @@ if (roleid) {
                 icon: mdiAccountSupervisorOutline,
               },
             ],
-          })
+          });
         }
+
         if (
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "other-customer"
         ) {
-          menu.push(
-            {
-              label: "ข้อมูลลูกค้าสำหรับฝ่ายขาย",
-              icon: mdiViewList,
-              menu: [
-                {
-                  to: "/customers",
-                  label: "ฐานข้อมูลลูกค้า",
-                  icon: mdiFaceAgent,
-                },
-              ],
-            }
-          );
+          sub_customer.push({
+            to: "/customers",
+            label: "ฐานข้อมูลลูกค้า",
+            icon: mdiFaceAgent,
+          });
+        }
+
+        if (
+          value.permission[0].action == "read" &&
+          value.permission[0].object[0].name == "warranty"
+        ) {
+          sub_customer.push({
+            to: "/warranty-list",
+            label: "การรับประกัน",
+            icon: mdiFaceAgent,
+          });
         }
 
         if (
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "keyword"
         ) {
-          menu.push(
-            {
-              label: "ตลาด",
-              icon: mdiViewList,
-              menu: [
-                {
-                  to: "/keyword",
-                  label: "คำค้นหาสถานที่",
-                  icon: mdiFaceAgent,
-                },
-              ],
-            }
-          );
+          menu.push({
+            label: "ตลาด",
+            icon: mdiViewList,
+            menu: [
+              {
+                to: "/keyword",
+                label: "คำค้นหาสถานที่",
+                icon: mdiFaceAgent,
+              },
+            ],
+          });
         }
       }
       //console.log(menu)
-      if(sub_menu_breed.length==0){
-        menu = menu.filter(x => x.label != "ข้อมูลด้านพืชพรรณ");
+      if (sub_menu_breed.length == 0) {
+        menu = menu.filter((x) => x.label != "ข้อมูลด้านพืชพรรณ");
       }
-      if(sub_geo.length==0){
-        menu = menu.filter(x => x.label != "ข้อมูลด้านภูมิศาสตร์");
+      if (sub_geo.length == 0) {
+        menu = menu.filter((x) => x.label != "ข้อมูลด้านภูมิศาสตร์");
+      }
+      if (sub_customer.length == 0) {
+        menu = menu.filter((x) => x.label != "ข้อมูลลูกค้าสำหรับฝ่ายขาย");
       }
       localStorage.setItem("pms", JSON.stringify(pms));
     })
