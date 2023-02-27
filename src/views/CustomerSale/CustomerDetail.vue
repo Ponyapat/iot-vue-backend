@@ -31,7 +31,7 @@ const states = reactive({
 })
 
 onMounted(() => {
-  console.log(id);
+
   ApiMain.get(`/other-customer/${id}`).then(res => {
     console.log(res.data.data);
     states.contactBy = res.data.data.contactBy;
@@ -82,7 +82,9 @@ const formatdate = (date) => {
   return time.slice(0, 5);
 };
 
+const showModal =()=>{
 
+};
 
 </script>
 <template>
@@ -152,7 +154,7 @@ const formatdate = (date) => {
                 <h2 class="mb-2 text-base font-semibold text-gray-900 dark:text-white">รายละเอียด : </h2>
               <ul class="max-w-md space-y-1 text-gray-800 list-disc list-inside dark:text-gray-400">
                   <li v-for="text in states.otherCustomerComment" :key="text.id" class="font-normal">
-                   <span class="break-words"> {{ text.commentDetail }}</span>
+                    <span class="break-words"> {{ text.commentDetail }}</span>
                   </li>
               </ul>
               </div>
@@ -164,9 +166,9 @@ const formatdate = (date) => {
         <h1 class="text-lg text-gray-700 font-bold mb-2"><i class="fa-solid fa-paperclip"></i> ไฟล์แนบ</h1>
         <div class="flex flex-row gap-2 items-center">
           <div class="flex flex-col justify-center items-center" v-for="(item,index) in states.otherCustomerImage" :key="index">
-            <div>
-              <img  :src="`/api-main/image/${item.imageName}?imageableType=other`" alt="" class="object-cover rounded-md w-[150px] h-[150px]">
-            </div>
+            <a :href="`/api-main/image/${item.imageName}?imageableType=other`" target="_blank" class="cursor-pointer hover:opacity-70">
+              <img :src="`/api-main/image/${item.imageName}?imageableType=other`" alt="" class="object-cover rounded-md w-[150px] h-[150px]">
+            </a>
             <div class="text-center">
               <p class="text-xs w-[100px] truncate" >{{ item.imageName }}</p>
             </div>
