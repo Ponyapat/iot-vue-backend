@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/Home.vue";
 
 const routes = [
+
   {
     meta: {
       title: "Users",
@@ -255,6 +256,30 @@ const routes = [
     path: "/profile",
     name: "profile",
     component: () => import(/* webpackChunkName: "profile" */ "@/views/Profile.vue"),
+  },
+  {
+    meta: {
+      title: "WarrantyCustomer",
+    },
+    path: "/warranty-list",
+    name: "WarrantyCustomer",
+    component: () => import("@/views/Warranty/WarrantyCustomer.vue"),
+  },
+  {
+    meta: {
+      title: "WarrantyCustomerDetail",
+    },
+    path: "/warranty-list/warranty",
+    name: "WarrantyCustomerDetail",
+    component: () => import("@/views/Warranty/WarrantyDetail.vue"),
+  },
+  {
+    meta: {
+      title: "FormWarranty",
+    },
+    path: "/warranty-list/form",
+    name: "FormWarranty",
+    component: () => import("@/views/Warranty/FormWarranty.vue"),
   },
   {
     meta: {
