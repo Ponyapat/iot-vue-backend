@@ -88,14 +88,6 @@ onBeforeMount(() => {
   geoData();
   weatherData();
   geoBreedData();
-
-  ApiCore.get("/v2/get-province").then((response) => {
-    console.log("ApiCore",response.data.data)
-  })
-
-  axios.get("https://staging.farmthailand.app/api/core/v2/get-province").then((response) => {
-    console.log("axios api",response.data.data)
-  })
 });
 
 const mainStore = useMainStore();

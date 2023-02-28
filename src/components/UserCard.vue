@@ -29,7 +29,7 @@ const userSwitchVal = ref([])
           /> -->
         </div>
         <h1 class="text-2xl">
-          Howdy, <b>{{ userName }}</b>!
+          <b>{{ userName }}</b>!
         </h1>
         <p>Last login <b>12 mins ago</b></p>
         <div class="flex justify-center md:block">

@@ -295,6 +295,7 @@ const pages = computed(() => {
       </select>
     </div>
   </div>
+  <div class="m-4">จำนวนทั้งหมด  : {{fruits_list.length}}</div>
   <div class=" relative">
     <table class="w-full text-sm text-left text-black dark:text-white">
       <thead class="text-base uppercase  bg-gray-700 text-white">
