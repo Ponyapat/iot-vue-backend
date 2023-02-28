@@ -1,3 +1,4 @@
+
 import {
   mdiAccountCircle,
   mdiDesktopMac,
@@ -188,40 +189,17 @@ if (roleid) {
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "keyword"
         ) {
-          menu.push(
-            {
-              label: "ตลาด",
-              icon: mdiViewList,
-              menu: [
-                {
-                  to: "/keyword",
-                  label: "คำค้นหาสถานที่",
-                  icon: mdiFaceAgent,
-                },
-              ],
-            }
-          );
-        }
-
-
-        // เพิ่มใหม่
-        if (
-          value.permission[0].action == "read" &&
-          value.permission[0].object[0].name == "keyword"
-        ) {
-          menu.push(
-            {
-              label: "การรับประกันสินค้า",
-              icon: mdiViewList,
-              menu: [
-                {
-                  to: "/warranty-list",
-                  label: "ข้อมูลสินค้าที่ลงทะเบียน",
-                  icon: mdiFaceAgent,
-                },
-              ],
-            }
-          );
+          menu.push({
+            label: "ตลาด",
+            icon: mdiViewList,
+            menu: [
+              {
+                to: "/keyword",
+                label: "คำค้นหาสถานที่",
+                icon: mdiFaceAgent,
+              },
+            ],
+          });
         }
       }
       //console.log(menu)
