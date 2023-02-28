@@ -188,7 +188,6 @@ if (roleid) {
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "keyword"
         ) {
-<<<<<<< HEAD
           menu.push(
             {
               label: "ตลาด",
@@ -223,19 +222,6 @@ if (roleid) {
               ],
             }
           );
-=======
-          menu.push({
-            label: "ตลาด",
-            icon: mdiViewList,
-            menu: [
-              {
-                to: "/keyword",
-                label: "คำค้นหาสถานที่",
-                icon: mdiFaceAgent,
-              },
-            ],
-          });
->>>>>>> b4c7985c2c111507fe10744de4316a1c293cfaf2
         }
       }
       //console.log(menu)
