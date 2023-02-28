@@ -188,12 +188,12 @@ if (roleid) {
         ) {
           menu.push(
             {
-              label: "ข้อมูลลูกค้าประกันผลิตภัณฑ์",
+              label: "การรับประกันสินค้า",
               icon: mdiViewList,
               menu: [
                 {
                   to: "/warranty-list",
-                  label: "ข้อมูลลูกค้าประกันผลิตภัณฑ์",
+                  label: "ข้อมูลสินค้าที่ลงทะเบียน",
                   icon: mdiFaceAgent,
                 },
               ],

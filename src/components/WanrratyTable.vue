@@ -95,10 +95,11 @@ const warranty = computed(()=>{
       const serial = data.serial.toLowerCase();
       const firstname = data.firstname.toLowerCase();
       const mobile = data.mobile.toLowerCase();
+      const email = data.email.toLowerCase();
 
       console.log(serial);
 
-      return serial.includes(searchName.value) || firstname.includes(searchName.value)|| mobile.includes(searchName.value)
+      return serial.includes(searchName.value) || firstname.includes(searchName.value)|| mobile.includes(searchName.value)|| email.includes(searchName.value)
     });
 });
 
@@ -194,7 +195,7 @@ const pages = computed(() => {
           {{ item.email }}
         </td>
         <td class="text-center">
-          <span v-if="item.expire_date"> {{ item.expire_date }}</span>
+          <span v-if="item.expire_date"> {{  moment(item.expire_date).format('DD/MM/YYYY') }}</span>
           <span v-else>-</span>
         </td>
         <td class="text-center">
