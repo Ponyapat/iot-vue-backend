@@ -94,7 +94,7 @@ const showModal =()=>{
       <div>
         <h1 class="text-xl font-bold text-center ">รายละเอียดลูกค้า</h1>
         <div class="flex justify-center mt-4 mb-4">
-          <img src="../../assets/images/son.png" alt="" class=" bg-gray-100 px-4 py-3.5 rounded-full border-2">
+          <img src="../../assets/images/mr.png" alt="" class=" bg-gray-100 px-4 py-3.5 rounded-full border-2">
         </div>
         <div class="flex items-center justify-center">
           <div class="flex flex-col w-custom p-4">
@@ -131,7 +131,11 @@ const showModal =()=>{
               <span v-if="states.type == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
               <span v-else class="font-normal text-gray-800">{{ states.type }}</span>
             </div>
-
+            <div class="font-bold mb-2 ">รายละเอียด :
+              <p v-if="states.detail == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</p>
+              <p v-else class="font-normal text-gray-800 indent-10" style="word-wrap: break-word; width: 500px;">{{ states.detail }}
+              </p>
+            </div>
             <div class="font-bold mb-2">ช่องทาง :
               <span v-if="states.contactBy == ''" class="opacity-60 font-normal">ไม่ได้ระบุ</span>
               <span v-else class="font-normal ">{{ states.contactBy }}</span>
@@ -179,14 +183,14 @@ const showModal =()=>{
     <div class="w-full bg-white shadow rounded-lg py-10">
       <h6 class="text-center font-bold text-lg mb-4">สถานะดำเนินการ</h6>
       <div v-if="(states.otherCustomerLog).length !=0">
-        <div class="relative overflow-x-auto">
+        <div class="relative overflow-x-auto overflow-y-auto h-[500px]">
           <div class="mx-10">
             <ol class="relative border-l border-gray-200 dark:border-gray-700">
               <li class="mb-10 ml-6 bg-white  w-[500px] shadow-custom-test p-2 rounded-lg"  v-for="(log, index) in reversedArray" :key="index">
-                <span :class="index==0?'bg-red-100':'bg-blue-100'"
+                <span :class="index==0?'bg-red-100':'bg-gray-200'"
                   class="absolute flex items-center justify-center w-6 h-6  rounded-full -left-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
                   <i v-if="index==0" class="fa-solid fa-fire text-red-500"></i>
-                  <i v-else class="fa-solid fa-circle-dot"></i>
+                  <i v-else class="fa-solid fa-circle-dot text-gray-700"></i>
                 </span>
                 <h3 class="flex items-center mb-1 text-base font-semibold text-gray-900 dark:text-white">{{ log.status }}
                   <span v-if="index==0" class="bg-red-200 text-black text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-blue-300 ml-3">ล่าสุด</span>

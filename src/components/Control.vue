@@ -45,6 +45,7 @@ const props = defineProps({
     default: ''
   },
   required: Boolean,
+  readonly:Boolean,
   borderless: Boolean,
   transparent: Boolean,
   ctrlKFocus: Boolean,
@@ -161,6 +162,7 @@ if (props.ctrlKFocus) {
       :inputmode="inputmode"
       :autocomplete="autocomplete"
       :required="required"
+      :readonly="readonly"
       :disabled="disabled"
       :placeholder="placeholder"
       :type="computedType"
