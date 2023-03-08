@@ -180,7 +180,18 @@ if (roleid) {
         ) {
           sub_customer.push({
             to: "/warranty-list",
-            label: "ข้อมูลลูกค้าประกันผลิตภัณฑ์",
+            label: "ข้อมูลการประกันสินค้า",
+            icon: mdiFaceAgent,
+          });
+        }
+
+        if (
+          value.permission[0].action == "read" &&
+          value.permission[0].object[0].name == "board-status"
+        ) {
+          sub_customer.push({
+            to: "board-list",
+            label: "สถานะการทำงานของบอร์ด",
             icon: mdiFaceAgent,
           });
         }

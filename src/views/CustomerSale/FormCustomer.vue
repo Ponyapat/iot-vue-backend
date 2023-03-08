@@ -284,6 +284,7 @@ const select_province = (data) => {
   ApiCore.get("/v2/get-district?province=" + dataform.province_id).then((response) => {
     let obj = response.data.data;
     let arr_th = [];
+    console.log(obj);
 
     obj.forEach((element, index) => {
       arr_th.push(element.name_th);

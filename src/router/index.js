@@ -259,6 +259,14 @@ const routes = [
   },
   {
     meta: {
+      title: "BoardList",
+    },
+    path: "/board-list",
+    name: "BoardList",
+    component: () => import("@/views/Boards/BoardList.vue"),
+  },
+  {
+    meta: {
       title: "WarrantyCustomer",
     },
     path: "/warranty-list",
