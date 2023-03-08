@@ -12,7 +12,7 @@ import Divider from "@/components/Divider.vue";
 import JbButton from "@/components/JbButton.vue";
 import JbButtons from "@/components/JbButtons.vue";
 import { mdiBallot } from "@mdi/js";
-
+ 
 const router = useRouter();
 const url = window.location.href;
 const id = url.split("/")[5];
