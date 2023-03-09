@@ -293,21 +293,21 @@ const filter_status = (event)=>{
           <td class="text-center">
             <span v-if="item.getStatusBoard == null"
               class="bg-red-100 text-black font-bold px-4 py-2 rounded-full "><i class="fa-solid fa-power-off text-red-500 mr-0.5"></i> ออฟไลน์</span>
-            <span v-else class="bg-green-100 text-black font-bold px-4 py-2 rounded-full "><i class="fa-solid fa-circle-dot text-green-500 mr-0.5"></i> {{  item.getStatusBoard.noti_status_text }}</span>
+            <span v-else class="bg-green-100 text-black font-bold px-4 py-2 rounded-full "><i :class="item.getStatusBoard.noti_status_text == 'ออฟไลน์'?'':''" class="fa-solid fa-circle-dot text-green-500 mr-0.5"></i> {{  item.getStatusBoard.noti_status_text }}</span>
           </td>
           <td class="text-center">
             <span v-if="item.warranty == null" class="">-</span>
-            <span v-else-if="item.warranty.expire_date == null || item.warranty.expire_date == ''" >-</span>
-            <span v-else class="">{{ moment(item.warranty.expire_date).format('DD/MM/YYYY') }}</span>
+            <span v-else-if="item.warranty.expire_date == null || item.warranty.expire_date == ''" class="text-gray-500">-</span>
+            <span v-else>{{ moment(item.warranty.expire_date).format('DD/MM/YYYY') }}</span>
           </td>
           <td class="text-center">
-            <span v-if="item.warranty == null" class="text-orange-500"><i class="fa-solid fa-circle-exclamation"></i> ไม่ได้ลงทะเบียน</span>
-            <span v-else class="text-green-500"><i class="fa-solid fa-circle-dot text-green-500 mr-0.5"></i> อยู่ระหว่างการรับประกัน</span>
+            <span v-if="item.warranty == null" class="text-orange-500"><i class="fa-solid fa-circle-exclamation mr-0.5"></i>ไม่ได้ลงทะเบียน</span>
+            <span v-else class="text-green-500"><i class="fa-solid fa-circle-dot text-green-500 mr-0.5"></i>อยู่ระหว่างการรับประกัน</span>
           </td>
           <td class="text-center">
             <span v-if="item.getOnlineLasted == null" class="bg-red-100 text-black font-bold px-4 py-2 rounded-full "><i class="fa-solid fa-power-off text-red-500 mr-0.5"></i>ออฟไลน์</span>
             <span v-else class="text-sm font-medium">
-              <span>{{ moment(item.getOnlineLasted.updated_at).format("DD/MM/YYYY")}}</span> <span>{{ moment.utc(item.getOnlineLasted.updated_at).format("HH:mm") }} น.</span>
+              <span class="mr-2">{{ moment(item.getOnlineLasted.updated_at).format("DD/MM/YYYY")}}</span><span>{{ moment.utc(item.getOnlineLasted.updated_at).format("HH:mm") }} น.</span>
             </span>
           </td>
           <td class="text-center">
@@ -401,15 +401,15 @@ const filter_status = (event)=>{
                 <span class="font-medium mb-2">User ID : <span class="font-normal text-basse">{{ states.user_data.user_id }}</span></span>
                 <span class="text-base font-medium mb-2" >ชื่อ :
                   <span v-if="states.user_data.first_name ">{{states.user_data.first_name}}  {{states.user_data.last_name}}</span>
-                  <span v-else class="font-normal">-</span>
+                  <span v-else class="font-normal text-gray-500">ไม่ได้ระบุ</span>
                   </span>
                 <span class="text-base font-medium whitespace-nowrap mb-2" >Email :
                   <span v-if="states.user_data.email != null || states.user_data.email == ''" class="font-normal">{{states.user_data.email}}</span>
-                  <span v-else>-</span>
+                  <span v-else class="font-normal text-gray-500">ไม่ได้ระบุ</span>
                 </span>
                 <span class="text-base font-medium" >เบอร์โทร :
                   <span v-if="states.user_data.phone != null || states.user_data.phone == ''" class="font-normal">{{states.user_data.phone}}</span>
-                  <span v-else>-</span>
+                  <span v-else class="font-normal text-gray-500">ไม่ได้ระบุ</span>
                 </span>
               </div>
               <!-- <span >ชื่อ : {{states.user_data.name}}</span> -->
