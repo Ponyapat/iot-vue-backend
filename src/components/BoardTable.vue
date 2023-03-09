@@ -293,7 +293,10 @@ const filter_status = (event)=>{
           <td class="text-center">
             <span v-if="item.getStatusBoard == null"
               class="bg-red-100 text-black font-bold px-4 py-2 rounded-full "><i class="fa-solid fa-power-off text-red-500 mr-0.5"></i> ออฟไลน์</span>
-            <span v-else class="bg-green-100 text-black font-bold px-4 py-2 rounded-full "><i :class="item.getStatusBoard.noti_status_text == 'ออฟไลน์'?'':''" class="fa-solid fa-circle-dot text-green-500 mr-0.5"></i> {{  item.getStatusBoard.noti_status_text }}</span>
+            <span v-else  :class="item.getStatusBoard.noti_status_text == 'ออนไลน์'?'bg-green-100':'bg-red-100'" class=" text-black font-bold px-4 py-2 rounded-full ">
+              <span v-if="item.getStatusBoard.noti_status_text == 'ออนไลน์'" ><i class="fa-solid fa-circle-dot text-green-500 mr-0.5"></i> {{  item.getStatusBoard.noti_status_text }}</span>
+              <span v-else><i class="fa-solid fa-power-off text-red-500 mr-0.5"></i> ออฟไลน์</span>
+            </span>
           </td>
           <td class="text-center">
             <span v-if="item.warranty == null" class="">-</span>
