@@ -246,15 +246,15 @@ const drainage = (data) => {
         <td class="text-center">
             <div class="flex flex-row justify-center items-center">
               <div>
-                <button 
-                 v-if="per_edit" 
+                <button
+                 v-if="per_edit"
                  @click="edit(item.id)" class="bg-blue-600 mr-3 px-2 py-1.5 rounded-md">
                   <i class="fa-solid fa-pen text-white text-base"></i>
                 </button>
               </div>
               <div>
-                  <button 
-                   v-if="per_del" 
+                  <button
+                   v-if="per_del"
                    @click="del(item.id)" class="bg-red-600 px-2 py-1.5 rounded-md">
                     <i class="fa-solid fa-trash text-white text-base"></i>
                   </button>
@@ -314,7 +314,7 @@ const drainage = (data) => {
   </nav>
 
 </template>
-<style >
+<style scoped>
 li.active,li.active:hover {
   background-color: rgb(48, 48, 48);
   color: white;

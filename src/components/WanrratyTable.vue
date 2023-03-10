@@ -159,7 +159,11 @@ const pages = computed(() => {
         </div>
         <small class="opacity-60">ค้นหาด้วย ชื่อ, เบอร์โทรศัพท์มือถือ หรือ email</small>
       </form>
+
   </div>
+  <div class="ml-4 mb-4">
+      <span class="text-base font-medium">จำนวนทั้งหมด : {{ states.warranty.length }}</span>
+    </div>
   <table>
     <thead class="bg-gray-600">
       <tr class="text-sm text-white ">
@@ -269,7 +273,7 @@ const pages = computed(() => {
   </nav>
 
 </template>
-<style >
+<style scoped>
 li.active,li.active:hover {
   background-color: rgb(48, 48, 48);
   color: white;
