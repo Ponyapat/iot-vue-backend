@@ -310,7 +310,7 @@ const filter_status = (event)=>{
             <span v-else class="text-green-500"><i class="fa-solid fa-circle-dot text-green-500 mr-0.5"></i>อยู่ระหว่างการรับประกัน</span>
           </td>
           <td class="text-center">
-            <span v-if="item.getOnlineLasted == null" class="bg-red-100 text-black font-bold px-4 py-2 rounded-full "><i class="fa-solid fa-power-off text-red-500 mr-0.5"></i>ออฟไลน์</span>
+            <span v-if="item.getOnlineLasted == null" class=" text-black font-bold px-4 py-2 rounded-full ">-</span>
             <span v-else class="text-sm font-medium">
               <span class="mr-2">{{ moment(item.getOnlineLasted.updated_at).format("DD/MM/YYYY")}}</span><span>{{ moment.utc(item.getOnlineLasted.updated_at).format("HH:mm") }} น.</span>
             </span>
