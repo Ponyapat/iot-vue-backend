@@ -116,19 +116,21 @@ const board_list = computed(() => {
   let response = states.board;
 
   return response.filter(item => {
-    const serial = item.serial.toLowerCase();
+    const serial = item.serial.toUpperCase();
+
+    console.log(serial);
     if(searchName.value == '' && states.select_status == 'all'){
       return item
     }
     else if(searchName.value != '' && states.select_status == 'all'){
-      return serial.includes(searchName.value)
+      return serial.includes((searchName.value).toUpperCase())
     }
    else{
     if(item.getStatusBoard){
-        return  serial.includes(searchName.value) && (item.getStatusBoard && item.getStatusBoard.noti_status_text == states.select_status)
+        return  serial.includes((searchName.value).toUpperCase()) && (item.getStatusBoard && item.getStatusBoard.noti_status_text == states.select_status)
       }
       else{
-        return serial.includes(searchName.value) && ('ออฟไลน์' == states.select_status )
+        return serial.includes((searchName.value).toUpperCase()) && ('ออฟไลน์' == states.select_status )
       }
    }
     // if(searchName.value == ''){
@@ -266,7 +268,7 @@ const filter_status = (event)=>{
   </div>
   </div>
     <div class="ml-4 mb-4">
-      <span class="text-base font-medium">จำนวนทั้งหมด : {{ states.board.length }}</span>
+      <span class="text-base font-medium">จำนวนทั้งหมด : {{board_list.length }}</span>
     </div>
     <table>
       <thead class="bg-gray-600">

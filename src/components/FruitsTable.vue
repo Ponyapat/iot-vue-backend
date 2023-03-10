@@ -140,7 +140,7 @@ const fruits_list = computed(()=>{
     return  response.filter(data => {
       const code = data.code.toLowerCase();
       const name = data.name.toLowerCase();
-      return code.includes(searchName.value) || name.includes(searchName.value)
+      return code.includes((searchName.value).toLowerCase()) || name.includes((searchName.value).toLowerCase())
     });
 });
 

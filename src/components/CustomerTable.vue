@@ -231,7 +231,7 @@ const customers_list = computed(()=>{
       const name = data.name.toLowerCase();
       const phone = data.phone.toLowerCase();
 
-      return name.includes(searchName.value) || phone.includes(searchName.value);
+      return name.includes((searchName.value).toLowerCase()) || phone.includes((searchName.value).toLowerCase());
     });
 });
 

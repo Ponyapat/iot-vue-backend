@@ -317,19 +317,23 @@ const searchText = () => {
 
 
 };
-
+const myButton = ref(null);
 const emptySearch = computed(()=>{
   if(searchName.value == ''){
     ApiSso.get(`/api/mgr/users?page=1`, config).then((res) => {
     states.customers = res.data.data;
   });
   }
+  // else{
+  //   myButton.value.click();
+  // }
 });
+
 
 </script>
 
 <template>
-  <div class="hidden">{{ emptySearch }}</div>
+  <div class="hidden">{{ emptySearch }} </div>
   <div class="flex flex-row">
     <div class="w-1/4 ml-4 mr-[40px] mt-10">
       <form class="flex items-center">
@@ -347,7 +351,7 @@ const emptySearch = computed(()=>{
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="อีเมล หรือ เบอร์โทรศัพท์มือถือ ">
         </div>
-        <button type="button" @click="searchText"
+        <button ref="myButton" type="button" @click="searchText"
           class="p-2.5 ml-1 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
