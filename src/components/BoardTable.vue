@@ -116,19 +116,21 @@ const board_list = computed(() => {
   let response = states.board;
 
   return response.filter(item => {
-    const serial = item.serial.toLowerCase();
+    const serial = item.serial.toUpperCase();
+
+    console.log(serial);
     if(searchName.value == '' && states.select_status == 'all'){
       return item
     }
     else if(searchName.value != '' && states.select_status == 'all'){
-      return serial.includes(searchName.value)
+      return serial.includes((searchName.value).toUpperCase())
     }
    else{
     if(item.getStatusBoard){
-        return  serial.includes(searchName.value) && (item.getStatusBoard && item.getStatusBoard.noti_status_text == states.select_status)
+        return  serial.includes((searchName.value).toUpperCase()) && (item.getStatusBoard && item.getStatusBoard.noti_status_text == states.select_status)
       }
       else{
-        return serial.includes(searchName.value) && ('ออฟไลน์' == states.select_status )
+        return serial.includes((searchName.value).toUpperCase()) && ('ออฟไลน์' == states.select_status )
       }
    }
     // if(searchName.value == ''){
@@ -266,7 +268,7 @@ const filter_status = (event)=>{
   </div>
   </div>
     <div class="ml-4 mb-4">
-      <span class="text-base font-medium">จำนวนทั้งหมด : {{ states.board.length }}</span>
+      <span class="text-base font-medium">จำนวนทั้งหมด : {{board_list.length }}</span>
     </div>
     <table>
       <thead class="bg-gray-600">
@@ -308,7 +310,7 @@ const filter_status = (event)=>{
             <span v-else class="text-green-500"><i class="fa-solid fa-circle-dot text-green-500 mr-0.5"></i>อยู่ระหว่างการรับประกัน</span>
           </td>
           <td class="text-center">
-            <span v-if="item.getOnlineLasted == null" class="bg-red-100 text-black font-bold px-4 py-2 rounded-full "><i class="fa-solid fa-power-off text-red-500 mr-0.5"></i>ออฟไลน์</span>
+            <span v-if="item.getOnlineLasted == null" class=" text-black font-bold px-4 py-2 rounded-full ">-</span>
             <span v-else class="text-sm font-medium">
               <span class="mr-2">{{ moment(item.getOnlineLasted.updated_at).format("DD/MM/YYYY")}}</span><span>{{ moment.utc(item.getOnlineLasted.updated_at).format("HH:mm") }} น.</span>
             </span>
@@ -427,7 +429,7 @@ const filter_status = (event)=>{
     <!-- Modal -->
   </div>
 </template>
-<style >
+<style scoped>
 li.active,
 li.active:hover {
   background-color: rgb(48, 48, 48);

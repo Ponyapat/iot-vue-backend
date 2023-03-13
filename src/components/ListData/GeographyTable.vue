@@ -308,7 +308,7 @@ const drainage = (data) => {
     <small class="ml-4 text-sm font-medium">Page {{ currentPageHuman }} of {{ numPages }}</small>
   </nav>
 </template>
-<style >
+<style scoped>
 li.active,li.active:hover {
   background-color: rgb(48, 48, 48);
   color: white;

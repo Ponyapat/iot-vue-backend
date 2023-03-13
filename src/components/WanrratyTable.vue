@@ -99,7 +99,7 @@ const warranty = computed(()=>{
 
       console.log(serial);
 
-      return serial.includes(searchName.value) || firstname.includes(searchName.value)|| mobile.includes(searchName.value)|| email.includes(searchName.value)
+      return serial.includes((searchName.value).toLowerCase()) || firstname.includes((searchName.value).toLowerCase())|| mobile.includes((searchName.value).toLowerCase())|| email.includes((searchName.value).toLowerCase())
     });
 });
 
@@ -148,7 +148,7 @@ const pages = computed(() => {
         <div class="relative">
           <input v-model="searchName" id="search_input" type="text"
             class="block w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="ค้นหา ชื่อ, เบอร์โทรศัพท์มือถือ หรือ email">
+            placeholder="ค้นหา serial,ชื่อ, เบอร์โทรศัพท์มือถือ หรือ email">
           <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor"
               viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -157,9 +157,13 @@ const pages = computed(() => {
             </svg>
           </div>
         </div>
-        <small class="opacity-60">ค้นหาด้วย ชื่อ, เบอร์โทรศัพท์มือถือ หรือ email</small>
+        <small class="opacity-60">ค้นหาด้วย serial ,ชื่อ, เบอร์โทรศัพท์มือถือ หรือ email</small>
       </form>
+
   </div>
+  <div class="ml-4 mb-4">
+      <span class="text-base font-medium">จำนวนทั้งหมด : {{ warranty.length }}</span>
+    </div>
   <table>
     <thead class="bg-gray-600">
       <tr class="text-sm text-white ">
@@ -269,7 +273,7 @@ const pages = computed(() => {
   </nav>
 
 </template>
-<style >
+<style scoped>
 li.active,li.active:hover {
   background-color: rgb(48, 48, 48);
   color: white;

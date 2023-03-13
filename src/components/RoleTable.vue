@@ -242,7 +242,7 @@ onBeforeMount(() => {
   </nav>
   </div>
 </template>
-<style>
+<style scoped>
 li.active,li.active:hover {
   background-color: rgb(48, 48, 48);
   color: white;
