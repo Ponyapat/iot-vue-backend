@@ -14,7 +14,8 @@ const VITE_PROXY = [
 export default defineConfig(({ mode }) => {
   return {
     build: {
-      target: 'esnext'
+      target: 'esnext',
+      esmExternals: true
     },
     server: {
       https: false,
