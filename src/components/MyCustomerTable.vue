@@ -60,6 +60,8 @@ let select_status = ref('');
 let pageAll = ref(0);
 let totalRecord = ref(0);
 
+let filter_result = ref(0);
+
 
 onMounted(() => {
   fetchData();
@@ -93,6 +95,7 @@ const fetchData = () => {
 
     pageAll.value = respones.data.total_page;
     totalRecord.value = respones.data.total_record;
+    filter_result.value = respones.data.total_record;
     states.customers = respones.data.data;
 
     console.log(states.customers);
@@ -312,7 +315,10 @@ const searchText = () => {
   ApiSso.get(`/api/mgr/users?page=1&keyword=${searchName.value}`, config).then((res) => {
     states.customers = res.data.data;
 
-    console.log(res, states.customers,searchName.value);
+    filter_result.value = res.data.total_record ;
+
+
+    console.log(res.data.data.total_record);
   });
 
 
@@ -363,7 +369,7 @@ const emptySearch = computed(()=>{
       <small class="opacity-60">ค้นหาด้วย อีเมล หรือ เบอร์โทรศัพท์มือถือ </small>
     </div>
   </div>
-  <div class="m-4 font-medium">จำนวนผู้ใช้งานทั้งหมด  : {{totalRecord}}</div>
+  <div class="m-4 font-medium">จำนวนผู้ใช้งานทั้งหมด  : {{filter_result}}</div>
   <div class="relative mt-4">
     <!-- <div class="ml-4 my-4 font-bold">จำนวนลูกค้าทั้งหมด : <span class="font-medium">{{ customers_list.length }} คน</span></div> -->
     <table class="w-full text-sm text-left text-black dark:text-white">
