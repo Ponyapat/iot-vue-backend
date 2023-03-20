@@ -34,6 +34,7 @@ import { reactive } from "vue";
 import axios from "axios";
 
 import Chart from 'chart.js/auto';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const titleStack = ref(["Admin", "Dashboard"]);
 
@@ -211,14 +212,31 @@ onMounted(()=>{
     }]
     },
     options: {
+
     maintainAspectRatio: false,
     responsive: true,
     plugins: {
+      datalabels: {
+        color: '#000',
+        anchor:'end',
+        align:'top',
+      },
       legend: {
         display: false,
-      }
-    }
-  }
+      },
+
+    },
+    scales: {
+            y: {
+                beginAtZero: true,
+                max: 1000,
+                ticks: {
+                    stepSize: 50
+                }
+            }
+        },
+  },
+  plugins: [ChartDataLabels]
   });
   }).catch((error)=>{
     console.log(error);
