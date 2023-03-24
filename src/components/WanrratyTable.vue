@@ -199,7 +199,7 @@ const pages = computed(() => {
           {{ item.email }}
         </td>
         <td class="text-center">
-          <span v-if="item.expire_date"> {{  moment(item.expire_date).format('DD/MM/YYYY') }}</span>
+          <span v-if="item.expire_date">{{moment.utc(item.expire_date).format('DD/MM/YYYY')}}</span>
           <span v-else>-</span>
         </td>
         <td class="text-center">
