@@ -99,7 +99,7 @@ onMounted(() => {
                 </p>
             </div>
             <div class="mb-2">
-              <span class="font-bold text-base">วันที่ซื้อผลิตภัณฑ์ : <span class="font-normal text-base">{{ moment(state.purchase_date).format('DD/MM/YYYY') }}</span></span>
+              <span class="font-bold text-base">วันที่ซื้อผลิตภัณฑ์ : <span class="font-normal text-base">{{ moment.utc(state.purchase_date).format('DD/MM/YYYY') }}</span></span>
             </div>
             <div class="mb-2">
               <span class="font-bold text-base">อีเมล : <span class="font-normal text-base">{{ state.email}}</span></span>
