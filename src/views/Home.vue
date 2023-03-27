@@ -286,7 +286,7 @@ const fetchData =()=>{
         />
       </template>
     </notification> -->
-    <div class="grid grid-cols-1 gap-2 lg:grid-cols-5 mb-6">
+    <div class="grid grid-cols-1 gap-2 lg:grid-cols-4 mb-6">
       <!--
         trend="12%"
         prefix="$"
@@ -299,14 +299,14 @@ const fetchData =()=>{
         :number="states.geoCountItem"
         label="ภูมิศาสตร์(ข้อมูลกลาง)"
       />
-      <card-widget
+      <!-- <card-widget
         v-if="states.weatherCountItem>0"
         trend-type="down"
         color="text-yellow-500"
         :icon="mdiWeatherPartlyRainy"
         :number="states.weatherCountItem"
         label="ภูมิอากาศ"
-      />
+      /> -->
       <card-widget
         v-if="states.weatherCountItem>0"
         trend-type="down"
