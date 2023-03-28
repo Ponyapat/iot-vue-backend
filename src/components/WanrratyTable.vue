@@ -25,6 +25,7 @@ const darkMode = computed(() => mainStore.darkMode);
 
 const states = reactive({
   warrranty: [],
+  my_email:'',
 });
 
 const warrranty_list = ref([]);
@@ -40,6 +41,12 @@ const per_del = ref(false);
 
 onMounted(()=>{
   fetchData();
+
+  ApiMain.get("/users/myprofile").then((response) => {
+
+    states.email = response.data.email ;
+
+  })
 })
 
 const fetchData = async () => {
@@ -47,7 +54,6 @@ const fetchData = async () => {
   ApiCore.get("/v2/warranty").then((response) => {
 
     states.warranty = response.data.data;
-    console.log(response.data.data);
     warrranty_list.value = response.data.data ;
   }).catch((error) => {
       console.log(error);
@@ -97,8 +103,6 @@ const warranty = computed(()=>{
       const mobile = data.mobile.toLowerCase();
       const email = data.email.toLowerCase();
 
-      console.log(serial);
-
       return serial.includes((searchName.value).toLowerCase()) || firstname.includes((searchName.value).toLowerCase())|| mobile.includes((searchName.value).toLowerCase())|| email.includes((searchName.value).toLowerCase())
     });
 });
@@ -140,11 +144,33 @@ const pages = computed(() => {
     return [...Array(numShown)].map((k,i) => i + first);
 });
 
+
+
+const exportExcel =()=>{
+
+  console.log(states.email,'keyword : '+ searchName.value);
+  ApiCore.post(`/v2/export-warranty?keyword=${searchName.value}`,{
+    email:states.email,
+    keyword:searchName.value,
+
+  }).then((response) => {
+    console.log(response);
+    // if(response.data.status == 200){
+
+    // }
+
+  }).catch((error) => {
+    console.log(error);
+  });
+};
 </script>
 
 <template>
   <div class="w-1/4 m-4 mt-10">
     <form>
+      <div class="mb-4">
+        <button type="button" @click="exportExcel" class="bg-orange-300 text-base font-medium px-4 py-1 rounded-lg text-black"><i class="fa-solid fa-file"></i> Export Excel</button>
+      </div>
         <div class="relative">
           <input v-model="searchName" id="search_input" type="text"
             class="block w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
