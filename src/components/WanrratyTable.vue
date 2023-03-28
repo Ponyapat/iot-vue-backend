@@ -154,11 +154,16 @@ const exportExcel =()=>{
     keyword:searchName.value,
 
   }).then((response) => {
-    console.log(response);
-    // if(response.data.status == 200){
-
-    // }
-
+    console.log('status send file CSV = '+response.status);
+    if(response.status == 200){
+      Swal.fire({
+        title: "ส่งไฟล์ CSV เรียบร้อย",
+        text: `ส่งไฟล์ เข้า email : ${states.email}`,
+        icon: "success",
+        confirmButtonColor: "#31C48D",
+        confirmButtonText: "ตกลง",
+      })
+    }
   }).catch((error) => {
     console.log(error);
   });
@@ -168,9 +173,7 @@ const exportExcel =()=>{
 <template>
   <div class="w-1/4 m-4 mt-10">
     <form>
-      <div class="mb-4">
-        <button type="button" @click="exportExcel" class="bg-orange-300 text-base font-medium px-4 py-1 rounded-lg text-black"><i class="fa-solid fa-file"></i> Export Excel</button>
-      </div>
+
         <div class="relative">
           <input v-model="searchName" id="search_input" type="text"
             class="block w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -187,8 +190,13 @@ const exportExcel =()=>{
       </form>
 
   </div>
-  <div class="ml-4 mb-4">
-      <span class="text-base font-medium">จำนวนทั้งหมด : {{ warranty.length }}</span>
+  <div class="ml-4 mb-4 flex flex-row justify-between">
+      <div>
+        <span class="text-base font-medium">จำนวนทั้งหมด : {{ warranty.length }}</span>
+      </div>
+      <div class="mb-4 mr-4">
+        <button type="button" @click="exportExcel" class="bg-orange-300 text-base font-medium px-4 py-1 rounded-lg text-black"><i class="fa-solid fa-file"></i> Export Excel</button>
+      </div>
     </div>
   <table>
     <thead class="bg-gray-600">
