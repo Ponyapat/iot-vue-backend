@@ -154,11 +154,16 @@ const exportExcel =()=>{
     keyword:searchName.value,
 
   }).then((response) => {
-    console.log(response);
-    // if(response.data.status == 200){
-
-    // }
-
+    console.log('status send file CSV = '+response.status);
+    if(response.status == 200){
+      Swal.fire({
+        title: "ส่งไฟล์ CSV เรียบร้อย",
+        text: `ส่งไฟล์ เข้า email : ${states.email}`,
+        icon: "success",
+        confirmButtonColor: "#31C48D",
+        confirmButtonText: "ตกลง",
+      })
+    }
   }).catch((error) => {
     console.log(error);
   });
