@@ -4,9 +4,13 @@ import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 
+import { useVuelidate } from '@vuelidate/core'
+import { required, helpers } from '@vuelidate/validators'
+
 const router = useRouter();
 let url = new URL(window.location.href);
 const serial_number = url.searchParams.get("serial_number");
+
 
 const state = reactive({
   board_id: '',
@@ -17,13 +21,20 @@ const state = reactive({
   check_type_form: 'add'
 });
 
+const rules = {
+  board_name: { required: helpers.withMessage('กรุณาระบุชื่อบอร์ด', required) },// ชื่อบอร์ด
+}
+
+
+const v$ = useVuelidate(rules, state);
 
 onMounted(async () => {
 
   // Group Line Show in Select
-  await ApiMain.get("line-access-token").then((response) => {
+  await ApiMain.get("line-access-token?order=ASC&page=1&take=99999").then((response) => {
 
     let obj_group = response.data.data;
+    console.log(obj_group);
     obj_group.forEach(element => {
       state.line_groupname_options.push({ value: element.id, label: element.name });
     });
@@ -65,10 +76,12 @@ onMounted(async () => {
   });
 })
 
-const submit = () => {
+const submit = async () => {
+  const result = await v$.value.$validate();
 
   // console.log(state.select_line_group_id);
-  if (state.check_type_form == 'edit') {
+  if(result){
+    if (state.check_type_form == 'edit') {
     console.log('Edit Line Group');
     console.log(state.select_line_group_id);
     const groupline_id = state.select_line_group_id.map(num => num.value)
@@ -116,6 +129,15 @@ const submit = () => {
     }).catch((error) => console.log(error));
     console.log('Add Line Group');
   }
+  }else{
+    Swal.fire({
+        icon: 'warning',
+        title: 'กรอกข้อมูลไม่ครบ',
+        text: 'โปรดระบุข้อมูลให้ครบ',
+        confirmButtonColor:'#31C48D'
+      });
+  }
+  
 
 };
 
@@ -138,9 +160,11 @@ const closeForm = () => {
         </div>
         <div class="mb-6">
           <label for="board_name" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">ชื่อบอร์ด</label>
-          <input type="text" id="board_name" v-model="state.board_name"
-            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
+          <input type="text" id="board_name" v-model="state.board_name" :class="v$.board_name.$error ? 'border-red-300' : 'border-gray-300'"
+            class="shadow-sm bg-gray-50 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
+            <small v-if="v$.board_name.$error" class="text-red-500 float-right">{{ v$.board_name.$errors[0].$message }}</small>
         </div>
+        
         <div class="mb-6">
           <label for="repeat-password"
             class="block mb-2 text-base font-medium text-gray-900 dark:text-white ">กลุ่มไลน์</label>
