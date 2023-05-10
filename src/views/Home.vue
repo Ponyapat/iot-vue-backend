@@ -32,11 +32,29 @@ import CardClientBar from "@/components/CardClientBar.vue";
 import TitleSubBar from "@/components/TitleSubBar.vue";
 import { reactive } from "vue";
 import axios from "axios";
-
+import { useRouter } from "vue-router";
 import Chart from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const titleStack = ref(["Admin", "Dashboard"]);
+
+const router = useRouter();
+let url = new URL(window.location.href);
+const code_line = url.searchParams.get("code");
+
+const line_access_token = ref('');
+
+onMounted(()=>{
+  console.log('code line == ',code_line);
+  if(code_line){
+    router.push(`line-group?access_token=${code_line}`);
+  }
+
+
+
+  
+
+})
 
 const chartData = ref(null);
 const states = reactive({

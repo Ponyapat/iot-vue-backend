@@ -20,6 +20,7 @@ import {
   mdiFruitWatermelon,
   mdiFaceAgent,
   mdiAccountSupervisorOutline,
+  mdiGroup
 } from "@mdi/js";
 
 import axios from "axios";
@@ -208,6 +209,22 @@ if (roleid) {
                 to: "/keyword",
                 label: "คำค้นหาสถานที่",
                 icon: mdiFaceAgent,
+              },
+            ],
+          });
+        }
+        if (
+          value.permission[0].action == "read" &&
+          value.permission[0].object[0].name == "keyword"
+        ) {
+          menu.push({
+            label: "กลุ่มไลน์",
+            icon: mdiViewList,
+            menu: [
+              {
+                to: "/line",
+                label: "สร้างกลุ่มไลน์",
+                icon: mdiGroup,
               },
             ],
           });
