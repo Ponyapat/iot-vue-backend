@@ -267,6 +267,14 @@ const routes = [
   },
   {
     meta: {
+      title: "BoardAddGroupLine",
+    },
+    path: "/board-list/group-line",
+    name: "BoardAddGroupLine",
+    component: () => import("@/views/Boards/GroupLine.vue"),
+  },
+  {
+    meta: {
       title: "WarrantyCustomer",
     },
     path: "/warranty-list",
@@ -332,6 +340,22 @@ const routes = [
     path: "/keyword/edit/:id",
     name: "EDITKeyword",
     component: () => import("@/views/Keyword/Form.vue")
+  },
+  {
+    meta: {
+      title: "Line Group",
+    },
+    path: "/line-group",
+    name: "LineGroup",
+    component: () => import("@/views/LineGroup.vue"),
+  },
+  {
+    meta: {
+      title: "LineHome",
+    },
+    path: "/line",
+    name: "LineHome",
+    component: () => import("@/views/LineHome.vue"),
   },
   {
     meta: {

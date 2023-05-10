@@ -118,7 +118,6 @@ const board_list = computed(() => {
   return response.filter(item => {
     const serial = item.serial.toUpperCase();
 
-    console.log(serial);
     if(searchName.value == '' && states.select_status == 'all'){
       return item
     }
@@ -226,15 +225,17 @@ const filter_status = (event)=>{
 
   // console.log(test);
   // states.board = test ;
-
-
-
 };
+
+const groupline = (serial_number) =>{
+  console.log(serial_number);
+  router.push('/board-list/groupline?serial_number='+serial_number);
+};
+
 
 </script>
 
 <template>
-
   <div v-if="showModal == true" class="fixed inset-0 z-40 bg-opacity-50 transition-opacity" style="background: rgba(0, 0, 0, 0.2);"></div>
   <div class="relative">
     <div class="flex flex-row">
@@ -280,6 +281,7 @@ const filter_status = (event)=>{
           <th class="text-center">สถานะการรับประกันสินค้า</th>
           <th class="text-center">เวลาที่ออนไลน์ล่าสุด</th>
           <th class="text-center">ข้อมูลเพิ่มเติม</th>
+          <th class="text-center">Group Line</th>
         </tr>
       </thead>
       <tbody>
@@ -321,6 +323,14 @@ const filter_status = (event)=>{
                 class="bg-gray-300 text-black hover:bg-gray-600 hover:text-white mr-3 px-2 py-1.5 rounded-md">
                 <i class="fa-solid fa-eye text-base"></i>
               </button>
+            </div>
+          </td>
+          <td class="text-center">
+            <div class="flex flex-row justify-center items-center">
+              <router-link :to="`/board-list/group-line?serial_number=${item.serial}`"
+                class="bg-orange-300 text-black hover:bg-gray-600 hover:text-white mr-3 px-2 py-1 rounded-md">
+                <i class="fa-solid fa-plus text-base"></i>
+              </router-link>
             </div>
           </td>
         </tr>
