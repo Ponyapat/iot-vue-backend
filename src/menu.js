@@ -191,7 +191,7 @@ if (roleid) {
           value.permission[0].object[0].name == "board-status"
         ) {
           sub_customer.push({
-            to: "board-list",
+            to: "/board-list",
             label: "สถานะการทำงานของบอร์ด",
             icon: mdiFaceAgent,
           });
