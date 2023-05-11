@@ -213,22 +213,7 @@ if (roleid) {
             ],
           });
         }
-        if (
-          value.permission[0].action == "read" &&
-          value.permission[0].object[0].name == "keyword"
-        ) {
-          menu.push({
-            label: "กลุ่มไลน์",
-            icon: mdiViewList,
-            menu: [
-              {
-                to: "/line",
-                label: "สร้างกลุ่มไลน์",
-                icon: mdiGroup,
-              },
-            ],
-          });
-        }
+        
       }
       //console.log(menu)
       if (sub_menu_breed.length == 0) {

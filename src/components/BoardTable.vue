@@ -24,25 +24,25 @@ const darkMode = computed(() => mainStore.darkMode);
 const token = localStorage.getItem("tkfw");
 
 const config = {
-        auth: {
-          username: 'admin',
-          password: import.meta.env.VITE_PASS_CUSTOMER
-        },
-        headers: {
-          Authorization: "Bearer " + token,
-        }
+  auth: {
+    username: 'admin',
+    password: import.meta.env.VITE_PASS_CUSTOMER
+  },
+  headers: {
+    Authorization: "Bearer " + token,
+  }
 
-      } ;
+};
 
 const states = reactive({
   board: [],
-  select_status:'all',
-  user_data:[
+  select_status: 'all',
+  user_data: [
     {
-      first_name:'',
-      last_name:'',
-      email:'',
-      phone:''
+      first_name: '',
+      last_name: '',
+      email: '',
+      phone: ''
     }
   ]
 });
@@ -57,6 +57,10 @@ const currentPage = ref(0);
 const per_edit = ref(false);
 const per_del = ref(false);
 
+
+const cliend_id = import.meta.env.VITE_LINE_NOTI_CLIENT_ID;
+const url_redirect = import.meta.env.VITE_LINE_NOTI_REDIRECT_URI;
+let url = ref(`https://notify-bot.line.me/oauth/authorize?response_type=code&client_id=${cliend_id}&redirect_uri=${url_redirect}&state=code&scope=notify`);
 
 
 onMounted(() => {
@@ -118,20 +122,20 @@ const board_list = computed(() => {
   return response.filter(item => {
     const serial = item.serial.toUpperCase();
 
-    if(searchName.value == '' && states.select_status == 'all'){
+    if (searchName.value == '' && states.select_status == 'all') {
       return item
     }
-    else if(searchName.value != '' && states.select_status == 'all'){
+    else if (searchName.value != '' && states.select_status == 'all') {
       return serial.includes((searchName.value).toUpperCase())
     }
-   else{
-    if(item.getStatusBoard){
-        return  serial.includes((searchName.value).toUpperCase()) && (item.getStatusBoard && item.getStatusBoard.noti_status_text == states.select_status)
+    else {
+      if (item.getStatusBoard) {
+        return serial.includes((searchName.value).toUpperCase()) && (item.getStatusBoard && item.getStatusBoard.noti_status_text == states.select_status)
       }
-      else{
-        return serial.includes((searchName.value).toUpperCase()) && ('ออฟไลน์' == states.select_status )
+      else {
+        return serial.includes((searchName.value).toUpperCase()) && ('ออฟไลน์' == states.select_status)
       }
-   }
+    }
     // if(searchName.value == ''){
     //   if(states.select_status == 'all'){
     //   return item
@@ -189,9 +193,9 @@ const pages = computed(() => {
   return [...Array(numShown)].map((k, i) => i + first);
 });
 
-const showPopup =(data)=>{
-  states.user_data.user_id = data.project.user_id ;
-  ApiSso.get(`/api/mgr/users/${data.project.user_id}`,config).then((result) => {
+const showPopup = (data) => {
+  states.user_data.user_id = data.project.user_id;
+  ApiSso.get(`/api/mgr/users/${data.project.user_id}`, config).then((result) => {
 
     states.user_data.first_name = result.data.data.first_name;
     states.user_data.last_name = result.data.data.last_name;
@@ -199,16 +203,16 @@ const showPopup =(data)=>{
     states.user_data.phone = result.data.data.username;
   })
 
-  showModal.value = true ;
+  showModal.value = true;
 };
 const closeModal = () => {
   showModal.value = false;
 };
 
 
-const filter_status = (event)=>{
+const filter_status = (event) => {
 
-  states.select_status  = event.target.value ;
+  states.select_status = event.target.value;
   // const test =  states.board.filter(item => {
   //  if(states.select_status == 'all'){
   //   return item
@@ -227,19 +231,21 @@ const filter_status = (event)=>{
   // states.board = test ;
 };
 
-const groupline = (serial_number) =>{
+const groupline = (serial_number) => {
   console.log(serial_number);
-  router.push('/board-list/groupline?serial_number='+serial_number);
+  router.push('/board-list/groupline?serial_number=' + serial_number);
 };
 
 
 </script>
 
 <template>
-  <div v-if="showModal == true" class="fixed inset-0 z-40 bg-opacity-50 transition-opacity" style="background: rgba(0, 0, 0, 0.2);"></div>
+  <div v-if="showModal == true" class="fixed inset-0 z-40 bg-opacity-50 transition-opacity"
+    style="background: rgba(0, 0, 0, 0.2);"></div>
   <div class="relative">
-    <div class="flex flex-row">
-    <div class="w-1/4 ml-4 mr-[40px] mt-10" >
+    <div class="flex flex-row justify-between">
+      <div class="flex flex-row">
+        <div class="w-full ml-4 mr-[40px] mt-10">
         <div class="relative">
           <input v-model="searchName" id="search_input" type="text"
             class="block w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -253,23 +259,30 @@ const groupline = (serial_number) =>{
           </div>
         </div>
         <small class="opacity-60">ค้นหาด้วย serials number</small>
+      </div>
+      <div class="flex flex-row gap-2 ml-5">
+        <div class="mt-5">
+          <label for="categories"
+            class="block text-sm font-medium text-gray-900 dark:text-white opacity-70">สถานะบอร์ด</label>
+          <select id="categories" v-model="states.select_status" @change="filter_status($event)"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option value="all">ทั้งหมด</option>
+            <option value="ออนไลน์">ออนไลน์</option>
+            <option value="ออฟไลน์">ออฟไลน์</option>
+          </select>
+        </div>
+      </div>
+      </div>
+      <div class="flex flex-row items-center mr-4">
+        <div class="mt-3">
+          <a :href="url"
+            class="flex flex-row items-center justify-center  text-base font-medium rounded-lg border-2 border-gray-300 bg-white hover:bg-green-50  py-2 px-4 ">
+            <img src="../assets/images/line_button.png" alt="logo line" class="w-6 h-6 mr-2">สร้างกลุ่มไลน์</a>
+        </div>
+      </div>
     </div>
-
-    <div class="flex flex-row gap-2 ml-5">
-
-    <div class="mt-5">
-      <label for="categories" class="block text-sm font-medium text-gray-900 dark:text-white opacity-70">สถานะบอร์ด</label>
-      <select id="categories" v-model="states.select_status" @change="filter_status($event)"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option value="all" >ทั้งหมด</option>
-        <option value="ออนไลน์">ออนไลน์</option>
-        <option value="ออฟไลน์">ออฟไลน์</option>
-      </select>
-    </div>
-  </div>
-  </div>
     <div class="ml-4 mb-4">
-      <span class="text-base font-medium">จำนวนทั้งหมด : {{board_list.length }}</span>
+      <span class="text-base font-medium">จำนวนทั้งหมด : {{ board_list.length }}</span>
     </div>
     <table>
       <thead class="bg-gray-600">
@@ -295,26 +308,33 @@ const groupline = (serial_number) =>{
             {{ item.serial }}
           </td>
           <td class="text-center">
-            <span v-if="item.getStatusBoard == null"
-              class="bg-red-100 text-black font-bold px-4 py-2 rounded-full "><i class="fa-solid fa-power-off text-red-500 mr-0.5"></i> ออฟไลน์</span>
-            <span v-else  :class="item.getStatusBoard.noti_status_text == 'ออนไลน์'?'bg-green-100':'bg-red-100'" class=" text-black font-bold px-4 py-2 rounded-full ">
-              <span v-if="item.getStatusBoard.noti_status_text == 'ออนไลน์'" ><i class="fa-solid fa-circle-dot text-green-500 mr-0.5"></i> {{  item.getStatusBoard.noti_status_text }}</span>
+            <span v-if="item.getStatusBoard == null" class="bg-red-100 text-black font-bold px-4 py-2 rounded-full "><i
+                class="fa-solid fa-power-off text-red-500 mr-0.5"></i> ออฟไลน์</span>
+            <span v-else :class="item.getStatusBoard.noti_status_text == 'ออนไลน์' ? 'bg-green-100' : 'bg-red-100'"
+              class=" text-black font-bold px-4 py-2 rounded-full ">
+              <span v-if="item.getStatusBoard.noti_status_text == 'ออนไลน์'"><i
+                  class="fa-solid fa-circle-dot text-green-500 mr-0.5"></i> {{ item.getStatusBoard.noti_status_text
+                  }}</span>
               <span v-else><i class="fa-solid fa-power-off text-red-500 mr-0.5"></i> ออฟไลน์</span>
             </span>
           </td>
           <td class="text-center">
             <span v-if="item.warranty == null" class="">-</span>
-            <span v-else-if="item.warranty.expire_date == null || item.warranty.expire_date == ''" class="text-gray-500">-</span>
+            <span v-else-if="item.warranty.expire_date == null || item.warranty.expire_date == ''"
+              class="text-gray-500">-</span>
             <span v-else>{{ moment(item.warranty.expire_date).format('DD/MM/YYYY') }}</span>
           </td>
           <td class="text-center">
-            <span v-if="item.warranty == null" class="text-orange-500"><i class="fa-solid fa-circle-exclamation mr-0.5"></i>ไม่ได้ลงทะเบียน</span>
-            <span v-else class="text-green-500"><i class="fa-solid fa-circle-dot text-green-500 mr-0.5"></i>อยู่ระหว่างการรับประกัน</span>
+            <span v-if="item.warranty == null" class="text-orange-500"><i
+                class="fa-solid fa-circle-exclamation mr-0.5"></i>ไม่ได้ลงทะเบียน</span>
+            <span v-else class="text-green-500"><i
+                class="fa-solid fa-circle-dot text-green-500 mr-0.5"></i>อยู่ระหว่างการรับประกัน</span>
           </td>
           <td class="text-center">
             <span v-if="item.getOnlineLasted == null" class=" text-black font-bold px-4 py-2 rounded-full ">-</span>
             <span v-else class="text-sm font-medium">
-              <span class="mr-2">{{ moment(item.getOnlineLasted.updated_at).format("DD/MM/YYYY")}}</span><span>{{ moment.utc(item.getOnlineLasted.updated_at).format("HH:mm") }} น.</span>
+              <span class="mr-2">{{ moment(item.getOnlineLasted.updated_at).format("DD/MM/YYYY") }}</span><span>{{
+                moment.utc(item.getOnlineLasted.updated_at).format("HH:mm") }} น.</span>
             </span>
           </td>
           <td class="text-center">
@@ -385,64 +405,65 @@ const groupline = (serial_number) =>{
 
       <small class="ml-4 text-sm font-medium">Page {{ currPage }} of {{ totalPage }}</small>
     </nav>
-    <div >
+    <div>
       <div id="staticModal" :class="showModal == true ? '' : 'hidden'"
-      class="absolute top-28 left-1/4 right-1/4 z-50  w-full p-4 overflow-x-hidden overflow-y-auto h-[calc(100%-1rem)] md:h-full">
-      <div class="relative w-full h-full max-w-2xl md:h-auto">
-        <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-          <!-- Modal header -->
-          <div class="flex items-start justify-between px-4 py-2.5 border-b rounded-t dark:border-gray-600">
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-              ข้อมูลลูกค้า
-            </h3>
-            <button type="button" @click="closeModal()"
-              class="text-white bg-red-500  hover:bg-red-700 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-              data-modal-hide="staticModal">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clip-rule="evenodd"></path>
-              </svg>
-            </button>
-          </div>
-          <!-- Modal body -->
-          <div class="p-6 pb-10 space-y-6">
-            <div class="flex justify-center ">
-              <img src="../assets/images/mr.png" alt="user" class="w-18 h-18 shadow bg-gray-100 p-2 rounded-full">
+        class="absolute top-28 left-1/4 right-1/4 z-50  w-full p-4 overflow-x-hidden overflow-y-auto h-[calc(100%-1rem)] md:h-full">
+        <div class="relative w-full h-full max-w-2xl md:h-auto">
+          <!-- Modal content -->
+          <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-start justify-between px-4 py-2.5 border-b rounded-t dark:border-gray-600">
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                ข้อมูลลูกค้า
+              </h3>
+              <button type="button" @click="closeModal()"
+                class="text-white bg-red-500  hover:bg-red-700 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                data-modal-hide="staticModal">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"></path>
+                </svg>
+              </button>
             </div>
-            <div class="flex flex-col items-center">
-              <div class="w-[250px] flex flex-col">
-                <span class="font-medium mb-2">User ID : <span class="font-normal text-basse">{{ states.user_data.user_id }}</span></span>
-                <span class="text-base font-medium mb-2" >ชื่อ :
-                  <span v-if="states.user_data.first_name ">{{states.user_data.first_name}}  {{states.user_data.last_name}}</span>
-                  <span v-else class="font-normal text-gray-500">ไม่ได้ระบุ</span>
-                  </span>
-                <span class="text-base font-medium whitespace-nowrap mb-2" >Email :
-                  <span v-if="states.user_data.email != null || states.user_data.email == ''" class="font-normal">{{states.user_data.email}}</span>
-                  <span v-else class="font-normal text-gray-500">ไม่ได้ระบุ</span>
-                </span>
-                <span class="text-base font-medium" >เบอร์โทร :
-                  <span v-if="states.user_data.phone != null || states.user_data.phone == ''" class="font-normal">{{states.user_data.phone}}</span>
-                  <span v-else class="font-normal text-gray-500">ไม่ได้ระบุ</span>
-                </span>
+            <!-- Modal body -->
+            <div class="p-6 pb-10 space-y-6">
+              <div class="flex justify-center ">
+                <img src="../assets/images/mr.png" alt="user" class="w-18 h-18 shadow bg-gray-100 p-2 rounded-full">
               </div>
-              <!-- <span >ชื่อ : {{states.user_data.name}}</span> -->
+              <div class="flex flex-col items-center">
+                <div class="w-[250px] flex flex-col">
+                  <span class="font-medium mb-2">User ID : <span class="font-normal text-basse">{{
+                    states.user_data.user_id }}</span></span>
+                  <span class="text-base font-medium mb-2">ชื่อ :
+                    <span v-if="states.user_data.first_name">{{ states.user_data.first_name }}
+                      {{ states.user_data.last_name }}</span>
+                    <span v-else class="font-normal text-gray-500">ไม่ได้ระบุ</span>
+                  </span>
+                  <span class="text-base font-medium whitespace-nowrap mb-2">Email :
+                    <span v-if="states.user_data.email != null || states.user_data.email == ''"
+                      class="font-normal">{{ states.user_data.email }}</span>
+                    <span v-else class="font-normal text-gray-500">ไม่ได้ระบุ</span>
+                  </span>
+                  <span class="text-base font-medium">เบอร์โทร :
+                    <span v-if="states.user_data.phone != null || states.user_data.phone == ''"
+                      class="font-normal">{{ states.user_data.phone }}</span>
+                    <span v-else class="font-normal text-gray-500">ไม่ได้ระบุ</span>
+                  </span>
+                </div>
+                <!-- <span >ชื่อ : {{states.user_data.name}}</span> -->
+              </div>
+
             </div>
 
           </div>
-
         </div>
-      </div>
     </div>
-    </div>
-    <!-- Modal -->
   </div>
-</template>
-<style scoped>
-li.active,
+  <!-- Modal -->
+</div></template>
+<style scoped>li.active,
 li.active:hover {
   background-color: rgb(48, 48, 48);
   color: white;
-}
-</style>
+}</style>

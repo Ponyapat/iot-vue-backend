@@ -63,7 +63,7 @@ const submitForm = () =>{
         confirmButtonColor: "#0E9F6E",
         confirmButtonText: "ตกลง",
     });
-    router.push('/line');
+    router.push('/board-list');
 
         
     }).catch(error=>{
