@@ -351,14 +351,6 @@ const routes = [
   },
   {
     meta: {
-      title: "LineHome",
-    },
-    path: "/line",
-    name: "LineHome",
-    component: () => import("@/views/LineHome.vue"),
-  },
-  {
-    meta: {
       title: "Error",
       fullScreen: true,
     },
