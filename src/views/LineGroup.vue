@@ -69,8 +69,8 @@ onMounted(() => {
     ApiMain.get(`/line-access-token/get-token/${code_line}`).then(res=>{
 
         console.log('access token in LineGroup == ',res);
-        line_access_token.value = response.data.access_token ;
-        state.access_token = response.data.access_token ;
+        line_access_token.value = res.data.access_token ;
+        state.access_token = res.data.access_token ;
 
     }).catch(err=>{
         console.log(err.message);
