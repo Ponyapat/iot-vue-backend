@@ -122,7 +122,8 @@ const linegroup_list = computed(() => {
   return response.filter(item => {
     const linegroup_name = item.name.toUpperCase();
     const line_access_token = item.access_token.toUpperCase();
-    return linegroup_name.includes((searchName.value).toUpperCase()) || line_access_token.includes((searchName.value).toUpperCase()) 
+
+    return linegroup_name.includes((searchName.value).toUpperCase()) || line_access_token.includes((searchName.value).toUpperCase())
 
   });
 });
@@ -172,6 +173,15 @@ const groupline = (serial_number) => {
 };
 
 
+const filter_status = (event) => {
+
+states.select_status = event.target.value;
+
+console.log(states.select_status);
+
+};
+
+
 </script>
 
 <template>
@@ -202,8 +212,8 @@ const groupline = (serial_number) => {
           <select id="categories" v-model="states.select_status" @change="filter_status($event)"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value="all">ทั้งหมด</option>
-            <option value="ออนไลน์">ออนไลน์</option>
-            <option value="ออฟไลน์">ออฟไลน์</option>
+            <option :value="false">กลุ่มธรรดา</option>
+            <option :value="true">แอดมิน</option>
           </select>
         </div>
       </div>

@@ -47,7 +47,7 @@ const line_access_token = ref('');
 onMounted(()=>{
   console.log('code line == ',code_line);
   if(code_line){
-    router.push(`line-group?access_token=${code_line}`);
+    router.push(`line-group?code=${code_line}`);
   }
 
 
