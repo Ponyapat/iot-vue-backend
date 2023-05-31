@@ -12,6 +12,13 @@
                 <label for="group_name" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">ชื่อกลุ่มไลน์</label>
                 <input type="text" id="group_name" v-model="state.groupname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
             </div>
+            <div class="mb-6">
+            <label for="adminstatus" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Group Admin</label>
+            <select id="adminstatus" v-model="state.is_admin" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <option :value="true">true</option>
+              <option :value="false" selected>false</option>
+            </select>
+        </div>
             <div class="text-center">
                 <button type="submit" class="w-[120px] h-[36px] bg-green-500 hove:bg-green-600 py-1 px-4 text-white rounded-lg">บันทึก</button>
             </div>
@@ -32,7 +39,8 @@ const access_token = url.searchParams.get("access_token");
 const router = useRouter();
 const state = reactive({
     access_token:access_token,
-    groupname:''
+    groupname:'',
+    is_admin:false
 })
 
 const line_access_token = ref('');
@@ -42,17 +50,21 @@ onMounted(()=>{
     
 })
 const submitForm = () =>{
-    console.log('submit form');
-    ApiMain.get(`line-access-token/get-token/${access_token}`).then((response) => {
-    console.log(response);
-    console.log('line access token ==',response.data.access_token)
+//     console.log('submit form');
+//     ApiMain.get(`line-access-token/get-token/${access_token}`).then((response) => {
+//     // console.log(response);
+//     // console.log('line access token ==',response.data.access_token)
 
-    line_access_token.value = response.data.access_token ;
+//     line_access_token.value = response.data.access_token ;
 
-    ApiMain.post('line-access-token',{
+  
+
+// }).catch(error => console.log(error));
+ApiMain.post('line-access-token',{
         name:state.groupname,
-        access_token:line_access_token.value,
-        board_ids:[]
+        access_token:state.access_token,
+        board_ids:[],
+        is_admin:state.is_admin
     }).then((res)=>{
         console.log(res);
 
@@ -63,15 +75,13 @@ const submitForm = () =>{
         confirmButtonColor: "#0E9F6E",
         confirmButtonText: "ตกลง",
     });
-    router.push('/board-list');
+    router.push('/linegroup-list');
 
         
     }).catch(error=>{
 
     console.log(error);
     });
-
-}).catch(error => console.log(error));
 
 };
 </script>
