@@ -77,6 +77,7 @@ if (roleid) {
       });
 
       const rolePermission = data.data.data.rolePermission;
+
       let pms = [];
       for (const [key, value] of Object.entries(rolePermission)) {
         pms.push({
@@ -208,6 +209,22 @@ if (roleid) {
               {
                 to: "/keyword",
                 label: "คำค้นหาสถานที่",
+                icon: mdiFaceAgent,
+              },
+            ],
+          });
+        }
+        if (
+          value.permission[0].action == "read" &&
+          value.permission[0].object[0].name == "group-line"
+        ) {
+          menu.push({
+            label: "ระบบแจ้งเตือน",
+            icon: mdiViewList,
+            menu: [
+              {
+                to: "/linegroup-list",
+                label: "กลุ่มไลน์ admin",
                 icon: mdiFaceAgent,
               },
             ],
