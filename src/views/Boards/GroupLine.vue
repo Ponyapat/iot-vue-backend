@@ -85,7 +85,7 @@ const submit = async () => {
     console.log('Edit Line Group');
     console.log(state.select_line_group_id);
     const groupline_id = state.select_line_group_id.map(num => num.value)
-
+    
     // EDIT API
     ApiMain.put(`board/${state.board_id}`, {
       name: state.board_name,

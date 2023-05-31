@@ -275,6 +275,14 @@ const routes = [
   },
   {
     meta: {
+      title: "FormBoard",
+    },
+    path: "/linegroup-list/form-board",
+    name: "FormBoard",
+    component: () => import("@/views/AdminLineGroup/FormBoard.vue"),
+  },
+  {
+    meta: {
       title: "WarrantyCustomer",
     },
     path: "/warranty-list",
@@ -348,6 +356,14 @@ const routes = [
     path: "/line-group",
     name: "LineGroup",
     component: () => import("@/views/LineGroup.vue"),
+  },
+  {
+    meta: {
+      title: "Line Group List",
+    },
+    path: "/linegroup-list",
+    name: "LineGroupList",
+    component: () => import("@/views/AdminLineGroup/LineGroupList.vue"),
   },
   {
     meta: {
