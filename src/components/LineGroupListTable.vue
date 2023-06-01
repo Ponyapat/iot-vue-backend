@@ -181,7 +181,7 @@ const deleteGroupLine =(id)=>{
 
   Swal.fire({
     title: "ยืนยันการลบ",
-    text: "คุณต้องการลบ ภูมิศาสตร์(ข้อมูลกลาง)นี้ใช้หรือไม่",
+    text: "คุณต้องการลบกลุ่มไลน์นี้ใช่หรือไม่",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#31C48D",
