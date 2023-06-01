@@ -207,7 +207,7 @@ const pages = computed(() => {
       <div class="flex flex-row gap-2 ml-5">
         <div class="mt-5">
           <label for="categories"
-            class="block text-sm font-medium text-gray-900 dark:text-white opacity-70">ประเภทกลุ่มไลน์</label>
+            class="block text-sm font-medium text-gray-800 dark:text-white opacity-70">ประเภทกลุ่มไลน์</label>
           <select id="categories" v-model="states.select_status" @change="filter_status($event)"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value="all">ทั้งหมด</option>
