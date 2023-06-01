@@ -126,6 +126,7 @@ const board_list = computed(() => {
     }
     else {
       if (item.getStatusBoard) {
+        console.log(item.getStatusBoard);
         return serial.includes((searchName.value).toUpperCase()) && (item.getStatusBoard && item.getStatusBoard.noti_status_text == states.select_status)
       }
       else {

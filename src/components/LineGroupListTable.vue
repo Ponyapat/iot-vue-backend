@@ -113,19 +113,30 @@ const edit = (id) => {
 let currPage = ref(1);
 let searchName = ref('');
 
+const filter_status = (event) => {
+
+states.select_status = event.target.value;
+
+};
 
 // filter dynamic
 const linegroup_list = computed(() => {
   currPage.value = 1;
   let response = states.linegroup;
-
-  return response.filter(item => {
+    //Apply filters 
+  response = response.filter(item => {
     const linegroup_name = item.name.toUpperCase();
     const line_access_token = item.access_token.toUpperCase();
-
     return linegroup_name.includes((searchName.value).toUpperCase()) || line_access_token.includes((searchName.value).toUpperCase())
-
   });
+
+  // filter ข้อมูลอีกต่อ
+  if (states.select_status !== "all") {
+    const isAdmin = states.select_status === "true";
+    response = response.filter(item => item.is_admin === isAdmin);
+  }
+  
+  return response;
 });
 
 const pageStart = computed(() => {
@@ -167,19 +178,7 @@ const pages = computed(() => {
 
 
 
-const groupline = (serial_number) => {
 
-  router.push('/board-list/groupline?serial_number=' + serial_number);
-};
-
-
-const filter_status = (event) => {
-
-states.select_status = event.target.value;
-
-console.log(states.select_status);
-
-};
 
 
 </script>
@@ -208,11 +207,11 @@ console.log(states.select_status);
       <div class="flex flex-row gap-2 ml-5">
         <div class="mt-5">
           <label for="categories"
-            class="block text-sm font-medium text-gray-900 dark:text-white opacity-70">สถานะบอร์ด</label>
+            class="block text-sm font-medium text-gray-900 dark:text-white opacity-70">ประเภทกลุ่มไลน์</label>
           <select id="categories" v-model="states.select_status" @change="filter_status($event)"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value="all">ทั้งหมด</option>
-            <option :value="false">กลุ่มธรรดา</option>
+            <option :value="false">กลุ่มทั่วไป</option>
             <option :value="true">แอดมิน</option>
           </select>
         </div>
