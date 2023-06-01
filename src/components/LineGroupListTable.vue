@@ -177,6 +177,50 @@ const pages = computed(() => {
 });
 
 
+const deleteGroupLine =(id)=>{
+
+  Swal.fire({
+    title: "ยืนยันการลบ",
+    text: "คุณต้องการลบ ภูมิศาสตร์(ข้อมูลกลาง)นี้ใช้หรือไม่",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#31C48D",
+    cancelButtonColor: "#F98080",
+    confirmButtonText: "ยืนยัน",
+    cancelButtonText: "ยกเลิก",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      ApiMain.delete(`line-access-token/${id}`).then(res=>{
+        console.log('resonse == ',res);
+        if(res.status == 200){
+          Swal.fire({
+            title: "ลบข้อมูลสำเร็จ",
+            text: "ลบกลุ่มไลน์สำเร็จ",
+            icon: "success",
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer:1000
+          })
+
+          fetchData();
+        }
+      }).catch(error=>{
+        if(error){
+          Swal.fire({
+            title: "เกิดข้อผิดพลาด",
+            text: "ลบข้อมูลผิดพลาด โปรดลองอีกครั้ง",
+            icon: "error",
+            timer:1500
+          })
+        }
+      })
+    }
+  });
+
+ 
+
+};
+
 
 
 
@@ -232,16 +276,18 @@ const pages = computed(() => {
     <table>
       <thead class="bg-gray-600">
         <tr class="text-sm text-white ">
+          <th class="text-center">ID</th>
           <th class="text-center">ชื่อกลุ่มไลน์</th>
           <th class="text-center">Access Token</th>
-          <th class="text-center">status</th>
-          <th class="text-center">Board</th>
+          <th class="text-center">Type</th>
+          <th class="text-center">Action</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in linegroup_list.slice(pageStart, pageStart + perPage)" :key="item.id"
           :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '', 'text-sm ']">
-          <td class="text-center">
+          <td class="text-center">{{ item.id }}</td>
+          <td class="text-center font-semibold">
             {{ item.name}}
           </td>
           <td class="text-center">
@@ -249,7 +295,7 @@ const pages = computed(() => {
           </td>
           <td class="text-center">
             <span v-if=" item.is_admin == true" class="bg-red-200 py-1 px-2 font-medium text-xs rounded-lg">แอดมิน</span>
-            <span v-else class="bg-green-200 py-1 px-2 font-medium text-xs rounded-lg">กลุ่มธรรดา</span>
+            <span v-else class="bg-green-200 py-1 px-2 font-medium text-xs rounded-lg">กลุ่มทั่วไป</span>
           </td>
           <td class="text-center">
             <div class="flex flex-row justify-center items-center">
@@ -257,6 +303,10 @@ const pages = computed(() => {
                 class="bg-orange-300 text-black hover:bg-gray-600 hover:text-white mr-3 px-2 py-1 rounded-md">
                 <i class="fa-solid fa-pen"></i>
               </router-link>
+              <button @click="deleteGroupLine(item.id)"
+                class="bg-red-300 text-black hover:bg-red-600 hover:text-white mr-3 px-2 py-1 rounded-md">
+                <i class="fa-solid fa-trash"></i>
+              </button>
             </div>
           </td>
         </tr>

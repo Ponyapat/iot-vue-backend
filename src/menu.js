@@ -224,7 +224,7 @@ if (roleid) {
             menu: [
               {
                 to: "/linegroup-list",
-                label: "กลุ่มไลน์ admin",
+                label: "LINE Group",
                 icon: mdiFaceAgent,
               },
             ],
