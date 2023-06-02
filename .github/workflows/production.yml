@@ -42,11 +42,11 @@ jobs:
           gcloud auth configure-docker asia-docker.pkg.dev
 
       - name: Build Docker image
-        run: docker build . --file Dockerfile.prod  --tag asia.gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:${{ steps.bump_version.outputs.new_tag }}
+        run: docker build . --file Dockerfile.prod  --tag asia-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/asia.gcr.io/$CI_REPOSITORY_NAME_SLUG:${{ steps.bump_version.outputs.new_tag }}
 
       - name: Push image to Google Cloud Container Registry
         run: |
-          docker push asia.gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:${{ steps.bump_version.outputs.new_tag }}
+          docker push asia-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/asia.gcr.io/$CI_REPOSITORY_NAME_SLUG:${{ steps.bump_version.outputs.new_tag }}
 
       - name: Extract tag name
         id: tag_template
@@ -67,7 +67,7 @@ jobs:
           --machine-type e2-small \
           --image-family cos-stable \
           --image-project cos-cloud \
-          --container-image asia.gcr.io/farmpress-production/$CI_REPOSITORY_NAME_SLUG:${{ steps.bump_version.outputs.new_tag }} \
+          --container-image asia-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/asia.gcr.io/$CI_REPOSITORY_NAME_SLUG:${{ steps.bump_version.outputs.new_tag }} \
           --container-privileged \
           --boot-disk-size 20 \
           --boot-disk-type pd-balanced \
