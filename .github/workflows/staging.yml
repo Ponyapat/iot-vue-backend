@@ -37,7 +37,7 @@ jobs:
 
       - name: Configure Docker to use Google Cloud Platform
         run: |
-          gcloud auth configure-docker
+          gcloud auth configure-docker asia.gcr.io
 
       - name: Build, tag, and push image to Google
         env:
