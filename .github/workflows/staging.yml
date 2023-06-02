@@ -36,7 +36,7 @@ jobs:
           project_id: ${{ secrets.GCLOUD_PROJECT }}
 
       - name: 'Use gcloud CLI'
-        run: 'gcloud info'
+        run: 'gcloud auth list --filter=status:ACTIVE --format="value(account)"'
 
       - name: Configure Docker to use Google Cloud Platform
         run: |
