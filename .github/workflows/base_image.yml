@@ -2,16 +2,16 @@ name: Base Image
 
 on:
   push:
-    # branches:
-    #   - develop
-    branches-ignore:
-     - '**'
+    branches:
+      - develop
+    # branches-ignore:
+    #  - '**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: '0'
 
@@ -22,7 +22,7 @@ jobs:
       - name: Build Docker image
         env:
           IMAGE_TAG: base
-        run: docker build . --file Dockerfile.base --tag asia.gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG
+        run: docker build . --file Dockerfile.base --tag gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG
 
       - uses: 'google-github-actions/auth@v1'
         with:
@@ -43,4 +43,4 @@ jobs:
         env:
           IMAGE_TAG: base
         run: |
-          docker push asia.gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:base
+          docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:base
