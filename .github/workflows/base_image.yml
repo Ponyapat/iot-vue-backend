@@ -22,7 +22,7 @@ jobs:
       - name: Build Docker image
         env:
           IMAGE_TAG: base
-        run: docker build . --file Dockerfile.base --tag gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG
+        run: docker build . --file Dockerfile.base --tag asia.gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG
 
       - uses: 'google-github-actions/auth@v1'
         with:
@@ -43,4 +43,4 @@ jobs:
         env:
           IMAGE_TAG: base
         run: |
-          docker push gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:base
+          docker push asia.gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:base
