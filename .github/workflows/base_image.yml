@@ -22,7 +22,7 @@ jobs:
       - name: Build Docker image
         env:
           IMAGE_TAG: base
-        run: docker build . --file Dockerfile.base --tag asia-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG
+        run: docker build . --file Dockerfile.base --tag asia.gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG
 
       - uses: 'google-github-actions/auth@v1'
         with:
@@ -37,10 +37,10 @@ jobs:
         run: |
           # Set up docker to authenticate
           # via gcloud command-line tool.
-          gcloud auth configure-docker
+          gcloud auth configure-docker asia-docker.pkg.dev
 
       - name: Push image to Google Cloud Container Registry
         env:
           IMAGE_TAG: base
         run: |
-          docker push asia-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:base
+          docker push asia.gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:base

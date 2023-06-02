@@ -39,7 +39,7 @@ jobs:
         run: |
           # Set up docker to authenticate
           # via gcloud command-line tool.
-          gcloud auth configure-docker
+          gcloud auth configure-docker asia-docker.pkg.dev
 
       - name: Build Docker image
         run: docker build . --file Dockerfile.prod  --tag asia.gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:${{ steps.bump_version.outputs.new_tag }}
