@@ -35,12 +35,9 @@ jobs:
         with:
           project_id: ${{ secrets.GCLOUD_PROJECT }}
 
-      - name: 'Use gcloud CLI'
-        run: 'gcloud auth list --filter=status:ACTIVE --format="value(account)"'
-
       - name: Configure Docker to use Google Cloud Platform
         run: |
-          gcloud auth configure-docker -q
+          gcloud auth configure-docker
 
       - name: Build, tag, and push image to Google
         env:
