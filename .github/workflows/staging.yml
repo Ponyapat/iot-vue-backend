@@ -40,9 +40,7 @@ jobs:
 
       - name: Configure Docker to use Google Cloud Platform
         run: |
-          # Set up docker to authenticate
-          # via gcloud command-line tool.
-          gcloud auth configure-docker
+          gcloud auth configure-docker -q
 
       - name: Build, tag, and push image to Google
         env:
