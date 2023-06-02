@@ -43,9 +43,9 @@ jobs:
         env:
           IMAGE_TAG: beta
         run: |
-          docker build -f Dockerfile.stg -t asia.gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG .
-          docker push asia.gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG
-          echo "::set-output name=image::asia.gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG"
+          docker build -f Dockerfile.stg -t asia-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/asia.gcr.io/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG .
+          docker push asia-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/asia.gcr.io/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG
+          echo "::set-output name=image::asia-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/asia.gcr.io/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG"
 
       - name: Save DigitalOcean kubeconfig
         uses: digitalocean/action-doctl@master
@@ -67,7 +67,7 @@ jobs:
         run: |
           cd docker/staging
           kubectl --kubeconfig=$GITHUB_WORKSPACE/.kubeconfig patch serviceaccount default -p '{"imagePullSecrets": [{"name": "gcr-json-key"}]}'
-          ./kustomize edit set image IMAGE:TAG=asia.gcr.io/${{ secrets.GCLOUD_PROJECT }}/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG
+          ./kustomize edit set image IMAGE:TAG=asia-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT }}/asia.gcr.io/$CI_REPOSITORY_NAME_SLUG:$IMAGE_TAG
           ./kustomize build . | kubectl --kubeconfig=$GITHUB_WORKSPACE/.kubeconfig apply -f -
           kubectl --kubeconfig=$GITHUB_WORKSPACE/.kubeconfig rollout restart deployment/$CI_REPOSITORY_NAME_SLUG
           kubectl --kubeconfig=$GITHUB_WORKSPACE/.kubeconfig rollout status deployment/$CI_REPOSITORY_NAME_SLUG
