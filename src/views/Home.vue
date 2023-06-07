@@ -1,7 +1,7 @@
 <script setup> 
 import { computed, ref, onMounted , onBeforeMount } from "vue";
 import { useMainStore } from "@/stores/main";
-import { 
+import {  
   mdiFruitCherries,mdiShield,mdiHumanChild
 } from '@mdi/js'
 import {
