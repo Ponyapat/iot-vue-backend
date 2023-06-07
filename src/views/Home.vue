@@ -50,6 +50,8 @@ onMounted(()=>{
     router.push(`line-group?code=${code_line}`);
   }
 
+  console.log("TEST PR")
+
 
 
   
