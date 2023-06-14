@@ -55,6 +55,8 @@ const fetchData = async () => {
 
     states.warranty = response.data.data;
     warrranty_list.value = response.data.data ;
+
+    console.log(states.warranty);
   }).catch((error) => {
       console.log(error);
     });
@@ -168,6 +170,31 @@ const exportExcel =()=>{
     console.log(error);
   });
 };
+
+
+const expiredateStatus = (expire_date) =>{
+  let expiredate = new Date(expire_date);
+  let now = new Date();
+  let timeDiff = expiredate.getTime() - now.getTime();
+  console.log(expiredate);
+
+  let days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+  let hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  let minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+  let seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+  console.log(days);
+  if(days >= 0){
+    if(hours > 0 && minutes > 0){
+      return 'ยังไม่หมดอายุ'
+    }
+  }else{
+    return 'หมดอายุ'
+  }
+
+console.log(`Time remaining: ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`);
+
+};
 </script>
 
 <template>
@@ -206,6 +233,7 @@ const exportExcel =()=>{
         <th class="text-center">เบอร์โทรศัพท์มือถือ</th>
         <th class="text-center">Email</th>
         <th class="text-center">วันที่หมดประกันสินค้า</th>
+        <th class="text-center">สถานะประกัน</th>
         <th class="text-center" >Action</th>
       </tr>
     </thead>
@@ -234,6 +262,10 @@ const exportExcel =()=>{
         </td>
         <td class="text-center">
           <span v-if="item.expire_date">{{moment.utc(item.expire_date).format('DD/MM/YYYY')}}</span>
+          <span v-else>-</span>
+        </td>
+        <td class="text-center">
+          <span v-if="item.expire_date" class="text-black font-medium" :class="expiredateStatus(item.expire_date) == 'ยังไม่หมดอายุ'?'bg-green-300 py-1 px-2 rounded-lg':'bg-red-300 py-1 px-2 rounded-lg'">{{ expiredateStatus(item.expire_date) }}</span>
           <span v-else>-</span>
         </td>
         <td class="text-center">
