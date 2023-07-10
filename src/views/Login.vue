@@ -84,7 +84,7 @@ const submit = () => {
       </div>
 
       <div class="flex justify-center pb-2">
-        <div class="text-lg"><b>FarmWorld Login</b></div>
+        <div class="text-lg"><b>Axons Login</b></div>
       </div>
 
       <div
