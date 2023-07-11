@@ -12,34 +12,13 @@ const mainStore = useMainStore()
 
 const userName = computed(() => mainStore.userName)
 
-const userSwitchVal = ref([])
+const userSwitchVal = ref([]);
 </script>
 
 <template>
   <card-component rounded="">
     <level type="justify-around lg:justify-center">
-      <user-avatar class="lg:mx-12" />
-      <div class="space-y-3 text-center md:text-left lg:mx-12">
-        <div class="flex justify-center md:block">
-          <!-- <check-radio-picker
-            v-model="userSwitchVal"
-            name="sample-switch"
-            type="switch"
-            :options="{ one: 'Notifications' }"
-          /> -->
-        </div>
-        <h1 class="text-2xl">
-          <b>{{ userName }}</b>!
-        </h1>
-        <p>Last login <b>12 mins ago</b></p>
-        <div class="flex justify-center md:block">
-          <pill
-            text="Verified"
-            type="success"
-            :icon="mdiCheckDecagram"
-          />
-        </div>
-      </div>
+      
     </level>
   </card-component>
 </template>

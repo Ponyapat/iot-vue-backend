@@ -47,7 +47,7 @@ const menuClick = (event, item) => {
     :class="[ asideStyle, isAsideMobileExpanded ? 'left-0' : '-left-60', isAsideLgActive ? 'block' : 'lg:hidden xl:block' ]"
   >
     <div
-      class="flex flex-row w-full flex-1 h-14 items-center dark:bg-transparent"
+      class="flex flex-row w-full h-24 justify-center items-center dark:bg-transparent"
       :class="[ asideBrandStyle ]"
     >
       <nav-bar-item
@@ -62,13 +62,8 @@ const menuClick = (event, item) => {
           size="24"
         />
       </nav-bar-item>
-      <img
-      src="/logo.png"
-      class="h-12 ml-10"
-       >
-      <div class="flex-1 px-3">
-        <span>Farm</span><b class="font-black">World</b>
-      </div>
+      <img src="../assets/icons/axons_logo.svg" class="w-14 h-14">
+      
     </div>
     <div>
       <template v-for="(menuGroup, index) in menu">

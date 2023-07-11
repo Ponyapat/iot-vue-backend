@@ -62,14 +62,9 @@ const submit = () => {
     >
       <div class="flex justify-center pb-2">
         <div>
-          <img src="/logo.png" class="h-20" />
+          <img src="../assets/icons/axons_logo_light.svg" class="h-20 w-20" />
         </div>
       </div>
-
-      <div class="flex justify-center pb-2">
-        <div class="text-lg"><b>FarmWorld Register</b></div>
-      </div>
-
       <field label="Username" help="Please enter your login">
         <control
           :icon="mdiAccount"

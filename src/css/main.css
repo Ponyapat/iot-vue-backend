@@ -8,3 +8,12 @@
 @import "_scrollbars.css";
 @import "_progress.css";
 @import "_table.css";
+
+
+.font-mali { 
+    font-family: 'Mali', cursive;
+}
+
+.font-eng{
+    
+}

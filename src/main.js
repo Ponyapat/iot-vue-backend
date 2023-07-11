@@ -64,7 +64,7 @@ if ((!localStorage[darkModeKey] && window.matchMedia('(prefers-color-scheme: dar
 }
 
 /* Default title tag */
-const defaultDocumentTitle = 'FarmWorld'
+const defaultDocumentTitle = 'AxonsTech'
 
 /* Collapse mobile aside menu on route change */
 router.beforeEach(to => {
