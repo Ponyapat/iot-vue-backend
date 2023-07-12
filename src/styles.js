@@ -1,7 +1,7 @@
 const bodyBase = 'text-base dark:bg-gray-800 dark:text-gray-100'
 
 export const basic = {
-  body: `bg-gray-50 ${bodyBase}`,
+  body: `bg-blue-50 ${bodyBase}`,
   lightBorder: 'border-gray-100',
   lightBg: 'bg-gray-100',
   aside: 'bg-gray-800 aside-scrollbars-gray',

@@ -335,8 +335,8 @@ const fetchData =()=>{
         :number="states.user_platform"
         label="ผู้ใช้งานแพลตฟอร์ม"
       />
-      <div class="bg-white p-4 rounded-lg shadow-sm">
-        <h3 class="text-lg leading-tight text-gray-500 dark:text-gray-400 mb-2">Board</h3>
+      <div class="bg-white dark:bg-gray-900/70 p-4 rounded-lg shadow-sm">
+        <h3 class="text-lg leading-tight text-black dark:text-white mb-2">Board</h3>
        <div class="flex flex-col">
         <span class="text-sm mb-1">ออนไลน์ {{ board_online }}</span>
         <div class="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
@@ -357,14 +357,14 @@ const fetchData =()=>{
       />
     </div>
     <div class="grid grid-cols-1 md:grid-cols-6 gap-4 shadow-sm">
-      <div class="col-span-1 md:col-span-2 w-full h-[450px] bg-white shadow-lg rounded-lg p-10">
-        <h1 class="text-lg leading-tight text-gray-700 font-bold mb-2">พืชพรรณ</h1>
+      <div class="col-span-1 md:col-span-2 w-full h-[450px] bg-white dark:bg-gray-900/70 shadow-lg rounded-lg p-10">
+        <h1 class="text-lg leading-tight text-gray-700 font-bold mb-2 dark:text-white">พืชพรรณ</h1>
         <div>
           <canvas id="chart1" ></canvas>
         </div>
       </div>
-      <div class="col-span-1 md:col-span-4 w-full h-[450px] bg-white shadow-lg rounded-lg p-10">
-        <h1 class="text-lg leading-tight text-gray-700 font-bold  mb-2">จำนวนลูกค้า(ฝ่ายขาย)</h1>
+      <div class="col-span-1 md:col-span-4 w-full h-[450px] bg-white dark:bg-gray-900/70 shadow-lg rounded-lg p-10">
+        <h1 class="text-lg leading-tight text-gray-700 font-bold  mb-2 dark:text-white">จำนวนลูกค้า(ฝ่ายขาย)</h1>
         <span class=" ml-4 text-sm">(คน)</span>
         <div>
           <canvas id="chart2" style="height: 350px ;"></canvas>
