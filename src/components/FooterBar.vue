@@ -19,8 +19,7 @@ const isFooterBarVisible = computed(() => !mainStore.isFullScreen);
     <level>
       <div class="text-center md:text-left">
         <b><a href="https://justboil.me/" target="_blank"
-            >© Copyright</a> {{ year }}, All Rights Reserved. | Powered by
-            Farmthailand
+            >© Copyright</a> {{ year }}, All Rights Reserved. | Powered by Axons Tech
         </b >
         <!-- <a
           href="https://justboil.me/tailwind-admin-templates/vue-dashboard/"
