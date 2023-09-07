@@ -9,6 +9,8 @@ import CheckRadioPicker from "@/components/CheckRadioPicker.vue";
 import { mdiTrashCan, mdiGreasePencil } from "@mdi/js";
 import Swal from "sweetalert2";
 
+
+
 const mainStore = useMainStore();
 
 const router = useRouter();
@@ -194,17 +196,22 @@ const statusText = (value) => {
   }
 };
 
+
+
 </script>
+
+
 <template>
-  <div>
-    <table>
+  <div  >
+    <div class="overflow-x-auto	max-w-full pb-4">
+      <table class="table-auto w-full ">
       <thead class="bg-gray-700 text-white">
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Role</th>
-          <th>Status</th>
+        <tr >
+          <th class="pl-4 text-sm">#</th>
+          <th class="text-sm">Name</th>
+          <th class="text-sm">Email</th>
+          <th class="text-sm">Role</th>
+          <th class="text-sm">Status</th>
           <th></th>
         </tr>
       </thead>
@@ -212,21 +219,21 @@ const statusText = (value) => {
         <tr
           v-for="(user, index) in states.users"
           :key="index"
-          :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']"
+          class="lg:table-row"
         >
-          <td data-label="#">
+          <td class="pl-4 text-xs md:text-base" data-label="#">
             {{ index + 1 }}
           </td>
-          <td class="p-3" data-label="Name">
+          <td class="p-3 pl-4 text-xs md:text-base whitespace-nowrap" data-label="Name">
             {{ user.name }}
           </td>
-          <td class="p-3" data-label="E-mail">
+          <td class="p-3 text-xs md:text-base" data-label="E-mail">
             {{ user.email }}
           </td>
-          <td class="p-3 text-gray-500" data-label="Role">
+          <td class="p-3 text-xs md:text-base text-gray-500 whitespace-nowrap" data-label="Role">
             {{ user.role ? user.role.name : "" }}
           </td>
-          <td class="p-3" data-label="Status">
+          <td class="flex p-2 justify-center" data-label="Status">
             <check-radio-picker
               v-model="user.isActive"
               name="sample-switch"
@@ -234,7 +241,8 @@ const statusText = (value) => {
               @click.prevent="onChangeActive(user.id, user.isActive)"
             />
           </td>
-          <td class="actions-cell">
+          <td class="actions-cell pr-4 ">
+            
             <jb-buttons type="justify-start lg:justify-end" no-wrap>
               <jb-button
                 color="info"
@@ -253,7 +261,9 @@ const statusText = (value) => {
         </tr>
       </tbody>
     </table>
-    <nav :class="lightBorderStyle" aria-label="Page navigation example" class="py-2 mx-3 lg:mx-6 border-t border-b ">
+    </div> 
+   
+    <nav :class="lightBorderStyle" aria-label="Page navigation example" class="flex flex-col lg:flex-row justify-center items-center py-3  mx-3 lg:mx-6 border-t border-b ">
     <ul class="inline-flex items-center -space-x-px">
       <li @click="firstPage">
         <a href="#"
@@ -302,6 +312,8 @@ const statusText = (value) => {
   </nav>
   </div>
 </template>
+
+
 <style scoped>
 
 li.active,li.active:hover {

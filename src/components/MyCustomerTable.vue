@@ -293,7 +293,7 @@ const firstPage = () => {
   });
 };
 const pages = computed(() => {
-  let numShown = 10; // This sets the number of page tabs
+  let numShown = 3; // This sets the number of page tabs
   let pagelist = pagesList.value;
   numShown = Math.min(numShown, pagelist.length);
 
@@ -340,7 +340,8 @@ const emptySearch = computed(()=>{
 
 <template>
   <div class="hidden">{{ emptySearch }} </div>
-  <div class="flex flex-row">
+ <div class="">
+  <div class="flex flex-row ">
     <div class="w-1/4 ml-4 mr-[40px] mt-10">
       <form class="flex items-center">
         <label for="simple-search" class="sr-only">Search</label>
@@ -354,11 +355,11 @@ const emptySearch = computed(()=>{
             </svg>
           </div>
           <input type="text" id="simple-search" v-model="searchName"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="bg-gray-50 w-20 sm:w-fit lg:w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="อีเมล หรือ เบอร์โทรศัพท์มือถือ ">
         </div>
         <button ref="myButton" type="button" @click="searchText"
-          class="p-2.5 ml-1 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          class="p-2.5 ml-2 md:ml-8 lg:ml-4 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -366,15 +367,17 @@ const emptySearch = computed(()=>{
           <span class="sr-only">Search</span>
         </button>
       </form>
-      <small class="opacity-60">ค้นหาด้วย อีเมล หรือ เบอร์โทรศัพท์มือถือ </small>
+      <small class="hidden lg:flex opacity-60">ค้นหาด้วย อีเมล หรือ เบอร์โทรศัพท์มือถือ </small>
     </div>
   </div>
-  <div class="m-4 font-medium">จำนวนผู้ใช้งานทั้งหมด  : {{filter_result}}</div>
-  <div class="relative mt-4">
+  
+  <div class="m-4 font-medium text-sm md:text-base">จำนวนผู้ใช้งานทั้งหมด : {{filter_result}}</div>
+
+  <div class="relative mt-4 overflow-x-auto	max-w-full m-0 pb-4">
     <!-- <div class="ml-4 my-4 font-bold">จำนวนลูกค้าทั้งหมด : <span class="font-medium">{{ customers_list.length }} คน</span></div> -->
     <table class="w-full text-sm text-left text-black dark:text-white">
       <thead class="text-base text-white uppercase bg-gray-600 dark:bg-gray-700 dark:text-white">
-        <tr>
+        <tr class="whitespace-nowrap text-xs md:text-base">
           <th scope="col" class="text-center py-3 w-[100px]">ID</th>
           <th scope="col" class="text-center py-3 w-[200px]">ชื่อลูกค้า</th>
           <th scope="col" class="text-center py-3 w-[200px]">อีเมล</th>
@@ -386,37 +389,38 @@ const emptySearch = computed(()=>{
       </thead>
       <tbody>
         <tr v-for="(item, index) in states.customers" :key="item.id"
-          :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']">
-          <td class="text-center">{{ item.id }}</td>
-          <td class="text-center">
+          >
+          <td class="text-center text-xs md:text-sm px-4 lg:px-0">{{ item.id }}</td>
+          <td class="text-center text-xs md:text-sm px-2 lg:px-0 whitespace-nowrap">
             <div v-if="item.first_name == null || ''">-</div>
             <div v-else>{{ item.first_name }} {{ item.last_name }}</div>
           </td>
-          <td class="text-center">
+          <td class="text-center text-xs md:text-sm px-2 lg:px-0">
             <div v-if="item.email">{{ item.email }}</div>
             <div v-else>-</div>
           </td>
-          <td class="text-center">{{ item.username }}</td>
-          <td class="text-center">
+          <td class="text-center text-xs md:text-sm px-2 lg:px-0">{{ item.username }}</td>
+          <td class="text-center text-xs md:text-sm px-2 lg:px-0">
             <div v-if="item.user_details.address == null || ''">-</div>
             <div v-else>{{ item.user_details.address }}</div>
           </td>
-          <td class="text-center">
+          <td class="text-center text-xs md:text-sm px-2 lg:px-0">
             <div v-if="item.createdAt == null">-</div>
             <div v-else>{{ moment(new Date(item.createdAt)).format('DD/MM/YYYY') }}</div>
           </td>
-          <td class="text-center w-[200px]">
+          <td class="text-center w-[200px] text-xs md:text-sm px-2 lg:px-0 whitespace-nowrap">
             <div v-if="item.activated == 0" class="text-orange-500 rounded-2xl py-1"><i
                 class="fa-solid fa-exclamation bg-orange-200 px-2.5 py-1 rounded-full mr-1"></i>ยังไม่ได้ยืนยันตัวตน
             </div>
-            <div v-if="item.activated == 1" class="text-green-500 rounded-2xl py-1"><i
+            <div v-if="item.activated == 1" class="text-green-500 rounded-2xl px-2 lg:px-0 py-1 text-xs md:text-sm"><i
                 class="fa-solid fa-check text-green-700 bg-green-200 p-1 rounded-full mr-1"></i>ยืนยันตัวตนแล้ว</div>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <nav :class="lightBorderStyle" aria-label="Page navigation example" class="py-2 mx-3 lg:mx-6 border-t border-b ">
+ </div>
+  <nav :class="lightBorderStyle" aria-label="Page navigation example" class="flex flex-col lg:flex-row justify-center items-center py-2 mx-3 lg:mx-6 border-t border-b ">
     <ul class="inline-flex items-center -space-x-px">
       <li @click="firstPage">
         <a href="#"

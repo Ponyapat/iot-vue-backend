@@ -38,7 +38,7 @@ tbody tr:nth-child(odd) {
 
 td:before {
   content: attr(data-label);
-  @apply font-semibold pr-3 text-left lg:hidden;
+  @apply font-semibold text-left lg:hidden;
 }
 
 td.checkbox-cell, th.checkbox-cell {
@@ -56,6 +56,10 @@ td.image-cell {
 
 td.image-cell:before, td.actions-cell:before {
   @apply hidden;
+}
+
+td.actions-cell {
+  @apply justify-end
 }
 
 td.image-cell .image {

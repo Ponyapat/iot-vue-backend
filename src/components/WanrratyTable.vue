@@ -223,7 +223,7 @@ const filter_status = (event) => {
 </script>
 
 <template>
-  <div class="w-1/2 m-4 mt-10">
+  <div class="w-1/2 m-4 ">
     <form>
       <!-- <div class="flex flex-row">
         <div>
@@ -254,10 +254,10 @@ const filter_status = (event) => {
       </div>
       </div> -->
       <div class="flex flex-row">
-        <div class="w-1/2 ml-4 mr-[40px] mt-10">
+        <div class=" mr-[40px] mt-10">
           <div class="relative">
             <input v-model="searchName" id="search_input" type="text"
-              class="block w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              class="block w-[90px] md:w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="ค้นหา serial,ชื่อ, เบอร์โทรศัพท์มือถือ หรือ email">
 
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -268,14 +268,14 @@ const filter_status = (event) => {
               </svg>
             </div>
           </div>
-          <small class="opacity-60">ค้นหาด้วย serial ,ชื่อ, เบอร์โทรศัพท์มือถือ หรือ email</small>
+          <small class="opacity-60 hidden lg:flex">ค้นหาด้วย serial ,ชื่อ, เบอร์โทรศัพท์มือถือ หรือ email</small>
         </div>
         <div>
           <div class="mt-5">
             <label for="categories"
               class="block text-sm font-medium text-gray-900 dark:text-white opacity-70">สถานะประกัน</label>
             <select id="categories" v-model="states.select_status" @change="filter_status($event)"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-22 md:w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               <option value="all">ทั้งหมด</option>
               <option value="true">ยังไม่หมดอายุ</option>
               <option value="false">หมดอายุ</option>
@@ -290,18 +290,20 @@ const filter_status = (event) => {
   </div>
   <div class="ml-4 mb-4 flex flex-row justify-between">
     <div>
-      <span class="text-base font-medium">จำนวนทั้งหมด : {{ warranty.length }}</span>
+      <span class="text-xs md:text-base font-medium">จำนวนทั้งหมด : {{ warranty.length }}</span>
     </div>
     <div class="mb-4 mr-4">
       <button type="button" @click="exportExcel"
-        class="bg-orange-300 text-base font-medium px-4 py-1 rounded-lg text-black"><i class="fa-solid fa-file"></i>
+        class="bg-orange-300 text-sm md:text-base font-medium px-4 py-1 rounded-lg text-black"><i class="fa-solid fa-file"></i>
         Export Excel</button>
     </div>
   </div>
-  <table>
+
+  <div class="overflow-x-auto	max-w-full pb-4">
+    <table class="w-full">
     <thead class="bg-gray-600">
-      <tr class="text-sm text-white ">
-        <th class="text-center">Serial Number</th>
+      <tr class="text-sm text-white whitespace-nowrap ">
+        <th class="text-center py-1">Serial Number</th>
         <th class="text-center">ชื่อ-นามสกุล</th>
         <th class="text-center">เบอร์โทรศัพท์มือถือ</th>
         <th class="text-center">Email</th>
@@ -318,24 +320,24 @@ const filter_status = (event) => {
       > -->
       <tr v-for="(item, index) in warranty.slice(pageStart, pageStart + perPage)" :key="item.id"
         :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '', 'text-sm ']">
-        <td class="text-center font-bold">
+        <td class="text-center font-bold text-xs md:text-base px-4 lg:px-0">
           {{ item.serial }}
         </td>
-        <td class="text-center">
+        <td class="text-center text-xs md:text-base whitespace-nowrap px-3 lg:px-0">
           {{ item.firstname }} {{ item.lastname }}
         </td>
-        <td class="text-center">
+        <td class="text-center text-xs md:text-base">
           {{ item.mobile }}
         </td>
-        <td class="text-center">
+        <td class="text-center text-xs md:text-base px-4 lg:px-0">
           {{ item.email }}
         </td>
-        <td class="text-center">
+        <td class="text-center text-xs md:text-base ">
           <span v-if="item.expire_date">{{ moment.utc(item.expire_date).format('DD/MM/YYYY') }}</span>
           <span v-else>-</span>
         </td>
-        <td class="text-center">
-          <span v-if="item.expire_date" class="text-black font-medium"
+        <td class="text-center text-xs md:text-base px-4 lg:px-0">
+          <span v-if="item.expire_date" class="text-black font-medium whitespace-nowrap"
             :class="expiredateStatus(item.expire_date, 'show') == 'ยังไม่หมดอายุ' ? 'bg-green-300 py-1 px-2 rounded-lg' : 'bg-red-300 py-1 px-2 rounded-lg'">{{
               expiredateStatus(item.expire_date) }}</span>
           <span v-else>-</span>
@@ -362,7 +364,8 @@ const filter_status = (event) => {
       </tr>
     </tbody>
   </table>
-  <nav aria-label="Page navigation example" class="py-2 mx-3 lg:mx-6 border-t border-b ">
+  </div>
+  <nav aria-label="Page navigation example" class="flex flex-col md:flex-row justify-center items-center py-2 mx-3 lg:mx-6 border-t border-b ">
     <ul class="inline-flex items-center -space-x-px">
       <li v-bind:class="{ disabled: currPage === 1 }" @click.prevent="setPage(1)">
         <a href="#"

@@ -151,10 +151,11 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <div>
-    <table>
+  <div class="h-fit">
+    <div class="overflow-x-auto	min-w-full pb-4">
+      <table class="table-auto w-full ">
       <thead class="bg-gray-700 text-white">
-        <tr>
+        <tr class="text-sm md:text-base">
           <th>ID</th>
           <th>NAME</th>
           <th></th>
@@ -164,12 +165,11 @@ onBeforeMount(() => {
         <tr
           v-for="(role, index) in states.roles"
           :key="index"
-          :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']"
         >
-          <td class="p-3" data-label="ID">{{ role.id }}</td>
-          <td class="p-3" data-label="Name">{{ role.name }}</td>
-          <td class="actions-cell">
-            <jb-buttons type="justify-start lg:justify-end" no-wrap>
+          <td class="py-3 px-2 text-xs md:text-base text-center " data-label="ID">{{ role.id }}</td>
+          <td class="py-3 px-2 text-xs md:text-base whitespace-nowrap" data-label="Name">{{ role.name }}</td>
+          <td class="actions-cell pr-4 md:pr-5">
+            <jb-buttons type="justify-end" no-wrap>
               <jb-button
                 color="warning"
                 :icon="mdiAccountLock"
@@ -193,7 +193,10 @@ onBeforeMount(() => {
         </tr>
       </tbody>
     </table>
-    <nav :class="lightBorderStyle" aria-label="Page navigation example" class="py-2 mx-3 lg:mx-6 border-t border-b ">
+    </div>
+
+   
+ <nav :class="lightBorderStyle" aria-label="Page navigation example" class="flex flex-col lg:flex-row justify-center items-center py-2 mx-3 lg:mx-6 border-t border-b ">
     <ul class="inline-flex items-center -space-x-px">
       <li @click="firstPage">
         <a href="#"
@@ -240,6 +243,7 @@ onBeforeMount(() => {
     </ul>
     <small class="ml-4 text-sm font-medium">Page {{ currentPageHuman }} of {{ numPages }}</small>
   </nav>
+  
   </div>
 </template>
 <style scoped>

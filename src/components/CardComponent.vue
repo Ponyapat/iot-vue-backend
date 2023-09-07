@@ -19,7 +19,7 @@ const props = defineProps({
   },
   rounded: {
     type: String,
-    default: "md:rounded",
+    default: "rounded",
   },
   hasTable: Boolean,
   empty: Boolean,
@@ -67,21 +67,10 @@ const submit = (e) => {
 </script>
 
 <template>
-  <component
-    :is="is"
-    :class="componentClass"
-    class="bg-white border dark:border-gray-800"
-    @submit="submit"
-  >
-    <header
-      v-if="title"
-      :class="lightBorderStyle"
-      class="flex items-stretch border-b dark:border-gray-800"
-    >
-      <p
-        class="flex items-center py-3 grow font-bold"
-        :class="[icon ? 'px-4' : 'px-6']"
-      >
+  <section class=" pb-5 lg:pb-10 lg:p-0 m-4 lg:m-0 ">
+    <component :is="is" :class="componentClass" class="bg-white border dark:border-gray-800" @submit="submit">
+    <header v-if="title" :class="lightBorderStyle" class="flex items-stretch pb-1 border-b dark:border-gray-800">
+      <p class="flex items-center py-3 grow font-bold whitespace-nowrap text-xs md:text-base" :class="[icon ? 'px-4' : 'px-6']">
         <icon v-if="icon" :path="icon" class="mr-3" />
 
         {{ title }}
@@ -96,12 +85,10 @@ const submit = (e) => {
         <icon :path="computedHeaderIcon" />
       </a> -->
 
-      <router-link v-if="addlink != null" :to="addlink">
-        <button
-          class="bg-green-700 hover:bg-green-900 text-white font-bold m-2 py-2 px-4 rounded"
-        >
-        <i class="fa-solid fa-plus"></i>
-          เพิ่ม ​{{title}}
+      <router-link v-if="addlink != null" :to="addlink" class="flex ">
+        <button class=" bg-green-700 hover:bg-green-900 text-white font-bold m-2 py-2 px-4 rounded-lg text-xs md:text-base">
+          <i class="fa-solid fa-plus text-xs md:text-base"></i>
+          เพิ่ม ​{{ title }}
         </button>
       </router-link>
 
@@ -115,14 +102,13 @@ const submit = (e) => {
         <icon :path="computedHeaderIcon" />
       </a> -->
     </header>
-    <div
-      v-if="empty"
-      class="text-center py-24 text-gray-500 dark:text-gray-400"
-    >
+
+    <div v-if="empty" class="text-center py-24 text-gray-500 dark:text-gray-400">
       <p>Nothing's here…</p>
     </div>
     <div v-else :class="{ 'p-6': !hasTable }">
       <slot />
     </div>
   </component>
+  </section>
 </template>

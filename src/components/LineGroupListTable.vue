@@ -230,72 +230,81 @@ const deleteGroupLine =(id)=>{
 <template>
   <div v-if="showModal == true" class="fixed inset-0 z-40 bg-opacity-50 transition-opacity"
     style="background: rgba(0, 0, 0, 0.2);"></div>
+
+    
   <div class="relative">
-    <div class="flex flex-row justify-between">
-      <div class="flex flex-row w-full">
-        <div class="w-[400px] ml-4 mr-[40px] mt-10">
-        <div class="relative">
+    <div class="flex flex-row w-full justify-between">
+    
+        <div class="relative pt-10 px-4">
           <input v-model="searchName" id="search_input" type="text"
             class="block w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="ค้นหาด้วย ชื่อกลุ่มไลน์, access token">
-          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor"
+          <div class="absolute inset-y-0 left-4 flex top-8 sm:top-10 lg:top-4 items-center pl-3 pointer-events-none">
+            <svg aria-hidden="true" class="w-5 h-5 items-center text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor"
               viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
           </div>
-        </div>
-        <small class="opacity-60">ค้นหาด้วย ชื่อกลุ่มไลน์, access token</small>
+          
+        <small class="hidden lg:flex opacity-60">ค้นหาด้วย ชื่อกลุ่มไลน์, access token</small>
       </div>
-      <div class="flex flex-row gap-2 ml-5">
+
+      <div class="flex flex-row gap-2 px-4">
         <div class="mt-5">
           <label for="categories"
-            class="block text-sm font-medium text-gray-800 dark:text-white opacity-70">ประเภทกลุ่มไลน์</label>
+            class="block text-sm whitespace-nowrap font-medium text-gray-800 dark:text-white opacity-70">ประเภทกลุ่มไลน์</label>
           <select id="categories" v-model="states.select_status" @change="filter_status($event)"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block sm:w-32 lg:w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <option value="all">ทั้งหมด</option>
             <option :value="false">กลุ่มทั่วไป</option>
             <option :value="true">แอดมิน</option>
           </select>
         </div>
       </div>
-    </div>
-    
-    <div class="flex flex-row justify-end w-full items-center mr-4">
-        <div class="mt-3">
+
+      <div class="flex flex-row mr-4 whitespace-nowrap">
+        <div class="flex items-end lg:items-center mt-3 px-4 w-full">
           <a :href="url"
-            class="flex flex-row items-center justify-center  text-base font-medium rounded-lg border-2 border-gray-300 bg-white hover:bg-green-50  text-black dark:text-black py-2 px-4 ">
-            <img src="../assets/images/line_button.png" alt="logo line" class="w-6 h-6 mr-2">สร้างกลุ่มไลน์</a>
+            class="flex justify-center items-center text-xs md:text-sm lg:text-base font-medium rounded-lg border-2 border-gray-300 bg-white hover:bg-green-50  text-black dark:text-black py-2 px-2 ">
+            <img src="../assets/images/line_button.png" alt="logo line" class="max-w-fit h-6 mr-0 sm:mr-2">
+          <p class="hidden sm:flex">
+            สร้างกลุ่มไลน์
+          </p>
+        </a>
         </div>
       </div>
+    
     </div>
-    <div class="ml-4 mb-4">
-      <span class="text-base font-medium">จำนวนทั้งหมด : {{ linegroup_list.length }}</span>
+
+    <div class="ml-4 my-4">
+      <span class="text-sm lg:text-base font-medium">จำนวนทั้งหมด : {{ linegroup_list.length }}</span>
     </div>
-    <table>
+    
+    <div class="overflow-x-auto	max-w-full pb-4">
+      <table class="w-full"> 
       <thead class="bg-gray-600">
-        <tr class="text-sm text-white ">
-          <th class="text-center">ID</th>
-          <th class="text-center">ชื่อกลุ่มไลน์</th>
-          <th class="text-center">Access Token</th>
-          <th class="text-center">Type</th>
-          <th class="text-center">Action</th>
+        <tr class="text-xs md:text-sm text-white ">
+          <th class="text-center px-4">ID</th>
+          <th class="text-center px-4 whitespace-nowrap">ชื่อกลุ่มไลน์</th>
+          <th class="text-center px-4">Access Token</th>
+          <th class="text-center px-4">Type</th>
+          <th class="text-center px-4">Action</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in linegroup_list.slice(pageStart, pageStart + perPage)" :key="item.id"
-          :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '', 'text-sm ']">
-          <td class="text-center">{{ item.id }}</td>
-          <td class="text-center font-semibold">
+          :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '', 'text-xs md:text-sm']">
+          <td class="text-center py-2">{{ item.id }}</td>
+          <td class="text-center font-semibold whitespace-nowrap px-2 md:px-0">
             {{ item.name}}
           </td>
-          <td class="text-center">
+          <td class="text-center px-2 md:px-0 ">
             {{ item.access_token}}
           </td>
-          <td class="text-center">
+          <td class="text-center whitespace-nowrap px-4 lg:px-0">
             <span v-if=" item.is_admin == true" class="bg-red-200 py-1 px-2 font-medium text-xs rounded-lg">แอดมิน</span>
-            <span v-else class="bg-green-200 py-1 px-2 font-medium text-xs rounded-lg">กลุ่มทั่วไป</span>
+            <span v-else class="bg-green-200 py-1 px-2 font-medium  rounded-lg">กลุ่มทั่วไป</span>
           </td>
           <td class="text-center">
             <div class="flex flex-row justify-center items-center">
@@ -312,8 +321,9 @@ const deleteGroupLine =(id)=>{
         </tr>
       </tbody>
     </table>
+    </div>
     <!-- Pagination -->
-    <nav aria-label="Page navigation example" class="py-2 mx-3 lg:mx-6 border-t border-b ">
+    <nav aria-label="Page navigation example" class="flex flex-col lg:flex-row justify-center items-center py-2 mx-3 lg:mx-6 border-t border-b ">
       <ul class="inline-flex items-center -space-x-px">
         <li v-bind:class="{ disabled: currPage === 1 }" @click.prevent="setPage(1)">
           <a href="#"

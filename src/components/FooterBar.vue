@@ -12,25 +12,18 @@ const isFooterBarVisible = computed(() => !mainStore.isFullScreen);
 </script>
 
 <template>
-  <footer
-    v-show="isFooterBarVisible"
-    class="bg-white py-2 px-6 dark:bg-gray-900/70"
-  >
+  <footer v-show="isFooterBarVisible"
+    class="flex  justify-center w-full relative bottom-0 bg-white py-2 px-6 dark:bg-gray-900/70 ">
     <level>
-      <div class="text-center md:text-left">
-        <b><a href="https://justboil.me/" target="_blank"
-            >© Copyright</a> {{ year }}, All Rights Reserved. | Powered by Axons Tech
-        </b >
+      <div class="text-center text-sm md:text-base ">
+        <b><a href="https://justboil.me/" target="_blank">© Copyright</a> {{ year }}, All Rights Reserved. | Powered by
+          Axons Tech
+        </b>
         <!-- <a
           href="https://justboil.me/tailwind-admin-templates/vue-dashboard/"
           target="_blank"
           class="text-blue-600"
         >Premium version</a> -->
-      </div>
-      <div class="md:py-2">
-        <!-- <a href="https://justboil.me">
-          <jb-logo class="w-auto h-8 md:h-6" />
-        </a> -->
       </div>
     </level>
   </footer>

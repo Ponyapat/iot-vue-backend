@@ -283,13 +283,13 @@ const dynamicSelect = computed(()=>{
 </script>
 
 <template>
-  <div class="flex flex-row">
-    <div class="w-1/4 ml-4 mr-[40px] mt-10" >
-        <div class="relative">
+  <div class="w-full flex flex-col md:flex-row">
+    <div class=" flex flex-row md:flex-col w-full  justify-center ml-0 md:ml-4 mr-[40px] mt-5 sm:mt-10 " >
+        <div class="relative w-full px-4">
           <input v-model="searchName" id="search_input" type="text"
-            class="block w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="block w-full  pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="ค้นหา ชื่อลูกค้า, ชื่อผู้ติดต่อ , เบอร์โทรศัพท์มือถือ">
-          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <div class="absolute w-full inset-y-0 left-0 flex items-center pl-6 md:pl-5 pointer-events-none">
             <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor"
               viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -297,15 +297,15 @@ const dynamicSelect = computed(()=>{
             </svg>
           </div>
         </div>
-        <small class="opacity-60">ค้นหาด้วย ชื่อลูกค้า, ชื่อผู้ติดต่อ , เบอร์โทรศัพท์มือถือ </small>
+        <small class="hidden lg:flex opacity-60 ">ค้นหาด้วย ชื่อลูกค้า, ชื่อผู้ติดต่อ , เบอร์โทรศัพท์มือถือ </small>
     </div>
 
-    <div class="flex flex-row gap-2 ml-5">
+    <div class="flex flex-col  md:flex-row gap-2 sm:gap-6 lg:gap-10 mx-5">
 
-    <div class="mt-5">
+    <div class="mt-5 flex flex-col items-center">
       <label for="categories" class="block text-sm font-medium text-gray-900 dark:text-white opacity-70">ประเภท</label>
       <select id="categories" @change="filter_type($event)"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-28 lg:w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         <option value="all" >ทั้งหมด</option>
         <option v-for="(item,index) of type_filter" :key="index" :value="item.type">{{item.type}}</option>
       </select>
@@ -318,44 +318,46 @@ const dynamicSelect = computed(()=>{
         <option v-for="(item,index) of product_filter" :key="index" :value="item.product">{{item.product}}</option>
       </select>
     </div> -->
-    <div class="mt-5">
+    <div class="sm:mt-5 flex flex-col items-center">
       <label for="categories" class="block text-sm font-medium text-gray-900 dark:text-white opacity-70">ช่องทาง</label>
       <select id="categories" @change="filter_contactby($event)"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-28 lg:w-[200px]  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         <option value="all" >ทั้งหมด</option>
         <option v-for="(item,index) of contactby_filter" :key="index" :value="item.data">{{item.data}}</option>
       </select>
     </div>
-    <div class="mt-5">
+    <div class="sm:mt-5 flex flex-col items-center">
       <label for="categories" class="block text-sm font-medium text-gray-900 dark:text-white opacity-70">สถานะ</label>
       <select id="categories" @change="filter_status($event)"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-28 lg:w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         <option value="all" >ทั้งหมด</option>
         <option v-for="(item,index) of status_filter" :key="index" :value="item.status">{{item.status}}</option>
       </select>
     </div>
   </div>
   </div>
+
+
   <div class="m-4">จำนวนทั้งหมด  : {{customers_list.length}}</div>
   <div class="relative mt-4">
     <table class="w-full text-sm text-left text-black dark:text-white">
       <thead class="text-base text-white uppercase bg-gray-600 dark:bg-gray-700 dark:text-white">
         <tr>
-          <th scope="col" class="text-center py-3 w-[100px]">ID</th>
-          <th scope="col" class=" py-3 w-[200px]">ชื่อลูกค้า</th>
-          <th scope="col" class=" py-3 w-[200px]">เบอร์โทร</th>
-          <th scope="col" class=" py-3 w-[150px]">จังหวัด</th>
-          <th scope="col" class=" py-3 w-[150px]">ประเภท</th>
-          <th scope="col" class=" py-3 w-[150px]">ช่องทาง</th>
-          <th scope="col" class=" py-3 w-[150px]">สถานะ</th>
-          <th scope="col" class="text-center py-3 w-[150px]">Action</th>
+          <th scope="col" class="text-center py-3 text-xs md:text-base w-[100px]">ID</th>
+          <th scope="col" class=" py-3 w-[200px] text-xs md:text-base">ชื่อลูกค้า</th>
+          <th scope="col" class=" py-3 w-[200px] text-xs text-center md:text-base md:text-left">เบอร์โทร</th>
+          <th scope="col" class=" py-3 w-[150px] text-xs md:text-base">จังหวัด</th>
+          <th scope="col" class=" py-3 w-[150px] text-xs md:text-base">ประเภท</th>
+          <th scope="col" class=" py-3 w-[150px] text-xs md:text-base">ช่องทาง</th>
+          <th scope="col" class=" py-3 w-[150px] text-xs md:text-base">สถานะ</th>
+          <th scope="col" class="text-center py-3 w-[150px] text-xs md:text-base">Action</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in customers_list.slice(pageStart, pageStart + perPage)" :key="item.id" :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '']">
           <td class="text-center">{{item.id}}</td>
           <td >
-            <div class="text-sm font-medium" >
+            <div class="text-sm font-medium " >
               <span v-if="item.name !=''">{{item.name}}</span>
               <span v-else>-</span>
             </div>
@@ -439,7 +441,9 @@ const dynamicSelect = computed(()=>{
       </tbody>
     </table>
   </div>
-  <nav :class="lightBorderStyle" aria-label="Page navigation example" class="py-2 mx-3 lg:mx-6 border-t border-b ">
+
+
+  <nav :class="lightBorderStyle" aria-label="Page navigation example" class="flex flex-col lg:flexrow justify-center items-center py-2 mx-3 lg:mx-6 border-t border-b ">
     <ul class="inline-flex items-center -space-x-px">
       <li v-bind:class="{ disabled: currPage === 1  }" @click.prevent="setPage(1)">
         <a href="#"

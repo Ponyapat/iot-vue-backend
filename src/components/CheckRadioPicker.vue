@@ -45,7 +45,7 @@ const inputType = computed(() => props.type === 'radio' ? 'radio' : 'checkbox')
 
 <template>
   <div
-    class="flex justify-start flex-wrap -mb-3"
+    class="flex justify-evenly md:justify-end flex-wrap -mb-3"
     :class="{'flex-col':column}"
   >
     <div v-if="options">

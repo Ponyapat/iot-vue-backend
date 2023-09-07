@@ -43,10 +43,35 @@ const overlayClick = () => {
   <nav-bar />
   <aside-menu :menu="menu" />
   <router-view />
-  <footer-bar />
+  
   <overlay
     v-show="isAsideLgActive"
     z-index="z-30"
     @overlay-click="overlayClick"
   />
+  <footer-bar />
 </template>
+ 
+
+<style>
+body {
+  @apply pt-14 xl:pl-60;
+}
+
+#app {
+  @apply w-screen transition-position lg:w-auto;
+}
+
+.dropdown {
+  @apply cursor-pointer;
+}
+
+.m-clipped, .m-clipped body {
+  @apply overflow-hidden lg:overflow-visible;
+}
+
+.full-screen body {
+  @apply p-0;
+}
+
+</style>

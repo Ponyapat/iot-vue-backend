@@ -31,6 +31,7 @@ let menu = [];
 let sub_menu_breed = [];
 let sub_geo = [];
 let sub_customer = [];
+let sub_sensor = [];
 
 if (roleid) {
   await axios
@@ -58,23 +59,23 @@ if (roleid) {
         });
       }
 
-      menu.push({
-        label: "ข้อมูลด้านพืชพรรณ",
-        icon: mdiViewList,
-        menu: sub_menu_breed,
-      });
+      
+      // menu.push({
+      //   label: "ข้อมูลด้านพืชพรรณ",
+      //   icon: mdiViewList,
+      //   menu: sub_menu_breed,
+      // });
+    
 
-      menu.push({
-        label: "ข้อมูลด้านภูมิศาสตร์",
-        icon: mdiViewList,
-        menu: sub_geo,
-      });
+      
 
       menu.push({
         label: "ข้อมูลลูกค้าสำหรับฝ่ายขาย",
         icon: mdiViewList,
         menu: sub_customer,
       });
+
+  
 
       const rolePermission = data.data.data.rolePermission;
 
@@ -91,6 +92,7 @@ if (roleid) {
           object: value.permission[0].object[0].name,
         });
 
+        // Plant
         if (
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "breed-categorise"
@@ -111,7 +113,9 @@ if (roleid) {
             icon: mdiFruitCherries,
           });
         }
-
+        
+      
+        // Custumer
         if (
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "geography"
@@ -122,6 +126,8 @@ if (roleid) {
             icon: mdiEarth,
           });
         }
+
+        //Database
         if (
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "geography-base"
@@ -132,6 +138,8 @@ if (roleid) {
             icon: mdiEarth,
           });
         }
+
+        /** 
         if (
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "weather"
@@ -148,6 +156,9 @@ if (roleid) {
             ],
           });
         }
+        */
+
+        //User
         if (
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "customer"
@@ -165,6 +176,7 @@ if (roleid) {
           });
         }
 
+        //Custumer Database
         if (
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "other-customer"
@@ -176,6 +188,7 @@ if (roleid) {
           });
         }
 
+        //Warranty
         if (
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "warranty"
@@ -187,6 +200,7 @@ if (roleid) {
           });
         }
 
+        //Board Status
         if (
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "board-status"
@@ -198,6 +212,7 @@ if (roleid) {
           });
         }
 
+        /** 
         if (
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "keyword"
@@ -214,6 +229,12 @@ if (roleid) {
             ],
           });
         }
+        */
+
+       
+
+        
+
         if (
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "group-line"
@@ -241,6 +262,9 @@ if (roleid) {
       }
       if (sub_customer.length == 0) {
         menu = menu.filter((x) => x.label != "ข้อมูลลูกค้าสำหรับฝ่ายขาย");
+      }
+      if (sub_sensor.length == 0) {
+        menu = menu.filter((x) => x.label != "ข้อมูลเซ็นเซอร์");
       }
       localStorage.setItem("pms", JSON.stringify(pms));
     })
