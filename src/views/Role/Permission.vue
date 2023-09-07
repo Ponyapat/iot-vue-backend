@@ -37,6 +37,9 @@ onBeforeMount(() => {
 
     ApiMain.get("/role/"+id+"/role-permission")
     .then((response) => {
+
+      console.log('response : ',response.data.data.rolePermission);
+
         let permission_arr = []
         for (const [key, val] of Object.entries(response.data.data.rolePermission)) {
             permission_arr.push(val.permissionId)
@@ -47,7 +50,7 @@ onBeforeMount(() => {
     ApiMain.get("/role/objects/lists")
     .then((response) => {
       form.objects = response.data
-      //console.log(form.objects)
+      console.log(form.objects)
     })
   }
 })
@@ -81,7 +84,7 @@ const submit = () => {
   } else {
 
   }
-}
+};
 
 </script>
 <template>
@@ -107,25 +110,25 @@ const submit = () => {
     </li>
     <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
         <div class="flex items-center pl-3">
-            <input id="vue-checkbox-list" v-model="form.userRoles" type="checkbox" :value=objects.permission[0].id class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+            <input id="vue-checkbox-list" v-model="form.userRoles" type="checkbox" :value="objects.permission[0].id" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
             <label for="vue-checkbox-list" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ดูข้อมูล</label>
         </div>
     </li>
     <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
         <div class="flex items-center pl-3">
-            <input id="react-checkbox-list" v-model="form.userRoles"  type="checkbox" :value=objects.permission[1].id class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+            <input id="react-checkbox-list" v-model="form.userRoles"  type="checkbox" :value="objects.permission[1].id" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
             <label for="react-checkbox-list" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">เพิ่มข้อมูล</label>
         </div>
     </li>
     <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
         <div class="flex items-center pl-3">
-            <input id="angular-checkbox-list" v-model="form.userRoles" type="checkbox" :value=objects.permission[2].id class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+            <input id="angular-checkbox-list" v-model="form.userRoles" type="checkbox" :value="objects.permission[2].id" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
             <label for="angular-checkbox-list" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">แก้ไขข้อมูล</label>
         </div>
     </li>
     <li class="w-full dark:border-gray-600">
         <div class="flex items-center pl-3">
-            <input id="laravel-checkbox-list" v-model="form.userRoles"  type="checkbox" :value=objects.permission[3].id class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+            <input id="laravel-checkbox-list" v-model="form.userRoles"  type="checkbox" :value="objects.permission[3].id" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
             <label for="laravel-checkbox-list" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ลบข้อมูล</label>
         </div>
     </li>
