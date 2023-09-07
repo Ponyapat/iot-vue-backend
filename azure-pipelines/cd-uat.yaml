@@ -1,0 +1,94 @@
+trigger: none
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: IoT Solution Architecture/ci-cd-templates
+
+    - repository: config
+      type: git
+      name: IoT Solution Architecture/Configurations
+
+  pipelines:
+    - pipeline: ci
+      source: iot-vue-backend-ci-uat
+      #trigger: true
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - name: ecr_repo
+    value: 350474780471.dkr.ecr.ap-southeast-1.amazonaws.com
+  - name: environment
+    value: uat
+  - name: project
+    value: iot-vue-backend
+  - name: cluster
+    value: ecs-iot-vue-backend-uat
+
+stages:
+  - stage: UAT_Deployment
+    displayName: UAT Deployment
+    jobs:
+      - deployment: UAT_Deployment_Job
+        displayName: UAT deployment
+        environment: $(environment)
+        variables:
+          - group: ecs-iot-non-prd
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: config
+                  persistCredentials: true
+
+                - template: templates/set-deploy-tag.yaml@templates
+                  parameters:
+                    build_artifact_name: build-artifacts
+
+                - template: templates/replace-image-tag.yaml@templates
+                  parameters:
+                    folder: $(project)/$(environment)
+                    ecr_repo: $(ecr_repo)/$(project)
+
+                - template: templates/register-task-definition.yaml@templates
+                  parameters:
+                    folder: $(project)/$(environment)
+                    family: $(project)-$(environment)
+
+                - template: templates/export-task-revision.yaml@templates
+                  parameters:
+                    task_definition: $(project)-$(environment)
+
+                - template: templates/update-config-repo.yaml@templates
+
+                - template: templates/update-service.yaml@templates
+                  parameters:
+                    cluster: $(cluster)
+                    service: $(project)-$(environment)
+                    task_definition: $(project)-$(environment)
+
+                # - bash: |
+                #     export AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID_ECS)
+                #     export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY_ECS)
+                #     aws ecs wait services-stable --region ap-southeast-1 --cluster ecs-worker-silo-uat --service worker-silo-uat
+                #   displayName: Wait for stable
+
+  # - stage: PROD_Deployment
+  #   dependsOn:
+  #     - UAT_Deployment
+  #   displayName: PROD Deployment
+  #   jobs:
+  #     - deployment: PROD_Deployment_Job
+  #       displayName: PROD deployment
+  #       environment: prod
+  #       variables:
+  #         - group: ecs-iot-prd
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #             steps:
+  #               - checkout: config
+  #                 persistCredentials: true

@@ -1,0 +1,50 @@
+trigger:
+  branches:
+    include:
+      - uat
+  paths:
+    exclude:
+      - azure-pipelines/*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - group: main-iot
+  - name: ecr_repo
+    value: 350474780471.dkr.ecr.ap-southeast-1.amazonaws.com
+  - name: project
+    value: iot-vue-backend
+
+stages:
+  - stage: build_stage
+    displayName: Build stage
+    jobs:
+      - job: build_job
+        displayName: Build Job
+        steps:
+          - bash: |
+              export AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID_ECR)
+              export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY_ECR)
+              aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin $(ecr_repo)
+            displayName: Login to the ECR
+
+          - bash: |
+              echo "##vso[task.setvariable variable=imageTag;isoutput=true]$(git rev-parse --short HEAD)-uat"
+            displayName: Generate image tag
+            name: generateImageTag
+
+          - bash: docker build -f Dockerfile.stg . -t $(ecr_repo)/$(project):$(generateImageTag.imageTag)
+            displayName: Containerize
+
+          - bash: docker push $(ecr_repo)/$(project):$(generateImageTag.imageTag)
+            displayName: Push to the ECR
+
+          - bash: |
+              mkdir build-artifacts
+              echo '$(generateImageTag.imageTag)' > build-artifacts/build-version
+            displayName: Define build artifacts
+
+          - publish: build-artifacts
+            artifact: build-artifacts
+            displayName: Publish build artifacts

@@ -1,4 +1,4 @@
-FROM asia-docker.pkg.dev/farmpress-production/asia.gcr.io/farmworld-vue-backend:base as build-stage
+FROM 350474780471.dkr.ecr.ap-southeast-1.amazonaws.com/iot-vue-backend:libs as build-stage
 
 COPY . .
 
@@ -18,10 +18,10 @@ COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 COPY --from=build-stage /app .
 COPY docker/nginx.stg.conf /etc/nginx/nginx.conf
-COPY docker/404.js dist/404.js
+COPY docker/mime.types /etc/nginx/mime.types
 COPY docker/dev-robots.txt dist/robots.txt
 
-EXPOSE 8080
+EXPOSE 80
 
 ENTRYPOINT ["tini", "--"]
 
