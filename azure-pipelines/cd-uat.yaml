@@ -13,7 +13,8 @@ resources:
   pipelines:
     - pipeline: ci
       source: iot-vue-backend-ci-uat
-      #trigger: true
+      branch: uat
+      trigger: true
 
 pool:
   vmImage: 'ubuntu-latest'
