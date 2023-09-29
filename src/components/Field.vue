@@ -36,7 +36,7 @@ const wrapperClass = computed(() => {
 </script>
 
 <template>
-  <div class="mb-6 last:mb-0">
+  <div class="mb-2 last:mb-0">
     <label
       v-if="label"
       :for="labelFor"

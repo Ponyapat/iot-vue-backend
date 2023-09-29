@@ -5,11 +5,9 @@ import { createProxy } from './build/proxy'
 
 const VITE_PORT = 3001
 const VITE_PROXY = [
-  ['/api-sso', 'https://stg-sso.iotaxons.com'],
+  ['/api-sso', 'https://stg-sso.iotaxons.com'],  // use
   ['/api-core', 'https://stg-core.iotaxons.com/api/core'],
-  // ['/api-main', 'https://stg-api.iotaxons.com/api']
-  ['/api-main', ' http://stg-new-api.iotaxons.com/api']
- 
+  ['/api-main', 'https://alpha-api.iotaxons.com/api']
 ]
 
 // https://vitejs.dev/config/

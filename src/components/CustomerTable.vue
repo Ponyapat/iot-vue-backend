@@ -85,7 +85,7 @@ onBeforeMount(() => {
 const del = (id) => {
   Swal.fire({
     title: "ยืนยันการลบ",
-    text: "คุณต้องการลบใช้หรือไม่",
+    text: "คุณต้องการลบใช่หรือไม่",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
@@ -262,7 +262,7 @@ const pagesList = computed(() => {
   return pagesList
 })
 const pages = computed(() => {
-    let numShown = 10;
+    let numShown = 3;
     let pagelist = pagesList.value ;
     numShown = Math.min(numShown, pagelist.length);
 
@@ -285,11 +285,11 @@ const dynamicSelect = computed(()=>{
 <template>
   <div class="w-full flex flex-col md:flex-row">
     <div class=" flex flex-row md:flex-col w-full  justify-center ml-0 md:ml-4 mr-[40px] mt-5 sm:mt-10 " >
-        <div class="relative w-full px-4">
+        <div class="relative w-full px-4 sm:px-0 ">
           <input v-model="searchName" id="search_input" type="text"
             class="block w-full  pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="ค้นหา ชื่อลูกค้า, ชื่อผู้ติดต่อ , เบอร์โทรศัพท์มือถือ">
-          <div class="absolute w-full inset-y-0 left-0 flex items-center pl-6 md:pl-5 pointer-events-none">
+          <div class="absolute w-full inset-y-0 left-0 flex items-center pl-7 sm:pl-3 lg:pl-3  pointer-events-none">
             <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor"
               viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -500,4 +500,5 @@ li.active,li.active:hover {
   color: white;
 }
 </style>
+
 

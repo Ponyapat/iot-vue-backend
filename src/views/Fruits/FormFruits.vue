@@ -158,7 +158,6 @@ onMounted(()=>{
   ApiMain.get("/breed-categorise?order=ASC&page=1&take=10").then((response) => {
       categories.value = response.data.data;
     })
-
 });
 
 const upload_image = (event) => {
@@ -426,6 +425,7 @@ const closeForm = () => {
       <h1 class="text-center font-semibold text-black text-2xl mb-10 dark:text-white">{{type_form}}</h1>
       <form @submit.prevent="submit">
         <div class="grid grid-cols-2 gap-6 mb-10">
+
           <div class="flex justify-center items-center w-full h-full">
             <label v-if="image_upload ==''" for="dropzone-file"
               class="flex flex-col justify-center items-center w-full h-full bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-white dark:hover:border-white dark:hover:bg-gray-600">
@@ -445,6 +445,7 @@ const closeForm = () => {
               <input id="dropzone-file" type="file" accept=".webp, .jpg, .jpeg , .png ,.tif" class="hidden" @change="upload_image">
             </label>
           </div>
+          
           <div class="w-full h-full">
             <div class="mb-4">
               <label for="name" class="block mb-2 text-base font-medium text-black dark:text-white">รหัสพืช <span class="text-red-500">*</span></label>

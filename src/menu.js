@@ -1,4 +1,3 @@
-
 import {
   mdiAccountCircle,
   mdiDesktopMac,
@@ -20,7 +19,11 @@ import {
   mdiFruitWatermelon,
   mdiFaceAgent,
   mdiAccountSupervisorOutline,
-  mdiGroup
+  mdiGroup,
+  mdiLeak,
+  mdiSprinklerVariant,
+  mdiShapePlus
+  
 } from "@mdi/js";
 
 import axios from "axios";
@@ -34,16 +37,12 @@ let sub_customer = [];
 let sub_sensor = [];
 
 if (roleid) {
-  await axios
-    .get(
-      import.meta.env.VITE_API_MAIN + "/role/" + roleid + "/role-permission",
-      {
+  await axios.get(import.meta.env.VITE_API_MAIN + "/role/" + roleid + "/role-permission",{
         headers: {
           Authorization: `Bearer ` + token,
         },
       }
-    )
-    .then((data) => {
+    ).then((data) => {
       if (roleid == 1) {
         menu.push({
           label: "ตั้งค่า/จัดการผู้ดูแล",
@@ -60,19 +59,27 @@ if (roleid) {
       }
 
       
-      // menu.push({
-      //   label: "ข้อมูลด้านพืชพรรณ",
-      //   icon: mdiViewList,
-      //   menu: sub_menu_breed,
-      // });
-    
 
+      
+      menu.push({
+        label: "ข้อมูลด้านพืชพรรณ",
+        icon: mdiViewList,
+        menu: sub_menu_breed,
+      });
+    
+      
       
 
       menu.push({
         label: "ข้อมูลลูกค้าสำหรับฝ่ายขาย",
         icon: mdiViewList,
         menu: sub_customer,
+      });
+
+      menu.push({
+        label: "จัดการอุปกรณ์",
+        icon: mdiViewList,
+        menu: sub_sensor,
       });
 
   
@@ -92,27 +99,29 @@ if (roleid) {
           object: value.permission[0].object[0].name,
         });
 
+        console.log('manu : ',value.permission[0].object[0].name)
+
         // Plant
-        if (
-          value.permission[0].action == "read" &&
-          value.permission[0].object[0].name == "breed-categorise"
-        ) {
-          sub_menu_breed.push({
-            to: "/fruits-type",
-            label: "ประเภทพืชพรรณ",
-            icon: mdiFruitWatermelon,
-          });
-        }
-        if (
-          value.permission[0].action == "read" &&
-          value.permission[0].object[0].name == "breed"
-        ) {
-          sub_menu_breed.push({
-            to: "/fruits",
-            label: "ฐานข้อมูลพืชพรรณ",
-            icon: mdiFruitCherries,
-          });
-        }
+        // if (
+        //   value.permission[0].action == "read" &&
+        //   value.permission[0].object[0].name == "breed-categorise"
+        // ) {
+        //   sub_menu_breed.push({
+        //     to: "/fruits-type",
+        //     label: "ประเภทพืชพรรณ",
+        //     icon: mdiFruitWatermelon,
+        //   });
+        // }
+        // if (
+        //   value.permission[0].action == "read" &&
+        //   value.permission[0].object[0].name == "breed"
+        // ) {
+        //   sub_menu_breed.push({
+        //     to: "/fruits",
+        //     label: "ฐานข้อมูลพืชพรรณ",
+        //     icon: mdiFruitCherries,
+        //   });
+        // }
         
       
         // Custumer
@@ -139,24 +148,24 @@ if (roleid) {
           });
         }
 
-        /** 
-        if (
-          value.permission[0].action == "read" &&
-          value.permission[0].object[0].name == "weather"
-        ) {
-          menu.push({
-            label: "ข้อมูลด้านภูมิอากาศ",
-            icon: mdiViewList,
-            menu: [
-              {
-                to: "/weather",
-                label: "ฐานข้อมูลภูมิอากาศ",
-                icon: mdiWeatherPartlyRainy,
-              },
-            ],
-          });
-        }
-        */
+        
+        // if (
+        //   value.permission[0].action == "read" &&
+        //   value.permission[0].object[0].name == "weather"
+        // ) {
+        //   menu.push({
+        //     label: "ข้อมูลด้านภูมิอากาศ",
+        //     icon: mdiViewList,
+        //     menu: [
+        //       {
+        //         to: "/weather",
+        //         label: "ฐานข้อมูลภูมิอากาศ",
+        //         icon: mdiWeatherPartlyRainy,
+        //       },
+        //     ],
+        //   });
+        // }
+        
 
         //User
         if (
@@ -231,10 +240,45 @@ if (roleid) {
         }
         */
 
-       
 
+        //Master Sensor
+        if (
+          value.permission[0].action == "read" &&
+          value.permission[0].object[0].name == "sensor-mgr"
+        ) {
+          sub_sensor.push({
+            to: "/sensor-list",
+            label: "Master Sensors",
+            icon: mdiLeak,
+          });
+        }
+
+        //Master Device
+        if (
+          value.permission[0].action == "read" &&
+          value.permission[0].object[0].name == "device-mgr"
+        ) {
+          sub_sensor.push({
+            to: "/device-list",
+            label: "Master Devices",
+            icon: mdiSprinklerVariant,
+          });
+        }
         
 
+        //Master Category
+        if (
+          value.permission[0].action == "read" &&
+          value.permission[0].object[0].name == "board-mgr"
+        ) {
+          sub_sensor.push({
+            to: "/category-list",
+            label: "Master Categories",
+            icon: mdiShapePlus,
+          });
+        }
+
+        //Alert
         if (
           value.permission[0].action == "read" &&
           value.permission[0].object[0].name == "group-line"
@@ -253,7 +297,7 @@ if (roleid) {
         }
         
       }
-      //console.log(menu)
+
       if (sub_menu_breed.length == 0) {
         menu = menu.filter((x) => x.label != "ข้อมูลด้านพืชพรรณ");
       }
@@ -285,3 +329,4 @@ export default [
   "Admin",
   menu,
 ];
+

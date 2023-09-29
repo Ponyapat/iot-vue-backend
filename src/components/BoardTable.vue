@@ -35,6 +35,7 @@ const config = {
 };
 
 const states = reactive({
+
   board: [],
   select_status: 'all',
   user_data: [
@@ -230,9 +231,9 @@ const filter_status = (event) => {
   // states.board = test ;
 };
 
-const groupline = (serial_number) => {
+const groupline = (id, serial_number) => {
   console.log(serial_number);
-  router.push('/board-list/groupline?serial_number=' + serial_number);
+  router.push('/board-list/groupline?serial_number=' + serial_number + "&id=" + id);
 };
 
 
@@ -245,34 +246,34 @@ const groupline = (serial_number) => {
     <div class="flex flex-row justify-between">
       <div class="flex flex-row">
         <div class="w-full ml-4 mr-[40px] mt-10">
-        <div class="relative">
-          <input v-model="searchName" id="search_input" type="text"
-            class="block w-[90px] md:w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="ค้นหา serials number">
-          <div class="absolute inset-y-0 left-0 flex items-center pl-4 md:pl-3 pointer-events-none">
-            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor"
-              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
+          <div class="relative">
+            <input v-model="searchName" id="search_input" type="text"
+              class="block w-[90px] md:w-full p-2.5 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="ค้นหา serials number">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-4 md:pl-3 pointer-events-none">
+              <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+          </div>
+          <small class="opacity-60 hidden lg:flex">ค้นหาด้วย serials number</small>
+        </div>
+        <div class="flex flex-row gap-2 ml-5">
+          <div class="mt-5">
+            <label for="categories"
+              class="block text-sm font-medium text-gray-900 dark:text-white opacity-70">สถานะบอร์ด</label>
+            <select id="categories" v-model="states.select_status" @change="filter_status($event)"
+              class="mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-24 md:w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <option value="all">ทั้งหมด</option>
+              <option value="ออนไลน์">ออนไลน์</option>
+              <option value="ออฟไลน์">ออฟไลน์</option>
+            </select>
           </div>
         </div>
-        <small class="opacity-60 hidden lg:flex">ค้นหาด้วย serials number</small>
       </div>
-      <div class="flex flex-row gap-2 ml-5">
-        <div class="mt-5">
-          <label for="categories"
-            class="block text-sm font-medium text-gray-900 dark:text-white opacity-70">สถานะบอร์ด</label>
-          <select id="categories" v-model="states.select_status" @change="filter_status($event)"
-            class="mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-24 md:w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option value="all">ทั้งหมด</option>
-            <option value="ออนไลน์">ออนไลน์</option>
-            <option value="ออฟไลน์">ออฟไลน์</option>
-          </select>
-        </div>
-      </div>
-      </div>
-      
+
     </div>
     <div class="flex items-center ml-4 my-4">
       <span class="text-sm md:text-base font-medium">จำนวนทั้งหมด : {{ board_list.length }}</span>
@@ -280,80 +281,81 @@ const groupline = (serial_number) => {
 
     <div class="overflow-x-auto	max-w-full pb-4">
       <table class="w-full">
-      <thead class="bg-gray-600 ">
-        <tr class="text-xs lg:text-sm text-white whitespace-nowrap">
-          <th class="text-center px-4 py-2 lg:px-0">User ID</th>
-          <th class="text-center px-4 py-2 lg:px-0">Serial Number</th>
-          <th class="text-center px-4 py-2 lg:px-0">สถานะของบอร์ด</th>
-          <th class="text-center px-4 py-2 lg:px-0">วันที่หมดประกันสินค้า</th>
-          <th class="text-center px-4 py-2 lg:px-0">สถานะการรับประกันสินค้า</th>
-          <th class="text-center px-4 py-2 lg:px-0">เวลาที่ออนไลน์ล่าสุด</th>
-          <th class="text-center px-4 py-2 lg:px-0">ข้อมูลเพิ่มเติม</th>
-          <th class="text-center px-4 py-2 lg:px-0">Group Line</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in board_list.slice(pageStart, pageStart + perPage)" :key="item.id"
-          :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '', 'text-sm ']">
-          <td class="text-center text-xs md:text-sm">
-            {{ item.project.user_id }}
-          </td>
-          <td class="text-center font-bold text-xs md:text-sm">
-            {{ item.serial }}
-          </td>
-          <td class="text-center text-xs md:text-sm">
-            <span v-if="item.getStatusBoard == null" class="bg-red-100 text-black font-bold px-4 py-2 rounded-full "><i
-                class="fa-solid fa-power-off text-red-500 mr-0.5 " ></i> ออฟไลน์</span>
-            <span v-else :class="item.getStatusBoard.noti_status_text == 'ออนไลน์' ? 'bg-green-100' : 'bg-red-100'"
-              class=" text-black font-bold px-4 py-2 rounded-full ">
-              <span v-if="item.getStatusBoard.noti_status_text == 'ออนไลน์'"><i
-                  class="fa-solid fa-circle-dot text-green-500 mr-0.5 "></i> {{ item.getStatusBoard.noti_status_text
-                  }}</span>
-              <span v-else><i class="fa-solid fa-power-off text-red-500 mr-0.5"></i> ออฟไลน์</span>
-            </span>
-          </td>
-          <td class="text-center text-xs md:text-sm">
-            <span v-if="item.warranty == null" class="">-</span>
-            <span v-else-if="item.warranty.expire_date == null || item.warranty.expire_date == ''"
-              class="text-gray-500">-</span>
-            <span v-else>{{ moment(item.warranty.expire_date).format('DD/MM/YYYY') }}</span>
-          </td>
-          <td class="text-center text-xs md:text-sm">
-            <span v-if="item.warranty == null" class="text-orange-500"><i
-                class="fa-solid fa-circle-exclamation mr-0.5"></i>ไม่ได้ลงทะเบียน</span>
-            <span v-else class="text-green-500"><i
-                class="fa-solid fa-circle-dot text-green-500 mr-0.5"></i>อยู่ระหว่างการรับประกัน</span>
-          </td>
-          <td class="text-center text-xs md:text-sm">
-            <span v-if="item.getOnlineLasted == null" class=" text-black font-bold px-4 py-2 rounded-full ">-</span>
-            <span v-else class="text-sm font-medium">
-              <span class="mr-2">{{ moment(item.getOnlineLasted.updated_at).format("DD/MM/YYYY") }}</span><span>{{
-                moment.utc(item.getOnlineLasted.updated_at).format("HH:mm") }} น.</span>
-            </span>
-          </td>
-          <td class="text-center text-xs md:text-sm">
-            <div class="flex flex-row justify-center items-center">
-              <button type="button" @click="showPopup(item)"
-                class=" bg-gray-300 text-black hover:bg-gray-600 hover:text-white mr-3 px-2 py-1.5 rounded-md">
-                <i class="fa-solid fa-eye text-base"></i>
-              </button>
-            </div>
-          </td>
-          <td class="text-center text-xs md:text-sm">
-            <div class="flex flex-row justify-center items-center">
-              <router-link :to="`/board-list/group-line?serial_number=${item.serial}`"
-                class="bg-orange-300 text-black hover:bg-gray-600 hover:text-white mr-3 px-2 py-1 rounded-md">
-                <i class="fa-solid fa-plus text-base"></i>
-              </router-link>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <thead class="bg-gray-600 ">
+          <tr class="text-xs lg:text-sm text-white whitespace-nowrap">
+            <th class="text-center px-4 py-2 lg:px-0">User ID</th>
+            <th class="text-center px-4 py-2 lg:px-0">Serial Number</th>
+            <th class="text-center px-4 py-2 lg:px-0">สถานะของบอร์ด</th>
+            <th class="text-center px-4 py-2 lg:px-0">วันที่หมดประกันสินค้า</th>
+            <th class="text-center px-4 py-2 lg:px-0">สถานะการรับประกันสินค้า</th>
+            <th class="text-center px-4 py-2 lg:px-0">เวลาที่ออนไลน์ล่าสุด</th>
+            <th class="text-center px-4 py-2 lg:px-0">ข้อมูลเพิ่มเติม</th>
+            <th class="text-center px-4 py-2 lg:px-0">Group Line</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in board_list.slice(pageStart, pageStart + perPage)" :key="item.id"
+            :class="[tableTrStyle, index % 2 === 0 ? tableTrOddStyle : '', 'text-sm ']">
+            <td class="text-center text-xs md:text-sm">
+              {{ item.project.user_id }}
+            </td>
+            <td class="text-center font-bold text-xs md:text-sm">
+              {{ item.serial }}
+            </td>
+            <td class="text-center text-xs md:text-sm">
+              <span v-if="item.getStatusBoard == null" class="bg-red-100 text-black font-bold px-4 py-2 rounded-full "><i
+                  class="fa-solid fa-power-off text-red-500 mr-0.5 "></i> ออฟไลน์</span>
+              <span v-else :class="item.getStatusBoard.noti_status_text == 'ออนไลน์' ? 'bg-green-100' : 'bg-red-100'"
+                class=" text-black font-bold px-4 py-2 rounded-full ">
+                <span v-if="item.getStatusBoard.noti_status_text == 'ออนไลน์'"><i
+                    class="fa-solid fa-circle-dot text-green-500 mr-0.5 "></i> {{ item.getStatusBoard.noti_status_text
+                    }}</span>
+                <span v-else><i class="fa-solid fa-power-off text-red-500 mr-0.5"></i> ออฟไลน์</span>
+              </span>
+            </td>
+            <td class="text-center text-xs md:text-sm">
+              <span v-if="item.warranty == null" class="">-</span>
+              <span v-else-if="item.warranty.expire_date == null || item.warranty.expire_date == ''"
+                class="text-gray-500">-</span>
+              <span v-else>{{ moment(item.warranty.expire_date).format('DD/MM/YYYY') }}</span>
+            </td>
+            <td class="text-center text-xs md:text-sm">
+              <span v-if="item.warranty == null" class="text-orange-500"><i
+                  class="fa-solid fa-circle-exclamation mr-0.5"></i>ไม่ได้ลงทะเบียน</span>
+              <span v-else class="text-green-500"><i
+                  class="fa-solid fa-circle-dot text-green-500 mr-0.5"></i>อยู่ระหว่างการรับประกัน</span>
+            </td>
+            <td class="text-center text-xs md:text-sm">
+              <span v-if="item.getOnlineLasted == null" class=" text-black font-bold px-4 py-2 rounded-full ">-</span>
+              <span v-else class="text-sm font-medium">
+                <span class="mr-2">{{ moment(item.getOnlineLasted.updated_at).format("DD/MM/YYYY") }}</span><span>{{
+                  moment.utc(item.getOnlineLasted.updated_at).format("HH:mm") }} น.</span>
+              </span>
+            </td>
+            <td class="text-center text-xs md:text-sm">
+              <div class="flex flex-row justify-center items-center">
+                <button type="button" @click="showPopup(item)"
+                  class=" bg-gray-300 text-black hover:bg-gray-600 hover:text-white mr-3 px-2 py-1.5 rounded-md">
+                  <i class="fa-solid fa-eye text-base"></i>
+                </button>
+              </div>
+            </td>
+            <td class="text-center text-xs md:text-sm">
+              <div class="flex flex-row justify-center items-center">
+                <router-link :to="`/board-list/group-line?serial_number=${item.serial}` + `&id=${item.id}`"
+                  class="bg-orange-300 text-black hover:bg-gray-600 hover:text-white mr-3 px-2 py-1 rounded-md">
+                  <i class="fa-solid fa-plus text-base"></i>
+                </router-link>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    
+
     <!-- Pagination -->
-    <nav aria-label="Page navigation example" class="flex flex-col lg:flex-row justify-center items-center py-2 mx-3 lg:mx-6 border-t border-b ">
+    <nav aria-label="Page navigation example"
+      class="flex flex-col lg:flex-row justify-center items-center py-2 mx-3 lg:mx-6 border-t border-b ">
       <ul class="inline-flex items-center -space-x-px">
         <li v-bind:class="{ disabled: currPage === 1 }" @click.prevent="setPage(1)">
           <a href="#"
@@ -437,13 +439,13 @@ const groupline = (serial_number) => {
                     <span v-else class="font-normal text-gray-500">ไม่ได้ระบุ</span>
                   </span>
                   <span class="text-base font-medium whitespace-nowrap mb-2">Email :
-                    <span v-if="states.user_data.email != null || states.user_data.email == ''"
-                      class="font-normal">{{ states.user_data.email }}</span>
+                    <span v-if="states.user_data.email != null || states.user_data.email == ''" class="font-normal">{{
+                      states.user_data.email }}</span>
                     <span v-else class="font-normal text-gray-500">ไม่ได้ระบุ</span>
                   </span>
                   <span class="text-base font-medium">เบอร์โทร :
-                    <span v-if="states.user_data.phone != null || states.user_data.phone == ''"
-                      class="font-normal">{{ states.user_data.phone }}</span>
+                    <span v-if="states.user_data.phone != null || states.user_data.phone == ''" class="font-normal">{{
+                      states.user_data.phone }}</span>
                     <span v-else class="font-normal text-gray-500">ไม่ได้ระบุ</span>
                   </span>
                 </div>
@@ -454,11 +456,13 @@ const groupline = (serial_number) => {
 
           </div>
         </div>
+      </div>
     </div>
+    <!-- Modal -->
   </div>
-  <!-- Modal -->
-</div></template>
-<style scoped>li.active,
+</template>
+<style scoped>
+li.active,
 li.active:hover {
   background-color: rgb(48, 48, 48);
   color: white;

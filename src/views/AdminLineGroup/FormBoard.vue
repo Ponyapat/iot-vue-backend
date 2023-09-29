@@ -194,7 +194,7 @@ const closeForm = () => {
         <div class="mb-6">
           <label for="repeat-password"
             class="block mb-2 text-base font-medium text-gray-900 dark:text-white ">บอร์ด</label>
-          <VueMultiselect :multiple="true" label="label" track-by="value" :close-on-select="true" class="border-1 border-gray-100 rounded-md shadow-none"
+          <VueMultiselect :multiple="active" label="label" track-by="value" :close-on-select="true" class="border-1 border-gray-100 rounded-md shadow-none"
             v-model="state.select_board_serial" :options="state.board_options">
           </VueMultiselect>
         </div>

@@ -1,0 +1,33 @@
+<template>
+    <div>
+    <title-bar class="p-4" :title-stack="titleStack" />
+    <card-component
+      :icon="mdiMonitorCellphone"
+      title="Sensor"
+      has-table
+      :addlink="Addlink"
+    >
+      <!-- table -->
+      <SensorTable />
+    </card-component>
+  </div>
+</template>
+
+<script setup>
+import { ref , onBeforeMount } from "vue";
+import { mdiMonitorCellphone } from "@mdi/js";
+import TitleBar from "@/components/TitleBar.vue";
+import SensorTable from "@/components/SensorTable.vue";
+import CardComponent from "@/components/CardComponent.vue";
+
+const titleStack = ref(["Master Sensors"]);
+const Addlink = ref(null);
+
+onBeforeMount(() => {
+  if(ck_pms("create","sensor-mgr")){
+    Addlink.value = "/sensor-list/add"
+  }
+});
+
+
+</script>

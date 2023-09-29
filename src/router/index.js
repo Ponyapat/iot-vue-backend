@@ -375,6 +375,110 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "error" */ "@/views/Error.vue"),
   },
+  {
+    meta: {
+      title: "Sensor Lists",
+    },
+    path: "/sensor-list",
+    name: "SensorLists",
+    component: () => import("@/views/Sensors/SensorList.vue"),
+  },
+  {
+    meta: {
+      title: "Device Lists",
+    },
+    path: "/device-list",
+    name: "DeviceLists",
+    component: () => import("@/views/Devices/DeviceList.vue"),
+  },
+  // {
+  //   meta: {
+  //     title: "AddDevice",
+  //   },
+  //   path: "/device-list/add",
+  //   name: "AddDevice",
+  //   component: () => import("@/views/Devices/AddDevice.vue"),
+  // },
+  {
+    meta: {
+      title: "Category Lists",
+    },
+    path: "/category-list",
+    name: "CategoriesList",
+    component: () => import("@/views/Category/CategoryList.vue"),
+  },
+  {
+    // meta: {
+    //   title: "AddSensor",
+    // },
+    // path: "/sensor-list/add",
+    // name: "AddSensor",
+    // component: () => import("@/views/Sensors/AddSensor.vue"),
+  },
+  // {
+  //   meta: {
+  //     title: "AddCategory",
+  //   },
+  //   path: "/category-list/add",
+  //   name: "AddCategory",
+  //   component: () => import("@/views/Category/AddCategory.vue"),
+  // },
+  // {
+  //   meta: {
+  //     title: "EditSensor",
+  //   },
+  //   path: "/sensor-list/edit",
+  //   name: "EditSensor",
+  //   component: () => import("@/views/Sensors/EditSensor.vue"),
+  // },
+  {
+    meta: {
+      title: "AddSensor",
+    },
+    path: "/sensor-list/add",
+    name: "AddSensor",
+    component: () => import("@/views/Sensors/FormSensor.vue"),
+  },
+  {
+    meta: {
+      title: "EditSensor",
+    },
+    path: "/sensor-list/edit",
+    name: "EditSensor",
+    component: () => import("@/views/Sensors/FormSensor.vue"),
+  },
+  {
+    meta: {
+      title: "AddDevice",
+    },
+    path: "/device-list/add",
+    name: "AddDevice",
+    component: () => import("@/views/Devices/FormDevice.vue"),
+  },
+  {
+    meta: {
+      title: "EditDevice",
+    },
+    path: "/device-list/edit",
+    name: "EditDevice",
+    component: () => import("@/views/Devices/FormDevice.vue"),
+  },
+  {
+    meta: {
+      title: "AddCategory",
+    },
+    path: "/category-list/add",
+    name: "AddCategory",
+    component: () => import("@/views/Category/FormCategory.vue"),
+  },
+  {
+    meta: {
+      title: "EditCategory",
+    },
+    path: "/category-list/edit",
+    name: "EditCategory",
+    component: () => import("@/views/Category/FormCategory.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -386,3 +490,4 @@ const router = createRouter({
 });
 
 export default router;
+

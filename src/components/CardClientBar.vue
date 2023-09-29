@@ -66,7 +66,7 @@ const pillText = computed(() => props.text ?? `${props.progress}%`)
 
 <template>
   <card-component
-    class="mb-6 last:mb-0"
+    class="mb-2 last:mb-0"
     hoverable
   >
     <level>

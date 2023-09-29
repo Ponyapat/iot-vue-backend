@@ -51,6 +51,8 @@ const submit = () => {
       })
         .then((res) => {
           localStorage.setItem("roleid", res.data.user.roleId);
+          // console.log('email profile : ',res.data.user.email);
+          localStorage.setItem('email',res.data.user.email);
           window.location.replace("/dashboard");
         }).catch((error) => {
           router.push("/login");

@@ -1,3 +1,4 @@
+Aside
 <script setup>
 import { computed } from 'vue'
 import { useMainStore } from '@/stores/main'
@@ -91,3 +92,4 @@ const menuClick = (event, item) => {
       background: linear-gradient(180deg, #074E9F 0%, #0e68cf 43.65%);
     }
 </style>
+
