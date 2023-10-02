@@ -14,12 +14,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import moment from "moment";
 
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
 defineProps({
   checkable: Boolean,
 });
@@ -228,34 +222,6 @@ if (img_name) {
 }
 };
 
-const generatePDF = async () => {
-  try {
-    // ดึงข้อมูลจาก API โดยใช้ Axios หรือไลบรารี HTTP อื่น ๆ
-    const response = await ApiMain.get("/devices?order=ASC&page=1&take=9999");
-
-    // ดึงข้อมูลที่ได้จาก response.data
-    const data = response.data;
-
-    // สร้างเอกสาร PDF จากข้อมูล
-    const docDefinition = {
-      content: [
-        'สวัสดี, นี่คือเอกสาร PDF ที่สร้างด้วย Vue.js',
-        { text: 'ข้อมูลจาก API:', style: 'subheader' },
-        { text: JSON.stringify(data, null, 2) },
-      ],
-      styles: {
-        subheader: {
-          fontSize: 16,
-          bold: true,
-        },
-      },
-    };
-
-    pdfMake.createPdf(docDefinition).download('example.pdf');
-  } catch (error) {
-    console.error('เกิดข้อผิดพลาดในการดึงข้อมูลหรือสร้าง PDF', error);
-  }
-};
 
 </script>
 
